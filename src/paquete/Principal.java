@@ -3,10 +3,13 @@ package paquete;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -19,17 +22,17 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 
-/**
- *
- * @author AGONZALEZ
- */
-public class Principal extends javax.swing.JFrame {
  
-    ResultSet rs;
+public class Principal extends javax.swing.JFrame {
+
+    ResultSet rs,rs2;
     int count = 0;
     DefaultTableModel md;
     Statement st;
-
+    PreparedStatement ps = null;
+    PreparedStatement ps2 = null;
+    int  folio;
+    
     public Principal() {
         initComponents();///inicializamos componentes al inicio del metodo
         Bebidas();//llamamos el metodo de bebidas para llenar tablas
@@ -39,18 +42,112 @@ public class Principal extends javax.swing.JFrame {
 
     }
     public void keyPressed(KeyEvent e){///funcio mediante teclas no utilizada
-                if(e.getKeyCode()==KeyEvent.VK_ENTER){
+               /* if(e.getKeyCode()==KeyEvent.VK_ENTER){
                     JOptionPane.showMessageDialog(null, "Has pulsado Enter");
                 }
                 if(e.getKeyCode()==KeyEvent.VK_ESCAPE){
                     System.exit(0);
-                }
+                }*/
             }
  
-    
+    public void agregarfinal(){
+       DefaultTableModel model = (DefaultTableModel) jtfinal.getModel();
+
+        int filaseleccionada = jthamburguesas.getSelectedRow();//OBTIENES EL ELEMENTO DE LA TABLA
+        if (filaseleccionada >= 0) {
+            Object obj0 = (jthamburguesas.getValueAt(filaseleccionada, 0));///OBTIENES EL PRIMER FILA
+            Object obj1 = (jthamburguesas.getValueAt(filaseleccionada, 1));///OBTIENES EL PRIMER FILA
+            Object obj2 = (jthamburguesas.getValueAt(filaseleccionada, 2));//OBTIENES LA SEGUNDA FILA
+            
+            /*String cod= obj0.toString();    /// CAMBIAS LOS OBJETOS A TIPO STRING
+            String descripcionp = obj1.toString();    /// CAMBIAS LOS OBJETOS A TIPO STRING
+            String cantidadp = obj2.toString();///*/
+
+            String combinar = "";
+            if (ch1.isSelected()) {
+                combinar += "SIN CEBOLLA,";
+            }
+            if (ch2.isSelected()) {
+                combinar += "SIN CHILE,";
+            }
+            if (ch3.isSelected()) {
+                combinar += "SIN PEPINILLOS,";
+            }
+            if (ch4.isSelected()) {
+                combinar += "SIN TOMATE,";
+            }
+            if (ch5.isSelected()) {
+                combinar += "SIN MOSTAZA,";
+            }
+            if (ch6.isSelected()) {
+                combinar += "SIN KETCHUP";
+            }
+            else{
+            
+            combinar="CON TODO";
+            }
+            model.addRow(new Object[]{obj0,obj1, obj2, 1,combinar});
+        }
+        sumar();
+
+    }
+    public void aumentarfolio(){
+            try {
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            java.sql.Connection conexion = DriverManager.getConnection("jdbc:jtds:sqlserver://192.168.1.80:55024", "usounds", "madljda");
+            Statement st = conexion.createStatement();
+            st.executeUpdate("USE cml;");
+
+            ps = conexion.prepareStatement("UPDATE `folios` SET `folio`=folio+1 WHERE `caja`=1      ");
+
+            int n = ps.executeUpdate();
+            if (n > 0) {
+             //   JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
+                st.close();
+                //  limpiarcampos();
+            }
+        } catch (HeadlessException | SQLException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Error en la base de datos, no se pudo guardar el folio" + ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+    }
+    public void obtenerfolio(){
+     
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+            st = conexion.createStatement();
+            st.executeUpdate("use prueba");
+
+            //Seleccionar datos
+            rs = st.executeQuery("SELECT folio from folios where caja ='1'");
+            md = (DefaultTableModel) jthamburguesas.getModel();
+            md.setRowCount(0);
+            try {
+                jthamburguesas.setRowHeight(40);
+                while (rs.next()) {
+                    try{
+                    folio=rs.getInt(1);
+                    }catch( Exception e ){ 
+                    this.dispose();
+                    } 
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage()+"><><");
+            }
+        } catch (HeadlessException | NumberFormatException | SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage()+"><");
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex+"xd");
+        }
+     
+    }
     public void Hamburguesas() {
         String data[][] = {};
-        String cabeza[] = {"Descripcion", "Precio"};///definimos nombre cada columna en encabezado
+        String cabeza[] = {"Codigo","Descripcion", "Precio","Imagen"};///definimos nombre cada columna en encabezado
       //  String cabeza[] = {"Descripcion", "Precio", "Imagen","xxx"};///definimos nombre cada columna en encabezado
         jthamburguesas.getTableHeader().setReorderingAllowed(false);//evitamos que no se pueda reordenar jtplatos 
 
@@ -58,7 +155,7 @@ public class Principal extends javax.swing.JFrame {
             @Override
             public boolean isCellEditable(int row, int column) {
              //   if (column != 4) {
-                if (column != 2) {
+                if (column != 4) {
                     return false;
                 } else {
                     return true;
@@ -74,17 +171,24 @@ public class Principal extends javax.swing.JFrame {
         JLabel headerLabel = (JLabel) rendererFromHeader;
         headerLabel.setHorizontalAlignment(JLabel.LEFT); 
         /////////////////////////////////////////////////////////>
-        jthamburguesas.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-
-        jthamburguesas.getColumnModel().getColumn(0).setPreferredWidth(300); //Matrícula
+        jthamburguesas.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); 
+        jthamburguesas.getColumnModel().getColumn(0).setPreferredWidth(60); //Matrícula
         jthamburguesas.getColumnModel().getColumn(0).setMaxWidth(300);
-        jthamburguesas.getColumnModel().getColumn(0).setMinWidth(300);
+        jthamburguesas.getColumnModel().getColumn(0).setMinWidth(60);
+        
+        jthamburguesas.getColumnModel().getColumn(1).setPreferredWidth(180); //Matrícula
+        jthamburguesas.getColumnModel().getColumn(1).setMaxWidth(300);
+        jthamburguesas.getColumnModel().getColumn(1).setMinWidth(180);
 
-        jthamburguesas.getColumnModel().getColumn(1).setPreferredWidth(120); //Nombre
-        jthamburguesas.getColumnModel().getColumn(1).setMaxWidth(120);
-        jthamburguesas.getColumnModel().getColumn(1).setMinWidth(120);
+        jthamburguesas.getColumnModel().getColumn(2).setPreferredWidth(70); //Nombre
+        jthamburguesas.getColumnModel().getColumn(2).setMaxWidth(120);
+        jthamburguesas.getColumnModel().getColumn(2).setMinWidth(70);
+        
+        jthamburguesas.getColumnModel().getColumn(3).setPreferredWidth(120); //Nombre
+        jthamburguesas.getColumnModel().getColumn(3).setMaxWidth(120);
+        jthamburguesas.getColumnModel().getColumn(3).setMinWidth(120);
   
-       // jthamburguesas.setDefaultRenderer(Object.class,new Imgtabla());
+        jthamburguesas.setDefaultRenderer(Object.class, new Imgtabla());
         try {
             Class.forName("com.mysql.jdbc.Driver");
             java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
@@ -92,18 +196,16 @@ public class Principal extends javax.swing.JFrame {
             st.executeUpdate("use prueba");
 
             //Seleccionar datos
-            rs = st.executeQuery("select * from productos where categoria='hamburguesa'");
+            rs = st.executeQuery("SELECT `codigo`, `descripcion`, `precio`, `cantidad`, `categoria`, `imagen` from productos where categoria='hamburguesa'");
             md = (DefaultTableModel) jthamburguesas.getModel();
             md.setRowCount(0);
             try {
                 jthamburguesas.setRowHeight(40);
                 while (rs.next()) {
-                  
-                 //   Object[] fila = (new Object[]{rs.getString(1),"$"+rs.getString(2) , rs.getString(3), rs.getString(4)     });
-                    Object[] fila = (new Object[]{rs.getString(1),"$"+rs.getString(2) });
-                    md.addRow(fila);
-                //    System.out.println(">>>"+rs.getString(1)+rs.getString(2)+rs.getString(3));
-                }
+                   String RUTA = "/img/" + rs.getString(6);
+                   Object[] fila = (new Object[]{rs.getString(1),rs.getString(2),"$"+rs.getString(3),new JLabel(new ImageIcon(getClass().getResource(""+ RUTA + ""))) });
+                   md.addRow(fila);
+                 }
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
             }
@@ -187,8 +289,8 @@ public class Principal extends javax.swing.JFrame {
     public void sumar() {
         double r = 0;
         for (int x = 0; x < jtfinal.getRowCount(); x++) {
-            String vprecio = ((String) jtfinal.getValueAt(x, 1));//obtener valor de precio
-            int vcantidad = ((int) jtfinal.getValueAt(x, 2));///obtienes el valor de la cantidad
+            String vprecio = ((String) jtfinal.getValueAt(x, 2));//obtener valor de precio
+            int vcantidad = ((int) jtfinal.getValueAt(x, 3));///obtienes el valor de la cantidad
             String vprecioformateado = vprecio.replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", "");//dejameos solo los elementos"[^0-1-2-3-4-5-6-7-8-9-.00]"
             double vprecioparseado = Double.parseDouble(vprecioformateado);
             r += vprecioparseado * vcantidad;
@@ -215,7 +317,6 @@ public class Principal extends javax.swing.JFrame {
             public boolean isCellEditable (int rowIndex, int colIndex) {
                 return false; // No permitir la edición de ninguna celda
             }};
-            btnagregarhamburguesa = new javax.swing.JToggleButton();
             jPanel1 = new javax.swing.JPanel();
             ch1 = new javax.swing.JCheckBox();
             ch4 = new javax.swing.JCheckBox();
@@ -223,10 +324,12 @@ public class Principal extends javax.swing.JFrame {
             ch5 = new javax.swing.JCheckBox();
             ch6 = new javax.swing.JCheckBox();
             ch3 = new javax.swing.JCheckBox();
-            btnNada = new javax.swing.JToggleButton();
             txt_codigo = new javax.swing.JTextField();
             jLabel6 = new javax.swing.JLabel();
             jButton3 = new javax.swing.JButton();
+            btnagregar = new javax.swing.JButton();
+            jButton4 = new javax.swing.JButton();
+            jButton5 = new javax.swing.JButton();
             Ordenes = new javax.swing.JPanel();
             jScrollPane5 = new javax.swing.JScrollPane();
             jtbebidas = new javax.swing.JTable();
@@ -320,14 +423,6 @@ public class Principal extends javax.swing.JFrame {
                     jthamburguesas.getColumnModel().getColumn(0).setResizable(false);
                 }
 
-                btnagregarhamburguesa.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-                btnagregarhamburguesa.setText("Añadir");
-                btnagregarhamburguesa.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        btnagregarhamburguesaActionPerformed(evt);
-                    }
-                });
-
                 jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
                 jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -360,13 +455,6 @@ public class Principal extends javax.swing.JFrame {
                 ch3.setPreferredSize(new java.awt.Dimension(90, 22));
                 jPanel1.add(ch3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 60, 140, -1));
 
-                btnNada.setText("Sin nada");
-                btnNada.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        btnNadaActionPerformed(evt);
-                    }
-                });
-
                 txt_codigo.addKeyListener(new java.awt.event.KeyAdapter() {
                     public void keyReleased(java.awt.event.KeyEvent evt) {
                         txt_codigoKeyReleased(evt);
@@ -375,10 +463,31 @@ public class Principal extends javax.swing.JFrame {
 
                 jLabel6.setText("Buscar:");
 
-                jButton3.setText("imprimi ttt");
+                jButton3.setText("VER REG");
                 jButton3.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
                         jButton3ActionPerformed(evt);
+                    }
+                });
+
+                btnagregar.setText("Agregar");
+                btnagregar.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        btnagregarActionPerformed(evt);
+                    }
+                });
+
+                jButton4.setText("Con todo");
+                jButton4.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        jButton4ActionPerformed(evt);
+                    }
+                });
+
+                jButton5.setText("Sin nada");
+                jButton5.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        jButton5ActionPerformed(evt);
                     }
                 });
 
@@ -388,24 +497,23 @@ public class Principal extends javax.swing.JFrame {
                     BebidasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(BebidasLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(BebidasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(BebidasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(BebidasLayout.createSequentialGroup()
                                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnNada, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnagregarhamburguesa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(BebidasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
+                                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnagregar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(BebidasLayout.createSequentialGroup()
-                                .addGroup(BebidasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(BebidasLayout.createSequentialGroup()
-                                        .addGap(8, 8, 8)
-                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txt_codigo, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jButton3)))
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGap(8, 8, 8)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txt_codigo, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton3)))
                         .addContainerGap(18, Short.MAX_VALUE))
                 );
                 BebidasLayout.setVerticalGroup(
@@ -421,12 +529,15 @@ public class Principal extends javax.swing.JFrame {
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(BebidasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnagregarhamburguesa, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
                             .addGroup(BebidasLayout.createSequentialGroup()
                                 .addGroup(BebidasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnNada))
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                    .addGroup(BebidasLayout.createSequentialGroup()
+                                        .addComponent(jButton5)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jButton4)))
+                                .addGap(0, 112, Short.MAX_VALUE))
+                            .addComponent(btnagregar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addContainerGap())
                 );
 
@@ -700,11 +811,11 @@ public class Principal extends javax.swing.JFrame {
 
                     },
                     new String [] {
-                        "Descripcion", "Precio", "Cantidad", "Detalles"
+                        "Codigo", "Descripcion", "Precio", "Cantidad", "Detalles"
                     }
                 ) {
                     boolean[] canEdit = new boolean [] {
-                        false, false, false, false
+                        true, false, false, false, false
                     };
 
                     public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -714,10 +825,10 @@ public class Principal extends javax.swing.JFrame {
                 jtfinal.setRowHeight(32);
                 jScrollPane2.setViewportView(jtfinal);
                 if (jtfinal.getColumnModel().getColumnCount() > 0) {
-                    jtfinal.getColumnModel().getColumn(0).setPreferredWidth(100);
-                    jtfinal.getColumnModel().getColumn(1).setPreferredWidth(50);
+                    jtfinal.getColumnModel().getColumn(1).setPreferredWidth(100);
                     jtfinal.getColumnModel().getColumn(2).setPreferredWidth(50);
-                    jtfinal.getColumnModel().getColumn(3).setPreferredWidth(10);
+                    jtfinal.getColumnModel().getColumn(3).setPreferredWidth(50);
+                    jtfinal.getColumnModel().getColumn(4).setPreferredWidth(10);
                 }
 
                 getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 50, 520, 340));
@@ -754,7 +865,7 @@ public class Principal extends javax.swing.JFrame {
                         btnconfirmarActionPerformed(evt);
                     }
                 });
-                getContentPane().add(btnconfirmar, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 470, 510, 180));
+                getContentPane().add(btnconfirmar, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 470, 510, 180));
 
                 txttotal1.setBackground(new java.awt.Color(255, 255, 255));
                 txttotal1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
@@ -783,7 +894,7 @@ public class Principal extends javax.swing.JFrame {
                 });
                 getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 3, 110, 40));
 
-                jButton2.setText("Limpiar");
+                jButton2.setText("Limpiar todo");
                 jButton2.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
                         jButton2ActionPerformed(evt);
@@ -807,13 +918,11 @@ public class Principal extends javax.swing.JFrame {
     private void btnconfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnconfirmarActionPerformed
         if (jtfinal.getRowCount() > 0) {
             Cobrar cb = new Cobrar();
-
             String TXTTTOTAL = txttotal.getText();
             String TXTTOTALDLLS = txttotaldlls.getText();
             cb.setVisible(true);
             cb.txttotalc.setText(TXTTTOTAL);
             cb.txttotaldllsc.setText(TXTTOTALDLLS);
-            //  cb.JTDVCAJA.setText(CAJA);
             cb.Enviartotal();
 
         } else {
@@ -822,51 +931,12 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnconfirmarActionPerformed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-                if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+            /*    if(evt.getKeyCode()==KeyEvent.VK_ENTER){
                     JOptionPane.showMessageDialog(null, "Has pulsado Enter");
                 }
-                if(evt.getKeyCode()==KeyEvent.VK_ESCAPE){
-                  //  System.exit(0);
-                }
+                if(evt.getKeyCode()==KeyEvent.VK_ESCAPE){             
+                }*/
     }//GEN-LAST:event_formKeyPressed
-
-    private void btnagregarhamburguesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarhamburguesaActionPerformed
-       
-          DefaultTableModel model = (DefaultTableModel) jtfinal.getModel();
-
-            int filaseleccionada = jthamburguesas.getSelectedRow();//OBTIENES EL ELEMENTO DE LA TABLA
-            if (filaseleccionada >= 0) {
-
-                Object obj1 = (jthamburguesas.getValueAt(filaseleccionada, 0));///OBTIENES EL PRIMER FILA
-                Object obj2 = (jthamburguesas.getValueAt(filaseleccionada, 1));//OBTIENES LA SEGUNDA FILA
-                String descripcionp = obj1.toString();    /// CAMBIAS LOS OBJETOS A TIPO STRING
-                String cantidadp = obj2.toString();///
-
-                String combinar = "";
-                if (ch1.isSelected()) {
-                    combinar += "SIN CEBOLLA,";
-                }
-                if (ch2.isSelected()) {
-                    combinar += "SIN CHILE,";
-                }
-                if (ch3.isSelected()) {
-                    combinar += "SIN PEPINILLOS,";
-                }
-                if (ch4.isSelected()) {
-                    combinar += "SIN TOMATE,";
-                }
-                if (ch5.isSelected()) {
-                    combinar += "SIN MOSTAZA,";
-                }
-                if (ch6.isSelected()) {
-                    combinar += "SIN KETCHUP";
-                }
-                model.addRow(new Object[]{obj1, obj2, 1,combinar});
-            }
-            sumar();
-         
-
-    }//GEN-LAST:event_btnagregarhamburguesaActionPerformed
 
     private void jthamburguesasKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jthamburguesasKeyTyped
        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
@@ -879,70 +949,23 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jthamburguesasKeyTyped
 
     private void jthamburguesasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jthamburguesasKeyPressed
-        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+    /*    if(evt.getKeyCode()==KeyEvent.VK_ENTER){
             JOptionPane.showMessageDialog(null, "Has pulsado Enter");
         }
         if(evt.getKeyCode()==KeyEvent.VK_ESCAPE){
-        }
+        }*/
 
     }//GEN-LAST:event_jthamburguesasKeyPressed
 
     private void jthamburguesasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jthamburguesasMouseClicked
-
-        if(evt.getClickCount()==2){
-            DefaultTableModel model = (DefaultTableModel) jtfinal.getModel();
-
-            int filaseleccionada = jthamburguesas.getSelectedRow();//OBTIENES EL ELEMENTO DE LA TABLA
-            if (filaseleccionada >= 0) {
-
-                Object obj1 = (jthamburguesas.getValueAt(filaseleccionada, 0));///OBTIENES EL PRIMER FILA
-                Object obj2 = (jthamburguesas.getValueAt(filaseleccionada, 1));//OBTIENES LA SEGUNDA FILA
-                String descripcionp = obj1.toString();    /// CAMBIAS LOS OBJETOS A TIPO STRING
-                String cantidadp = obj2.toString();///
-
-                String combinar = "";
-                if (ch1.isSelected()) {
-                    combinar += "SIN CEBOLLA,";
-                }
-                if (ch2.isSelected()) {
-                    combinar += "SIN CHILE,";
-                }
-                if (ch3.isSelected()) {
-                    combinar += "SIN PEPINILLOS,";
-                }
-                if (ch4.isSelected()) {
-                    combinar += "SIN TOMATE,";
-                }
-                if (ch5.isSelected()) {
-                    combinar += "SIN MOSTAZA,";
-                }
-                if (ch6.isSelected()) {
-                    combinar += "SIN KETCHUP";
-                }
-                
-                if (combinar == "") {
-                    combinar = "CON TODO";
-                }
-                model.addRow(new Object[]{obj1, obj2, 1,combinar});
-          
-                
-            sumar();
-        }
+        if (evt.getClickCount() == 2) { 
+            agregarfinal();
         }
     }//GEN-LAST:event_jthamburguesasMouseClicked
 
     private void btnagregarplato1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarplato1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnagregarplato1ActionPerformed
-
-    private void btnNadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNadaActionPerformed
-        ch1.setSelected(true);
-        ch2.setSelected(true);
-        ch3.setSelected(true);
-        ch4.setSelected(true);
-        ch5.setSelected(true);
-        ch6.setSelected(true);
-    }//GEN-LAST:event_btnNadaActionPerformed
 
     private void ch6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ch6ActionPerformed
         // TODO add your handling code here:
@@ -964,8 +987,8 @@ public class Principal extends javax.swing.JFrame {
         if (filaseleccionada >= 0) {
             String itemcodigo = (jtfinal.getValueAt(filaseleccionada, 3).toString().trim());
             DefaultTableModel dtm = (DefaultTableModel) jtfinal.getModel(); //TableProducto es el nombre de mi tabla ;)
-        dtm.removeRow(jtfinal.getSelectedRow());
-        sumar();
+            dtm.removeRow(jtfinal.getSelectedRow());
+            sumar();
         } else {
             JOptionPane.showMessageDialog(null, "NO SELECCIONASTE NINGUN CODIGO ");
         }
@@ -1008,23 +1031,85 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        double r = 0;
-        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------");
-        for (int x = 0; x < jtfinal.getRowCount(); x++) {
-            String vprecio = ((String) jtfinal.getValueAt(x, 1));//obtener valor de precio
-            int vcantidad = ((int) jtfinal.getValueAt(x, 2));///obtienes el valor de la cantidad
-            String vprecioformateado = vprecio.replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", "");//dejameos solo los elementos"[^0-1-2-3-4-5-6-7-8-9-.00]"
-            double vprecioparseado = Double.parseDouble(vprecioformateado);
-            System.out.println("tabla=" + jtfinal.getValueAt(x, 0) + "|" + jtfinal.getValueAt(x, 1) + "|" + jtfinal.getValueAt(x, 2) + "|" + jtfinal.getValueAt(x, 3));
-            r += 1;
-        }
-        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------");
+        double numarticulo = 0;
+        obtenerfolio();
+              System.out.println("paso1");
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+            Statement st = conexion.createStatement();
+             st.executeUpdate("USE prueba;");
+                  System.out.println("paso la conexion");
+            //Seleccionar datos
+            //  rs = st.executeQuery("SELECT `codigo`, `descripcion`, `precio`, `cantidad`, `categoria`, `imagen` from productos where categoria='hamburguesa'");
+            // rs2 = st.executeQuery("SELECT  from productos where categoria='hamburguesa'");
+            for (int x = 0; x < jtfinal.getRowCount(); x++) {
+                  System.out.println("llegando al ciclo");
+                  String vcodigo = ((String) jtfinal.getValueAt(x, 0));//obtener valor de precio
+                String vdescripcion = ((String) jtfinal.getValueAt(x, 1));//obtener valor de precio
+                String vprecio =  ((String) jtfinal.getValueAt(x, 2));///obtienes el valor de la cantidad
+                int vcantidad =  ((int) jtfinal.getValueAt(x, 3));///obtienes el valor de la cantidad
+                
+                
+                  String vprecioformateado = vprecio.replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", "");//dejameos solo los elementos"[^0-1-2-3-4-5-6-7-8-9-.00]"
+                double vprecioparseado = Double.parseDouble(vprecioformateado);
+                ps = conexion.prepareStatement("INSERT INTO `ventas`(`Fecha`, `Sucursal`, `Folio`, `Caja`, `Articulo`, `Codigo`, `Grupo`, `Cantidad`, `Precioventa`, `Vendedor`, `Cajero`, `Claveventa`, `Hora`) "
+                         + "VALUES (getdate(),'1','"+folio+"','1','"+numarticulo+"','"+vcodigo+"','00','"+vcantidad +"','"+vprecioformateado+"','1111','00',777,'11:21'");
 
+
+                      numarticulo =numarticulo+ 1;
+                 
+              }
+            
+            //      System.out.println(">>>>>xxxx" + txtgondola.getText().toUpperCase() + txtcantidad.getText().toUpperCase() + date);
+           int n = ps.executeUpdate();
+            if (n > 0) {
+                JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
+                aumentarfolio();
+                
+                
+                //limpiarventanas();
+            }
+        } catch (HeadlessException | SQLException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Error en la base de datos");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
+        
+        
+        
+        
+        
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnagregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarActionPerformed
+     agregarfinal(); 
+    }//GEN-LAST:event_btnagregarActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        ch1.setSelected(false);
+        ch2.setSelected(false);
+        ch3.setSelected(false);
+        ch4.setSelected(false);
+        ch5.setSelected(false);
+        ch6.setSelected(false);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+      ch1.setSelected(true);
+        ch2.setSelected(true);
+        ch3.setSelected(true);
+        ch4.setSelected(true);
+        ch5.setSelected(true);
+        ch6.setSelected(true);
+    }//GEN-LAST:event_jButton5ActionPerformed
 
    
     public static void main(String args[]) {
@@ -1067,10 +1152,9 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JPanel Ordenes1;
     private javax.swing.JPanel Ordenes2;
     private javax.swing.JButton btnEliminarpieza1;
-    private javax.swing.JToggleButton btnNada;
     private javax.swing.JToggleButton btnNada1;
     private javax.swing.JToggleButton btnTodo1;
-    private javax.swing.JToggleButton btnagregarhamburguesa;
+    private javax.swing.JButton btnagregar;
     private javax.swing.JToggleButton btnagregarhotdog;
     private javax.swing.JToggleButton btnagregarplato1;
     private javax.swing.JButton btnconfirmar;
@@ -1092,6 +1176,8 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1121,7 +1207,7 @@ public class Principal extends javax.swing.JFrame {
  public void Totaldearticulos() {
             int r = 0;
             for (int x = 0; x < jtfinal.getRowCount(); x++) {
-                int vcantidad = Integer.parseInt(jtfinal.getValueAt(x, 2).toString().replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", ""));///obtienes el valor de la cantidad
+                int vcantidad = Integer.parseInt(jtfinal.getValueAt(x, 3).toString().replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", ""));///obtienes el valor de la cantidad
                 r = vcantidad + r;
               //  System.out.println("r " + r);
                 //System.out.println("vcantidad " + vcantidad);
@@ -1138,12 +1224,12 @@ public class Principal extends javax.swing.JFrame {
     }
    public void tablafinal() {
      String data[][] = {};
-        String cabeza[] = {"Descripcion", "Precio", "Cantidad","Detalles"};
+        String cabeza[] = {"Codigo","Descripcion", "Precio", "Cantidad","Detalles"};
         jtfinal.getTableHeader().setReorderingAllowed(false);
         md = new DefaultTableModel(data, cabeza) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                if (column != 4) {
+                if (column != 5) {
                     return false;
                 } else {
                     return true;
@@ -1153,7 +1239,7 @@ public class Principal extends javax.swing.JFrame {
         jtfinal.setModel(md);
         JTableHeader th;
         th = jtfinal.getTableHeader();
-        th.setFont(new java.awt.Font("tahoma", 0, 18));
+        th.setFont(new java.awt.Font("tahoma", 0, 14));
 
         //Centrar el encabezado de la tabla
         TableCellRenderer rendererFromHeader = jtfinal.getTableHeader().getDefaultRenderer();
@@ -1162,19 +1248,24 @@ public class Principal extends javax.swing.JFrame {
 
         jtfinal.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        jtfinal.getColumnModel().getColumn(0).setPreferredWidth(170);  
-        jtfinal.getColumnModel().getColumn(0).setMaxWidth(170);
-        jtfinal.getColumnModel().getColumn(0).setMinWidth(170);
+        
+        jtfinal.getColumnModel().getColumn(0).setPreferredWidth(60);  
+        jtfinal.getColumnModel().getColumn(0).setMaxWidth(80);
+        jtfinal.getColumnModel().getColumn(0).setMinWidth(60);
+        
+        jtfinal.getColumnModel().getColumn(1).setPreferredWidth(170);  
+        jtfinal.getColumnModel().getColumn(1).setMaxWidth(170);
+        jtfinal.getColumnModel().getColumn(1).setMinWidth(170);
 
-        jtfinal.getColumnModel().getColumn(1).setPreferredWidth(80); 
-        jtfinal.getColumnModel().getColumn(1).setMaxWidth(80);
-        jtfinal.getColumnModel().getColumn(1).setMinWidth(80);
-        
-        jtfinal.getColumnModel().getColumn(2).setPreferredWidth(50);  
+        jtfinal.getColumnModel().getColumn(2).setPreferredWidth(70); 
         jtfinal.getColumnModel().getColumn(2).setMaxWidth(80);
-        jtfinal.getColumnModel().getColumn(2).setMinWidth(50); 
+        jtfinal.getColumnModel().getColumn(2).setMinWidth(70);
         
-        jtfinal.getColumnModel().getColumn(3).setPreferredWidth(220);  
-        jtfinal.getColumnModel().getColumn(3).setMaxWidth(220);
-        jtfinal.getColumnModel().getColumn(3).setMinWidth(220); }
+        jtfinal.getColumnModel().getColumn(3).setPreferredWidth(50);  
+        jtfinal.getColumnModel().getColumn(3).setMaxWidth(80);
+        jtfinal.getColumnModel().getColumn(3).setMinWidth(50); 
+        
+        jtfinal.getColumnModel().getColumn(4).setPreferredWidth(220);  
+        jtfinal.getColumnModel().getColumn(4).setMaxWidth(500);
+        jtfinal.getColumnModel().getColumn(4).setMinWidth(220); }
 }
