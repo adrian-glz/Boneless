@@ -49,20 +49,86 @@ public class Principal extends javax.swing.JFrame {
                     System.exit(0);
                 }*/
             }
- 
-    public void agregarfinal(){
-       DefaultTableModel model = (DefaultTableModel) jtfinal.getModel();
+    
+    
+    
+    public void insertaventapagos() {
+        Statement e;
+        PreparedStatement pse = null;
+        double numarticulo = 1;
+        int n = 0;
+        double total = Double.parseDouble(txttotal.getText().replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", ""));
+        //System.out.println("double perro>>>" + total);
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+            Statement ste = conexion.createStatement();
+            ste.executeUpdate("USE prueba;");
+            pse = conexion.prepareStatement("INSERT INTO `ventaspagos`(`Sucursal`,  `Caja`, `Folio`, `Importe`, `Clavepago`, `NumeroTarjeta`, `NombreCliente`, `DireccionCliente`, `TelefonoCliente`, `CorreoCliente`) \n"
+                    + "VALUES ('1','1','" + folio + "','" + total + "','01','0000','NULL','NULL','NULL','NULL')");
+            numarticulo = numarticulo + 1;
+            n = pse.executeUpdate();
+        } catch (HeadlessException | SQLException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Error en la base de datos" + ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (n > 0) {
+            JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
+            aumentarfolio();
+        }
+    }
+
+    public void insertarventa() {
+
+        Statement e;
+        PreparedStatement pse = null;
+        double numarticulo = 1;
+        obtenerfolio();
+        int n = 0;
+        for (int x = 0; x < jtfinal.getRowCount(); x++) {
+
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+                Statement ste = conexion.createStatement();
+                ste.executeUpdate("USE prueba;");
+                String vcodigo = ((String) jtfinal.getValueAt(x, 0));//obtener valor de precio
+                String vdescripcion = ((String) jtfinal.getValueAt(x, 1));//obtener valor de precio
+                String vprecio = ((String) jtfinal.getValueAt(x, 2));///obtienes el valor de la cantidad
+                int vcantidad = ((int) jtfinal.getValueAt(x, 3));///obtienes el valor de la cantidad
+                String vprecioformateado = vprecio.replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", "");//dejameos solo los elementos"[^0-1-2-3-4-5-6-7-8-9-.00]"
+                double vprecioparseado = Double.parseDouble(vprecioformateado);
+                pse = conexion.prepareStatement("INSERT INTO ventas ( `Sucursal`, `Folio`, `Caja`, `Articulo`, `Codigo`, `Grupo`, `Cantidad`, `Precioventa`, `Vendedor`, `Cajero`, `Claveventa`, `Hora`) "
+                        + "VALUES ( '1','" + folio + "','1','" + numarticulo + "','" + vcodigo + "','00','" + vcantidad + "','" + vprecioformateado + "','1111','00','777','11:21')");
+                numarticulo = numarticulo + 1;
+                n = pse.executeUpdate();
+
+            } catch (HeadlessException | SQLException ex) {
+                JOptionPane.showMessageDialog(rootPane, "Error en la base de datos" + ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }///fin del cliclo for perro
+        if (n > 0) {
+            JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
+            insertaventapagos();
+            //  aumentarfolio(); 
+        }
+    }
+
+    public void agregarfinal() {
+        DefaultTableModel model = (DefaultTableModel) jtfinal.getModel();
 
         int filaseleccionada = jthamburguesas.getSelectedRow();//OBTIENES EL ELEMENTO DE LA TABLA
         if (filaseleccionada >= 0) {
             Object obj0 = (jthamburguesas.getValueAt(filaseleccionada, 0));///OBTIENES EL PRIMER FILA
             Object obj1 = (jthamburguesas.getValueAt(filaseleccionada, 1));///OBTIENES EL PRIMER FILA
             Object obj2 = (jthamburguesas.getValueAt(filaseleccionada, 2));//OBTIENES LA SEGUNDA FILA
-            
-            /*String cod= obj0.toString();    /// CAMBIAS LOS OBJETOS A TIPO STRING
-            String descripcionp = obj1.toString();    /// CAMBIAS LOS OBJETOS A TIPO STRING
-            String cantidadp = obj2.toString();///*/
 
+            /*String cod= obj0.toString();    /// CAMBIAS LOS OBJETOS A TIPO STRING
+             String descripcionp = obj1.toString();    /// CAMBIAS LOS OBJETOS A TIPO STRING
+             String cantidadp = obj2.toString();///*/
             String combinar = "";
             if (ch1.isSelected()) {
                 combinar += "SIN CEBOLLA,";
@@ -81,28 +147,28 @@ public class Principal extends javax.swing.JFrame {
             }
             if (ch6.isSelected()) {
                 combinar += "SIN KETCHUP";
+            } else {
+
+                combinar = "CON TODO";
             }
-            else{
-            
-            combinar="CON TODO";
-            }
-            model.addRow(new Object[]{obj0,obj1, obj2, 1,combinar});
+            model.addRow(new Object[]{obj0, obj1, obj2, 1, combinar});
         }
         sumar();
 
     }
-    public void aumentarfolio(){
-            try {
-            Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            java.sql.Connection conexion = DriverManager.getConnection("jdbc:jtds:sqlserver://192.168.1.80:55024", "usounds", "madljda");
+
+    public void aumentarfolio() {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
             Statement st = conexion.createStatement();
-            st.executeUpdate("USE cml;");
+            st.executeUpdate("USE prueba;");
 
             ps = conexion.prepareStatement("UPDATE `folios` SET `folio`=folio+1 WHERE `caja`=1      ");
 
             int n = ps.executeUpdate();
             if (n > 0) {
-             //   JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
+                //   JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
                 st.close();
                 //  limpiarcampos();
             }
@@ -111,10 +177,11 @@ public class Principal extends javax.swing.JFrame {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
+
     }
-    public void obtenerfolio(){
-     
+
+    public void obtenerfolio() {
+
         try {
             Class.forName("com.mysql.jdbc.Driver");
             java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
@@ -123,38 +190,38 @@ public class Principal extends javax.swing.JFrame {
 
             //Seleccionar datos
             rs = st.executeQuery("SELECT folio from folios where caja ='1'");
-            md = (DefaultTableModel) jthamburguesas.getModel();
-            md.setRowCount(0);
+
             try {
-                jthamburguesas.setRowHeight(40);
+
                 while (rs.next()) {
-                    try{
-                    folio=rs.getInt(1);
-                    }catch( Exception e ){ 
-                    this.dispose();
-                    } 
+                    try {
+                        folio = rs.getInt(1);
+                    } catch (Exception e) {
+                        this.dispose();
+                    }
                 }
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage()+"><><");
+                JOptionPane.showMessageDialog(null, ex.getMessage() + "><><");
             }
         } catch (HeadlessException | NumberFormatException | SQLException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage()+"><");
+            JOptionPane.showMessageDialog(null, e.getMessage() + "><");
 
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex+"xd");
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex + "xd");
         }
-     
+
     }
+
     public void Hamburguesas() {
         String data[][] = {};
-        String cabeza[] = {"Codigo","Descripcion", "Precio","Imagen"};///definimos nombre cada columna en encabezado
-      //  String cabeza[] = {"Descripcion", "Precio", "Imagen","xxx"};///definimos nombre cada columna en encabezado
+        String cabeza[] = {"Codigo", "Descripcion", "Precio", "Imagen"};///definimos nombre cada columna en encabezado
+        //  String cabeza[] = {"Descripcion", "Precio", "Imagen","xxx"};///definimos nombre cada columna en encabezado
         jthamburguesas.getTableHeader().setReorderingAllowed(false);//evitamos que no se pueda reordenar jtplatos 
 
         md = new DefaultTableModel(data, cabeza) {
             @Override
             public boolean isCellEditable(int row, int column) {
-             //   if (column != 4) {
+                //   if (column != 4) {
                 if (column != 4) {
                     return false;
                 } else {
@@ -169,13 +236,13 @@ public class Principal extends javax.swing.JFrame {
         //<Centrar el encabezado de la tabla>
         TableCellRenderer rendererFromHeader = jthamburguesas.getTableHeader().getDefaultRenderer();//
         JLabel headerLabel = (JLabel) rendererFromHeader;
-        headerLabel.setHorizontalAlignment(JLabel.LEFT); 
+        headerLabel.setHorizontalAlignment(JLabel.LEFT);
         /////////////////////////////////////////////////////////>
-        jthamburguesas.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); 
+        jthamburguesas.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jthamburguesas.getColumnModel().getColumn(0).setPreferredWidth(60); //Matrícula
         jthamburguesas.getColumnModel().getColumn(0).setMaxWidth(300);
         jthamburguesas.getColumnModel().getColumn(0).setMinWidth(60);
-        
+
         jthamburguesas.getColumnModel().getColumn(1).setPreferredWidth(180); //Matrícula
         jthamburguesas.getColumnModel().getColumn(1).setMaxWidth(300);
         jthamburguesas.getColumnModel().getColumn(1).setMinWidth(180);
@@ -183,11 +250,11 @@ public class Principal extends javax.swing.JFrame {
         jthamburguesas.getColumnModel().getColumn(2).setPreferredWidth(70); //Nombre
         jthamburguesas.getColumnModel().getColumn(2).setMaxWidth(120);
         jthamburguesas.getColumnModel().getColumn(2).setMinWidth(70);
-        
+
         jthamburguesas.getColumnModel().getColumn(3).setPreferredWidth(120); //Nombre
         jthamburguesas.getColumnModel().getColumn(3).setMaxWidth(120);
         jthamburguesas.getColumnModel().getColumn(3).setMinWidth(120);
-  
+
         jthamburguesas.setDefaultRenderer(Object.class, new Imgtabla());
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -202,10 +269,10 @@ public class Principal extends javax.swing.JFrame {
             try {
                 jthamburguesas.setRowHeight(40);
                 while (rs.next()) {
-                   String RUTA = "/img/" + rs.getString(6);
-                   Object[] fila = (new Object[]{rs.getString(1),rs.getString(2),"$"+rs.getString(3),new JLabel(new ImageIcon(getClass().getResource(""+ RUTA + ""))) });
-                   md.addRow(fila);
-                 }
+                    String RUTA = "/img/" + rs.getString(6);
+                    Object[] fila = (new Object[]{rs.getString(1), rs.getString(2), "$" + rs.getString(3), new JLabel(new ImageIcon(getClass().getResource("" + RUTA + "")))});
+                    md.addRow(fila);
+                }
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
             }
@@ -216,6 +283,7 @@ public class Principal extends javax.swing.JFrame {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     public void Bebidas() {
         String data[][] = {};
         String cabeza[] = {"1", "2", "3", "4"};
@@ -361,7 +429,6 @@ public class Principal extends javax.swing.JFrame {
                 filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
                 jScrollPane2 = new javax.swing.JScrollPane();
                 jtfinal = new javax.swing.JTable();
-                c = new javax.swing.JLabel();
                 jLabel3 = new javax.swing.JLabel();
                 txttotal = new javax.swing.JLabel();
                 jLabel4 = new javax.swing.JLabel();
@@ -831,19 +898,16 @@ public class Principal extends javax.swing.JFrame {
                     jtfinal.getColumnModel().getColumn(4).setPreferredWidth(10);
                 }
 
-                getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 50, 520, 340));
-
-                c.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-                getContentPane().add(c, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 500, 160, 30));
+                getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 170, 520, 340));
 
                 jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
                 jLabel3.setText("DLLS");
-                getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 420, 70, 30));
+                getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 540, 70, 30));
 
                 txttotal.setBackground(new java.awt.Color(255, 255, 255));
                 txttotal.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
                 txttotal.setText("$ 0.00");
-                getContentPane().add(txttotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 390, 160, 30));
+                getContentPane().add(txttotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 510, 160, 30));
 
                 jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
                 jLabel4.setText("TOTAL:");
@@ -851,11 +915,11 @@ public class Principal extends javax.swing.JFrame {
 
                 jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
                 jLabel5.setText("MXN");
-                getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 390, 70, 30));
+                getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 510, 70, 30));
 
                 txttotaldlls.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
                 txttotaldlls.setText("$ 0.00");
-                getContentPane().add(txttotaldlls, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 420, 160, 30));
+                getContentPane().add(txttotaldlls, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 540, 160, 30));
 
                 btnconfirmar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
                 btnconfirmar.setForeground(new java.awt.Color(64, 190, 64));
@@ -865,18 +929,18 @@ public class Principal extends javax.swing.JFrame {
                         btnconfirmarActionPerformed(evt);
                     }
                 });
-                getContentPane().add(btnconfirmar, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 470, 510, 180));
+                getContentPane().add(btnconfirmar, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 620, 520, 60));
 
                 txttotal1.setBackground(new java.awt.Color(255, 255, 255));
                 txttotal1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
                 txttotal1.setText("TOTAL DE ARTICULO(S):");
-                getContentPane().add(txttotal1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 0, 300, 45));
+                getContentPane().add(txttotal1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 570, 300, 45));
 
                 txttotalarticulos.setBackground(new java.awt.Color(255, 255, 255));
                 txttotalarticulos.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
                 txttotalarticulos.setForeground(new java.awt.Color(255, 51, 51));
                 txttotalarticulos.setText("0");
-                getContentPane().add(txttotalarticulos, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 1, 77, 40));
+                getContentPane().add(txttotalarticulos, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 570, 77, 40));
 
                 btnEliminarpieza1.setText("Quitar pieza");
                 btnEliminarpieza1.addActionListener(new java.awt.event.ActionListener() {
@@ -884,7 +948,7 @@ public class Principal extends javax.swing.JFrame {
                         btnEliminarpieza1ActionPerformed(evt);
                     }
                 });
-                getContentPane().add(btnEliminarpieza1, new org.netbeans.lib.awtextra.AbsoluteConstraints(461, 400, 100, 35));
+                getContentPane().add(btnEliminarpieza1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 520, 100, 35));
 
                 jButton1.setText("Opciones");
                 jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -892,7 +956,7 @@ public class Principal extends javax.swing.JFrame {
                         jButton1ActionPerformed(evt);
                     }
                 });
-                getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 3, 110, 40));
+                getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 10, 110, 40));
 
                 jButton2.setText("Limpiar todo");
                 jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -900,14 +964,13 @@ public class Principal extends javax.swing.JFrame {
                         jButton2ActionPerformed(evt);
                     }
                 });
-                getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 400, 100, 35));
+                getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 520, 100, 35));
 
                 pack();
             }// </editor-fold>//GEN-END:initComponents
     public static void vaciartabla(Object[] sergioelbailador) {
-        DefaultTableModel mode = (DefaultTableModel) jtfinal.getModel();
+     DefaultTableModel mode = (DefaultTableModel) jtfinal.getModel();
         int filas = mode.getRowCount();///pasamos el total de elementos a filas
-
         for (int i = 0; filas > i; i++) {
             mode.removeRow(0); //removes las columnas en base a la longitud de el arreglo
         }
@@ -1031,58 +1094,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        double numarticulo = 0;
-        obtenerfolio();
-              System.out.println("paso1");
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
-            Statement st = conexion.createStatement();
-             st.executeUpdate("USE prueba;");
-                  System.out.println("paso la conexion");
-            //Seleccionar datos
-            //  rs = st.executeQuery("SELECT `codigo`, `descripcion`, `precio`, `cantidad`, `categoria`, `imagen` from productos where categoria='hamburguesa'");
-            // rs2 = st.executeQuery("SELECT  from productos where categoria='hamburguesa'");
-            for (int x = 0; x < jtfinal.getRowCount(); x++) {
-                  System.out.println("llegando al ciclo");
-                  String vcodigo = ((String) jtfinal.getValueAt(x, 0));//obtener valor de precio
-                String vdescripcion = ((String) jtfinal.getValueAt(x, 1));//obtener valor de precio
-                String vprecio =  ((String) jtfinal.getValueAt(x, 2));///obtienes el valor de la cantidad
-                int vcantidad =  ((int) jtfinal.getValueAt(x, 3));///obtienes el valor de la cantidad
-                
-                
-                  String vprecioformateado = vprecio.replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", "");//dejameos solo los elementos"[^0-1-2-3-4-5-6-7-8-9-.00]"
-                double vprecioparseado = Double.parseDouble(vprecioformateado);
-                ps = conexion.prepareStatement("INSERT INTO `ventas`(`Fecha`, `Sucursal`, `Folio`, `Caja`, `Articulo`, `Codigo`, `Grupo`, `Cantidad`, `Precioventa`, `Vendedor`, `Cajero`, `Claveventa`, `Hora`) "
-                         + "VALUES (getdate(),'1','"+folio+"','1','"+numarticulo+"','"+vcodigo+"','00','"+vcantidad +"','"+vprecioformateado+"','1111','00',777,'11:21'");
-
-
-                      numarticulo =numarticulo+ 1;
-                 
-              }
-            
-            //      System.out.println(">>>>>xxxx" + txtgondola.getText().toUpperCase() + txtcantidad.getText().toUpperCase() + date);
-           int n = ps.executeUpdate();
-            if (n > 0) {
-                JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
-                aumentarfolio();
-                
-                
-                //limpiarventanas();
-            }
-        } catch (HeadlessException | SQLException ex) {
-            JOptionPane.showMessageDialog(rootPane, "Error en la base de datos");
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        
-        
-        
-        
-        
-        
+     insertarventa();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -1158,7 +1170,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JToggleButton btnagregarhotdog;
     private javax.swing.JToggleButton btnagregarplato1;
     private javax.swing.JButton btnconfirmar;
-    private javax.swing.JLabel c;
     private javax.swing.JCheckBox ch1;
     private javax.swing.JCheckBox ch10;
     private javax.swing.JCheckBox ch11;
