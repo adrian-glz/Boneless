@@ -8,8 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+ 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -25,36 +24,38 @@ import javax.swing.table.TableRowSorter;
  
 public class Principal extends javax.swing.JFrame {
 
-    ResultSet rs,rs2;
-    int count = 0;
+    
+    int folio; ///variable que almacena el folio cuando lo obtiene de sql 
     DefaultTableModel md;
     Statement st;
+    ResultSet rs;
     PreparedStatement ps = null;
-    PreparedStatement ps2 = null;
-    int  folio;
-    
+    public static double rcambio;
+    public static int rfolio;
+    public static String rcajero;
+   
     public Principal() {
         initComponents();///inicializamos componentes al inicio del metodo
-        datos();
-        
-        
+        obtenerfolio();
+        datos(); 
         Bebidas();//llamamos el metodo de bebidas para llenar tablas
         Hamburguesas();//llamamos el metodo de Comidas para llenar Comidas
         tablafinal();
-        jtfinal.getTableHeader().setReorderingAllowed(false);///INHABILITA EL MOVER CABECERAS los titulos de la tabla jtfinal
-
-    }
-    public void keyPressed(KeyEvent e){///funcio mediante teclas no utilizada
-               /* if(e.getKeyCode()==KeyEvent.VK_ENTER){
-                    JOptionPane.showMessageDialog(null, "Has pulsado Enter");
-                }
-                if(e.getKeyCode()==KeyEvent.VK_ESCAPE){
-                    System.exit(0);
-                }*/
-     }
-
-    public void datos() {///metodo para traer cajero, folio, 
         
+        
+        jtfinal.getTableHeader().setReorderingAllowed(false);///INHABILITA EL MOVER CABECERAS los titulos de la tabla jtfinal
+    }
+
+        public void alertasql(){
+        JOptionPane.showMessageDialog(this, "Error con SQL revisa los ajustes y consultas SQL, se va a cerrar el programa");
+          System.exit(0);
+        }
+        
+        
+        
+        
+    public void datos() {///metodo para traer cajero, folio, 
+
         try {
             Class.forName("com.mysql.jdbc.Driver");
             java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
@@ -62,28 +63,40 @@ public class Principal extends javax.swing.JFrame {
             st.executeUpdate("use prueba");
 
             //Seleccionar datos
-            rs = st.executeQuery("SELECT   `almacenacajero`, `almacenacambio` FROM `sesion`"
+            rs = st.executeQuery("SELECT   `almacenacajero`, `almacenacambio`     FROM `sesion`"
                     + " where caja='1'");
             try {
-
                 while (rs.next()) {
-                    String rcajero = rs.getString(1);
-                    double rcambio = rs.getDouble(2);
+                    rcajero = rs.getString(1).trim();
+                    rcambio = rs.getDouble(2);
+                    //  rfolio = rs.getInt(3);
+                    System.out.println("----------------------");
+                    System.out.println("DATOS DE COMPRABACION");
+                    System.out.println("CAJERO--->" + rcajero);
+                    System.out.println("CAMBIO--->" + rcambio);
+                    //    System.out.println("FOLIO---->"+rfolio);
+                    System.out.println("---------------------");
 
                 }
+
+                txtcajero.setText("" + rcajero);
+                txtdolar.setText("" + rcambio);
+                txtfolio.setText("" + folio);
+
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
+             alertasql();
             }
         } catch (HeadlessException | NumberFormatException | SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
-
+           alertasql();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+           alertasql();
         }
 
     }
-    
-    
+
     public void insertaventapagos() {
         Statement e;
         PreparedStatement pse = null;
@@ -158,9 +171,6 @@ public class Principal extends javax.swing.JFrame {
             Object obj1 = (jthamburguesas.getValueAt(filaseleccionada, 1));///OBTIENES EL PRIMER FILA
             Object obj2 = (jthamburguesas.getValueAt(filaseleccionada, 2));//OBTIENES LA SEGUNDA FILA
 
-            /*String cod= obj0.toString();    /// CAMBIAS LOS OBJETOS A TIPO STRING
-             String descripcionp = obj1.toString();    /// CAMBIAS LOS OBJETOS A TIPO STRING
-             String cantidadp = obj2.toString();///*/
             String combinar = "";
             if (ch1.isSelected()) {
                 combinar += "SIN CEBOLLA,";
@@ -258,7 +268,7 @@ public class Principal extends javax.swing.JFrame {
                     return false;
                 } else {
                     return true;
-                }  
+                }
             }
         };
         jthamburguesas.setModel(md); //igualamos en modelo en jplatos
@@ -400,7 +410,7 @@ public class Principal extends javax.swing.JFrame {
         txttotal.setText("$" + r);
         txttotaldlls.setText("");
         DecimalFormat df = new DecimalFormat("#0.00");
-        double totaldll = r / 22.50;
+        double totaldll = r / rcambio;
         txttotaldlls.setText("$" + df.format(totaldll));
         Totaldearticulos();
     }
@@ -411,13 +421,13 @@ public class Principal extends javax.swing.JFrame {
 
         popupMenu1 = new java.awt.PopupMenu();
         panelmenu = new javax.swing.JTabbedPane();
-        Bebidas = new javax.swing.JPanel();
+        jpfondo = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jthamburguesas = new javax.swing.JTable(){
             public boolean isCellEditable (int rowIndex, int colIndex) {
                 return false; // No permitir la edición de ninguna celda
             }};
-            jPanel1 = new javax.swing.JPanel();
+            jpingredentes = new javax.swing.JPanel();
             ch1 = new javax.swing.JCheckBox();
             ch4 = new javax.swing.JCheckBox();
             ch2 = new javax.swing.JCheckBox();
@@ -425,11 +435,11 @@ public class Principal extends javax.swing.JFrame {
             ch6 = new javax.swing.JCheckBox();
             ch3 = new javax.swing.JCheckBox();
             txt_codigo = new javax.swing.JTextField();
-            jLabel6 = new javax.swing.JLabel();
+            editbuscar = new javax.swing.JLabel();
             jButton3 = new javax.swing.JButton();
-            btnagregar = new javax.swing.JButton();
-            jButton4 = new javax.swing.JButton();
-            jButton5 = new javax.swing.JButton();
+            btnagregarajtfinal = new javax.swing.JButton();
+            btncontodo = new javax.swing.JButton();
+            btnsinnada = new javax.swing.JButton();
             Ordenes = new javax.swing.JPanel();
             jScrollPane5 = new javax.swing.JScrollPane();
             jtbebidas = new javax.swing.JTable();
@@ -477,7 +487,7 @@ public class Principal extends javax.swing.JFrame {
                 jLabel8 = new javax.swing.JLabel();
                 txtcajero = new javax.swing.JLabel();
                 txtfolio = new javax.swing.JLabel();
-                txtcdolar = new javax.swing.JLabel();
+                txtdolar = new javax.swing.JLabel();
 
                 popupMenu1.setLabel("popupMenu1");
 
@@ -528,24 +538,24 @@ public class Principal extends javax.swing.JFrame {
                     jthamburguesas.getColumnModel().getColumn(0).setResizable(false);
                 }
 
-                jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-                jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+                jpingredentes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+                jpingredentes.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
                 ch1.setText("SIN CEBOLLA");
                 ch1.setPreferredSize(new java.awt.Dimension(90, 22));
-                jPanel1.add(ch1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 102, -1));
+                jpingredentes.add(ch1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 102, -1));
 
                 ch4.setText("SIN TOMATE");
                 ch4.setPreferredSize(new java.awt.Dimension(90, 22));
-                jPanel1.add(ch4, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 2, 100, 20));
+                jpingredentes.add(ch4, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 2, 100, 20));
 
                 ch2.setText("SIN CHILE");
                 ch2.setPreferredSize(new java.awt.Dimension(90, 22));
-                jPanel1.add(ch2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 20, 102, -1));
+                jpingredentes.add(ch2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 20, 102, -1));
 
                 ch5.setText("SIN MOSTAZA");
                 ch5.setPreferredSize(new java.awt.Dimension(90, 22));
-                jPanel1.add(ch5, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 22, 100, 20));
+                jpingredentes.add(ch5, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 22, 100, 20));
 
                 ch6.setText("SIN KETCHUP");
                 ch6.setPreferredSize(new java.awt.Dimension(90, 22));
@@ -554,11 +564,11 @@ public class Principal extends javax.swing.JFrame {
                         ch6ActionPerformed(evt);
                     }
                 });
-                jPanel1.add(ch6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 40, 140, -1));
+                jpingredentes.add(ch6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 40, 140, -1));
 
                 ch3.setText("SIN PEPINILLOS");
                 ch3.setPreferredSize(new java.awt.Dimension(90, 22));
-                jPanel1.add(ch3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 60, 140, -1));
+                jpingredentes.add(ch3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 60, 140, -1));
 
                 txt_codigo.addKeyListener(new java.awt.event.KeyAdapter() {
                     public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -566,7 +576,7 @@ public class Principal extends javax.swing.JFrame {
                     }
                 });
 
-                jLabel6.setText("Buscar:");
+                editbuscar.setText("Buscar:");
 
                 jButton3.setText("VER REG");
                 jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -575,77 +585,77 @@ public class Principal extends javax.swing.JFrame {
                     }
                 });
 
-                btnagregar.setText("Agregar");
-                btnagregar.addActionListener(new java.awt.event.ActionListener() {
+                btnagregarajtfinal.setText("Agregar");
+                btnagregarajtfinal.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        btnagregarActionPerformed(evt);
+                        btnagregarajtfinalActionPerformed(evt);
                     }
                 });
 
-                jButton4.setText("Con todo");
-                jButton4.addActionListener(new java.awt.event.ActionListener() {
+                btncontodo.setText("Con todo");
+                btncontodo.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        jButton4ActionPerformed(evt);
+                        btncontodoActionPerformed(evt);
                     }
                 });
 
-                jButton5.setText("Sin nada");
-                jButton5.addActionListener(new java.awt.event.ActionListener() {
+                btnsinnada.setText("Sin nada");
+                btnsinnada.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        jButton5ActionPerformed(evt);
+                        btnsinnadaActionPerformed(evt);
                     }
                 });
 
-                javax.swing.GroupLayout BebidasLayout = new javax.swing.GroupLayout(Bebidas);
-                Bebidas.setLayout(BebidasLayout);
-                BebidasLayout.setHorizontalGroup(
-                    BebidasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(BebidasLayout.createSequentialGroup()
+                javax.swing.GroupLayout jpfondoLayout = new javax.swing.GroupLayout(jpfondo);
+                jpfondo.setLayout(jpfondoLayout);
+                jpfondoLayout.setHorizontalGroup(
+                    jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpfondoLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(BebidasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(BebidasLayout.createSequentialGroup()
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jpfondoLayout.createSequentialGroup()
+                                .addComponent(jpingredentes, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(BebidasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
-                                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btncontodo, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
+                                    .addComponent(btnsinnada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnagregar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(btnagregarajtfinal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(BebidasLayout.createSequentialGroup()
+                            .addGroup(jpfondoLayout.createSequentialGroup()
                                 .addGap(8, 8, 8)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(editbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txt_codigo, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(jButton3)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 );
-                BebidasLayout.setVerticalGroup(
-                    BebidasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(BebidasLayout.createSequentialGroup()
+                jpfondoLayout.setVerticalGroup(
+                    jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpfondoLayout.createSequentialGroup()
                         .addGap(9, 9, 9)
-                        .addGroup(BebidasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(editbuscar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton3)
                             .addComponent(txt_codigo, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(BebidasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(BebidasLayout.createSequentialGroup()
-                                .addGroup(BebidasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(BebidasLayout.createSequentialGroup()
-                                        .addComponent(jButton5)
+                        .addGroup(jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jpfondoLayout.createSequentialGroup()
+                                .addGroup(jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jpingredentes, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jpfondoLayout.createSequentialGroup()
+                                        .addComponent(btnsinnada)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton4)))
+                                        .addComponent(btncontodo)))
                                 .addGap(0, 117, Short.MAX_VALUE))
-                            .addComponent(btnagregar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btnagregarajtfinal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addContainerGap())
                 );
 
-                panelmenu.addTab("Hamburguesas", Bebidas);
+                panelmenu.addTab("Hamburguesas", jpfondo);
 
                 jtbebidas.setModel(new javax.swing.table.DefaultTableModel(
                     new Object [][] {
@@ -935,16 +945,16 @@ public class Principal extends javax.swing.JFrame {
                     jtfinal.getColumnModel().getColumn(4).setPreferredWidth(10);
                 }
 
-                getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 170, 520, 340));
+                getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 90, 520, 340));
 
                 jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
                 jLabel3.setText("DLLS");
-                getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 540, 70, 30));
+                getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 470, 70, 30));
 
                 txttotal.setBackground(new java.awt.Color(255, 255, 255));
                 txttotal.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
                 txttotal.setText("$ 0.00");
-                getContentPane().add(txttotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 510, 160, 30));
+                getContentPane().add(txttotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 440, 160, 30));
 
                 jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
                 jLabel4.setText("TOTAL:");
@@ -952,11 +962,11 @@ public class Principal extends javax.swing.JFrame {
 
                 jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
                 jLabel5.setText("MXN");
-                getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 510, 70, 30));
+                getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 440, 70, 30));
 
                 txttotaldlls.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
                 txttotaldlls.setText("$ 0.00");
-                getContentPane().add(txttotaldlls, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 540, 160, 30));
+                getContentPane().add(txttotaldlls, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 470, 160, 30));
 
                 btnconfirmar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
                 btnconfirmar.setForeground(new java.awt.Color(64, 190, 64));
@@ -966,18 +976,18 @@ public class Principal extends javax.swing.JFrame {
                         btnconfirmarActionPerformed(evt);
                     }
                 });
-                getContentPane().add(btnconfirmar, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 620, 520, 60));
+                getContentPane().add(btnconfirmar, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 560, 520, 60));
 
                 txttotal1.setBackground(new java.awt.Color(255, 255, 255));
                 txttotal1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
                 txttotal1.setText("TOTAL DE ARTICULO(S):");
-                getContentPane().add(txttotal1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 570, 300, 45));
+                getContentPane().add(txttotal1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 510, 300, 45));
 
                 txttotalarticulos.setBackground(new java.awt.Color(255, 255, 255));
                 txttotalarticulos.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
                 txttotalarticulos.setForeground(new java.awt.Color(255, 51, 51));
                 txttotalarticulos.setText("0");
-                getContentPane().add(txttotalarticulos, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 570, 77, 40));
+                getContentPane().add(txttotalarticulos, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 510, 77, 40));
 
                 btnEliminarpieza1.setText("Quitar pieza");
                 btnEliminarpieza1.addActionListener(new java.awt.event.ActionListener() {
@@ -985,16 +995,16 @@ public class Principal extends javax.swing.JFrame {
                         btnEliminarpieza1ActionPerformed(evt);
                     }
                 });
-                getContentPane().add(btnEliminarpieza1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 520, 100, 35));
+                getContentPane().add(btnEliminarpieza1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 450, 100, 35));
 
                 jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-                jButton1.setText("Opciones");
+                jButton1.setText("...");
                 jButton1.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
                         jButton1ActionPerformed(evt);
                     }
                 });
-                getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 10, 120, 40));
+                getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 10, 40, 40));
 
                 jButton2.setText("Limpiar todo");
                 jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -1002,34 +1012,34 @@ public class Principal extends javax.swing.JFrame {
                         jButton2ActionPerformed(evt);
                     }
                 });
-                getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 520, 100, 35));
+                getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 450, 100, 35));
 
-                jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+                jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
                 jLabel1.setText("FOLIO:");
-                getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 130, 100, 30));
+                getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 10, 90, 30));
 
-                jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+                jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
                 jLabel2.setText("CAJERO:");
-                getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 80, 100, 30));
+                getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 50, 100, 30));
 
-                jLabel8.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-                jLabel8.setText("DOLAR:");
-                getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 130, 90, 30));
+                jLabel8.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+                jLabel8.setText("TIPO CAMBIO:");
+                getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 10, 140, 30));
 
-                txtcajero.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+                txtcajero.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
                 txtcajero.setForeground(new java.awt.Color(255, 51, 51));
-                txtcajero.setText("     ");
-                getContentPane().add(txtcajero, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 80, 240, 30));
+                txtcajero.setText("INICIE SESION");
+                getContentPane().add(txtcajero, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 50, 390, 30));
 
-                txtfolio.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+                txtfolio.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
                 txtfolio.setForeground(new java.awt.Color(0, 0, 204));
-                txtfolio.setText("  ");
-                getContentPane().add(txtfolio, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 130, 60, 30));
+                txtfolio.setText("ERROR");
+                getContentPane().add(txtfolio, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 10, 80, 30));
 
-                txtcdolar.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-                txtcdolar.setForeground(new java.awt.Color(0, 204, 0));
-                txtcdolar.setText("  ");
-                getContentPane().add(txtcdolar, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 130, 60, 30));
+                txtdolar.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+                txtdolar.setForeground(new java.awt.Color(0, 204, 0));
+                txtdolar.setText("NA");
+                getContentPane().add(txtdolar, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 10, 60, 30));
 
                 pack();
             }// </editor-fold>//GEN-END:initComponents
@@ -1161,27 +1171,27 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void btnagregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarActionPerformed
+    private void btnagregarajtfinalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarajtfinalActionPerformed
      agregarfinal(); 
-    }//GEN-LAST:event_btnagregarActionPerformed
+    }//GEN-LAST:event_btnagregarajtfinalActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void btncontodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncontodoActionPerformed
         ch1.setSelected(false);
         ch2.setSelected(false);
         ch3.setSelected(false);
         ch4.setSelected(false);
         ch5.setSelected(false);
         ch6.setSelected(false);
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_btncontodoActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void btnsinnadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsinnadaActionPerformed
         ch1.setSelected(true);
         ch2.setSelected(true);
         ch3.setSelected(true);
         ch4.setSelected(true);
         ch5.setSelected(true);
         ch6.setSelected(true);
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_btnsinnadaActionPerformed
 
    
      public static void main(String args[]) {
@@ -1224,7 +1234,6 @@ public class Principal extends javax.swing.JFrame {
  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel Bebidas;
     private javax.swing.JPanel Menu;
     private javax.swing.JPanel Menu1;
     private javax.swing.JPanel Ordenes;
@@ -1233,10 +1242,12 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btnEliminarpieza1;
     private javax.swing.JToggleButton btnNada1;
     private javax.swing.JToggleButton btnTodo1;
-    private javax.swing.JButton btnagregar;
+    private javax.swing.JButton btnagregarajtfinal;
     private javax.swing.JToggleButton btnagregarhotdog;
     private javax.swing.JToggleButton btnagregarplato1;
     private javax.swing.JButton btnconfirmar;
+    private javax.swing.JButton btncontodo;
+    private javax.swing.JButton btnsinnada;
     private javax.swing.JCheckBox ch1;
     private javax.swing.JCheckBox ch10;
     private javax.swing.JCheckBox ch11;
@@ -1249,28 +1260,27 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JCheckBox ch7;
     private javax.swing.JCheckBox ch8;
     private javax.swing.JCheckBox ch9;
+    private javax.swing.JLabel editbuscar;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JPanel jpfondo;
+    private javax.swing.JPanel jpingredentes;
     private javax.swing.JTable jtbebidas;
     private javax.swing.JTable jtboneless;
     public static javax.swing.JTable jtfinal;
@@ -1281,7 +1291,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JTextField txt_codigo;
     private javax.swing.JTextField txt_codigo1;
     private javax.swing.JLabel txtcajero;
-    private javax.swing.JLabel txtcdolar;
+    private javax.swing.JLabel txtdolar;
     private javax.swing.JLabel txtfolio;
     private static javax.swing.JLabel txttotal;
     private static javax.swing.JLabel txttotal1;
@@ -1289,14 +1299,14 @@ public class Principal extends javax.swing.JFrame {
     private static javax.swing.JLabel txttotaldlls;
     // End of variables declaration//GEN-END:variables
  public void Totaldearticulos() {
-            int r = 0;
-            for (int x = 0; x < jtfinal.getRowCount(); x++) {
-                int vcantidad = Integer.parseInt(jtfinal.getValueAt(x, 3).toString().replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", ""));///obtienes el valor de la cantidad
-                r = vcantidad + r;
-            }
-            txttotalarticulos.setText("" + r);//preciototal
+        int r = 0;
+        for (int x = 0; x < jtfinal.getRowCount(); x++) {
+            int vcantidad = Integer.parseInt(jtfinal.getValueAt(x, 3).toString().replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", ""));///obtienes el valor de la cantidad
+            r = vcantidad + r;
         }
- 
+        txttotalarticulos.setText("" + r);//preciototal
+    }
+
     public void Vaciartabla() {
         DefaultTableModel vt = (DefaultTableModel) jtfinal.getModel();
         for (int i = vt.getRowCount() - 1; i >= 0; i--) {
@@ -1304,9 +1314,10 @@ public class Principal extends javax.swing.JFrame {
         }
         sumar();
     }
-   public void tablafinal() {
-     String data[][] = {};
-        String cabeza[] = {"Codigo","Descripcion", "Precio", "Cantidad","Detalles"};
+
+    public void tablafinal() {
+        String data[][] = {};
+        String cabeza[] = {"Codigo", "Descripcion", "Precio", "Cantidad", "Detalles"};
         jtfinal.getTableHeader().setReorderingAllowed(false);
         md = new DefaultTableModel(data, cabeza) {
             @Override
@@ -1330,24 +1341,24 @@ public class Principal extends javax.swing.JFrame {
 
         jtfinal.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        
-        jtfinal.getColumnModel().getColumn(0).setPreferredWidth(60);  
+        jtfinal.getColumnModel().getColumn(0).setPreferredWidth(60);
         jtfinal.getColumnModel().getColumn(0).setMaxWidth(80);
         jtfinal.getColumnModel().getColumn(0).setMinWidth(60);
-        
-        jtfinal.getColumnModel().getColumn(1).setPreferredWidth(170);  
+
+        jtfinal.getColumnModel().getColumn(1).setPreferredWidth(170);
         jtfinal.getColumnModel().getColumn(1).setMaxWidth(170);
         jtfinal.getColumnModel().getColumn(1).setMinWidth(170);
 
-        jtfinal.getColumnModel().getColumn(2).setPreferredWidth(70); 
+        jtfinal.getColumnModel().getColumn(2).setPreferredWidth(70);
         jtfinal.getColumnModel().getColumn(2).setMaxWidth(80);
         jtfinal.getColumnModel().getColumn(2).setMinWidth(70);
-        
-        jtfinal.getColumnModel().getColumn(3).setPreferredWidth(50);  
+
+        jtfinal.getColumnModel().getColumn(3).setPreferredWidth(50);
         jtfinal.getColumnModel().getColumn(3).setMaxWidth(80);
-        jtfinal.getColumnModel().getColumn(3).setMinWidth(50); 
-        
-        jtfinal.getColumnModel().getColumn(4).setPreferredWidth(220);  
+        jtfinal.getColumnModel().getColumn(3).setMinWidth(50);
+
+        jtfinal.getColumnModel().getColumn(4).setPreferredWidth(220);
         jtfinal.getColumnModel().getColumn(4).setMaxWidth(500);
-        jtfinal.getColumnModel().getColumn(4).setMinWidth(220); }
+        jtfinal.getColumnModel().getColumn(4).setMinWidth(220);
+    }
 }
