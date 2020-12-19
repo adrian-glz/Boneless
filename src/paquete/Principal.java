@@ -35,6 +35,9 @@ public class Principal extends javax.swing.JFrame {
     
     public Principal() {
         initComponents();///inicializamos componentes al inicio del metodo
+        datos();
+        
+        
         Bebidas();//llamamos el metodo de bebidas para llenar tablas
         Hamburguesas();//llamamos el metodo de Comidas para llenar Comidas
         tablafinal();
@@ -48,8 +51,37 @@ public class Principal extends javax.swing.JFrame {
                 if(e.getKeyCode()==KeyEvent.VK_ESCAPE){
                     System.exit(0);
                 }*/
+     }
+
+    public void datos() {///metodo para traer cajero, folio, 
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+            st = conexion.createStatement();
+            st.executeUpdate("use prueba");
+
+            //Seleccionar datos
+            rs = st.executeQuery("SELECT   `almacenacajero`, `almacenacambio` FROM `sesion`"
+                    + " where caja='1'");
+            try {
+
+                while (rs.next()) {
+                    String rcajero = rs.getString(1);
+                    double rcambio = rs.getDouble(2);
+
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
             }
-    
+        } catch (HeadlessException | NumberFormatException | SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
     
     
     public void insertaventapagos() {
@@ -226,7 +258,7 @@ public class Principal extends javax.swing.JFrame {
                     return false;
                 } else {
                     return true;
-                }
+                }  
             }
         };
         jthamburguesas.setModel(md); //igualamos en modelo en jplatos
@@ -440,6 +472,12 @@ public class Principal extends javax.swing.JFrame {
                 btnEliminarpieza1 = new javax.swing.JButton();
                 jButton1 = new javax.swing.JButton();
                 jButton2 = new javax.swing.JButton();
+                jLabel1 = new javax.swing.JLabel();
+                jLabel2 = new javax.swing.JLabel();
+                jLabel8 = new javax.swing.JLabel();
+                txtcajero = new javax.swing.JLabel();
+                txtfolio = new javax.swing.JLabel();
+                txtcdolar = new javax.swing.JLabel();
 
                 popupMenu1.setLabel("popupMenu1");
 
@@ -581,18 +619,17 @@ public class Principal extends javax.swing.JFrame {
                                 .addComponent(txt_codigo, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(jButton3)))
-                        .addContainerGap(18, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 );
                 BebidasLayout.setVerticalGroup(
                     BebidasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(BebidasLayout.createSequentialGroup()
                         .addGap(9, 9, 9)
-                        .addGroup(BebidasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(BebidasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(txt_codigo)
-                                .addComponent(jButton3))
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(BebidasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton3)
+                            .addComponent(txt_codigo, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(BebidasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -603,7 +640,7 @@ public class Principal extends javax.swing.JFrame {
                                         .addComponent(jButton5)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jButton4)))
-                                .addGap(0, 112, Short.MAX_VALUE))
+                                .addGap(0, 117, Short.MAX_VALUE))
                             .addComponent(btnagregar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addContainerGap())
                 );
@@ -950,13 +987,14 @@ public class Principal extends javax.swing.JFrame {
                 });
                 getContentPane().add(btnEliminarpieza1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 520, 100, 35));
 
+                jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
                 jButton1.setText("Opciones");
                 jButton1.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
                         jButton1ActionPerformed(evt);
                     }
                 });
-                getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 10, 110, 40));
+                getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 10, 120, 40));
 
                 jButton2.setText("Limpiar todo");
                 jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -965,6 +1003,33 @@ public class Principal extends javax.swing.JFrame {
                     }
                 });
                 getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 520, 100, 35));
+
+                jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+                jLabel1.setText("FOLIO:");
+                getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 130, 100, 30));
+
+                jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+                jLabel2.setText("CAJERO:");
+                getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 80, 100, 30));
+
+                jLabel8.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+                jLabel8.setText("DOLAR:");
+                getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 130, 90, 30));
+
+                txtcajero.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+                txtcajero.setForeground(new java.awt.Color(255, 51, 51));
+                txtcajero.setText("     ");
+                getContentPane().add(txtcajero, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 80, 240, 30));
+
+                txtfolio.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+                txtfolio.setForeground(new java.awt.Color(0, 0, 204));
+                txtfolio.setText("  ");
+                getContentPane().add(txtfolio, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 130, 60, 30));
+
+                txtcdolar.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+                txtcdolar.setForeground(new java.awt.Color(0, 204, 0));
+                txtcdolar.setText("  ");
+                getContentPane().add(txtcdolar, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 130, 60, 30));
 
                 pack();
             }// </editor-fold>//GEN-END:initComponents
@@ -1012,12 +1077,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jthamburguesasKeyTyped
 
     private void jthamburguesasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jthamburguesasKeyPressed
-    /*    if(evt.getKeyCode()==KeyEvent.VK_ENTER){
-            JOptionPane.showMessageDialog(null, "Has pulsado Enter");
-        }
-        if(evt.getKeyCode()==KeyEvent.VK_ESCAPE){
-        }*/
-
+ 
     }//GEN-LAST:event_jthamburguesasKeyPressed
 
     private void jthamburguesasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jthamburguesasMouseClicked
@@ -1115,7 +1175,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-      ch1.setSelected(true);
+        ch1.setSelected(true);
         ch2.setSelected(true);
         ch3.setSelected(true);
         ch4.setSelected(true);
@@ -1124,7 +1184,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
    
-    public static void main(String args[]) {
+     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -1138,23 +1198,30 @@ public class Principal extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Agregar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Agregar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Agregar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Agregar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-    
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+              
+                
                 new Principal().setVisible(true);
+                
+                
+                
             }
         });
     }
+
+ 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Bebidas;
@@ -1189,11 +1256,14 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
@@ -1210,6 +1280,9 @@ public class Principal extends javax.swing.JFrame {
     private java.awt.PopupMenu popupMenu1;
     private javax.swing.JTextField txt_codigo;
     private javax.swing.JTextField txt_codigo1;
+    private javax.swing.JLabel txtcajero;
+    private javax.swing.JLabel txtcdolar;
+    private javax.swing.JLabel txtfolio;
     private static javax.swing.JLabel txttotal;
     private static javax.swing.JLabel txttotal1;
     private static javax.swing.JLabel txttotalarticulos;
@@ -1220,8 +1293,6 @@ public class Principal extends javax.swing.JFrame {
             for (int x = 0; x < jtfinal.getRowCount(); x++) {
                 int vcantidad = Integer.parseInt(jtfinal.getValueAt(x, 3).toString().replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", ""));///obtienes el valor de la cantidad
                 r = vcantidad + r;
-              //  System.out.println("r " + r);
-                //System.out.println("vcantidad " + vcantidad);
             }
             txttotalarticulos.setText("" + r);//preciototal
         }
