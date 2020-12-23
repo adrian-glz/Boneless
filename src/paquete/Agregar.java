@@ -5,86 +5,126 @@
  */
 package paquete;
 
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 /**
  *
  * @author AGONZALEZ
  */
 public class Agregar extends javax.swing.JFrame {
+       Statement st;
+    PreparedStatement ps = null;
+    ResultSet rs;
  
     public Agregar() {
-        initComponents();
+        initComponents();      
+        btnagregar.setEnabled(false);    
+        llenarcategorias();
     }
 
-     
+     public void llenarcategorias(){
+        cbcategorias.removeAllItems();
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+            st = conexion.createStatement();
+            st.executeUpdate("use prueba;");
+            rs = st.executeQuery("SELECT * FROM categorias");
+
+            while (rs.next()) {
+                String elemento = rs.getString(1);
+                cbcategorias.addItem(elemento);
+            }
+            st.close();
+        } catch (Exception e) {
+            System.out.println("ERROR: failed to load HSQLDB JDBC driver.");
+            e.printStackTrace();
+            return;
+        }
+     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
-        txt_nombreproducto = new javax.swing.JTextField();
-        cbpiezas = new javax.swing.JSpinner();
+        cbcategorias = new javax.swing.JComboBox();
+        txtcodigo = new javax.swing.JTextField();
+        cbcantidad = new javax.swing.JSpinner();
         txt_precio = new javax.swing.JTextField();
-        txt_codigo = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnagregar = new javax.swing.JButton();
+        btnagregarcategoria = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        txt_nombreproducto1 = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Agregar nuevo producto");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jLabel1.setText("Agregar producto");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(135, 0, 409, -1));
-
         jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel2.setText("Nombre de producto:");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 80, 152, 34));
+        jLabel2.setText("Codigo:");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, 50, 34));
 
         jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel3.setText("Categoria:");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(103, 132, 88, 35));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, 70, 35));
 
         jLabel4.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel4.setText("Piezas:");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(121, 185, 70, 35));
+        jLabel4.setText("Cantidad:");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 70, 70, 35));
 
         jLabel5.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel5.setText("Precio:");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(121, 238, 70, 35));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 190, 50, 35));
 
-        jLabel6.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel6.setText("Codigo (numerico):");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 290, 120, 35));
+        cbcategorias.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        getContentPane().add(cbcategorias, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, 170, 35));
+        getContentPane().add(txtcodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 30, 170, 35));
+        getContentPane().add(cbcantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 70, 170, 35));
+        getContentPane().add(txt_precio, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 190, 170, 35));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        getContentPane().add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(195, 132, 185, 35));
-        getContentPane().add(txt_nombreproducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(195, 79, 185, 35));
-        getContentPane().add(cbpiezas, new org.netbeans.lib.awtextra.AbsoluteConstraints(195, 185, 185, 35));
-        getContentPane().add(txt_precio, new org.netbeans.lib.awtextra.AbsoluteConstraints(195, 239, 185, 35));
-        getContentPane().add(txt_codigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(195, 292, 185, 35));
-
-        jButton1.setText("Aceptar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnagregar.setBackground(new java.awt.Color(51, 255, 51));
+        btnagregar.setText("Aceptar");
+        btnagregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnagregarActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(307, 338, 236, 76));
+        getContentPane().add(btnagregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 250, 230, 40));
 
-        jButton2.setText("Agregar nueva categoria");
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 132, -1, 35));
+        btnagregarcategoria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/agregar1.png"))); // NOI18N
+        btnagregarcategoria.setContentAreaFilled(false);
+        btnagregarcategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnagregarcategoriaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnagregarcategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 110, 40, 30));
+
+        jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel7.setText("Nombre de producto:");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 130, 34));
+        getContentPane().add(txt_nombreproducto1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 150, 170, 35));
+
+        jLabel1.setText("       ");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 270, 40, 30));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnagregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnagregarActionPerformed
+
+    private void btnagregarcategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarcategoriaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnagregarcategoriaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -122,18 +162,18 @@ public class Agregar extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JSpinner cbpiezas;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JButton btnagregar;
+    private javax.swing.JButton btnagregarcategoria;
+    private javax.swing.JSpinner cbcantidad;
+    private javax.swing.JComboBox cbcategorias;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JTextField txt_codigo;
-    private javax.swing.JTextField txt_nombreproducto;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JTextField txt_nombreproducto1;
     private javax.swing.JTextField txt_precio;
+    private javax.swing.JTextField txtcodigo;
     // End of variables declaration//GEN-END:variables
 }
