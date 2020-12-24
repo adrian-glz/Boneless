@@ -199,9 +199,9 @@ public class Principal extends javax.swing.JFrame {
             Class.forName("com.mysql.jdbc.Driver");
             java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
             Statement st = conexion.createStatement();
-            st.executeUpdate("USE prueba;");
+            st.executeUpdate("use prueba;");
 
-            ps = conexion.prepareStatement("UPDATE `folios` SET `folio`= folio+1 WHERE `caja`=1      ");
+            ps = conexion.prepareStatement("update `folios` set `folio`= folio+1 where `caja`=1 ");
 
             int n = ps.executeUpdate();
             if (n > 0) {

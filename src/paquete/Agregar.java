@@ -23,6 +23,7 @@ public class Agregar extends javax.swing.JFrame {
         initComponents();      
         btnagregar.setEnabled(false);    
         llenarcategorias();
+        
     }
 
      public void llenarcategorias(){
