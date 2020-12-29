@@ -37,7 +37,8 @@ public class Principal extends javax.swing.JFrame {
         
         initComponents();///inicializamos componentes al inicio del metodo
         obtenerfolio();
-        datos(); 
+        recuperafolio(); 
+        recuperacostodolar();
         Bebidas();//llamamos el metodo de bebidas para llenar tablas
         Hamburguesas();//llamamos el metodo de Comidas para llenar Comidas
         tablafinal();
@@ -51,33 +52,57 @@ public class Principal extends javax.swing.JFrame {
         System.exit(0);
     }
          
-    public void datos() {///metodo para traer cajero, folio, 
-
-        try {
+        public void recuperacostodolar(){
+         try {
             Class.forName("com.mysql.jdbc.Driver");
             java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
             st = conexion.createStatement();
             st.executeUpdate("use prueba");
 
             //Seleccionar datos
-            rs = st.executeQuery("SELECT   `almacenacajero`, `almacenacambio`     FROM `sesion`"
+            rs = st.executeQuery("SELECT   compra    FROM `costeo`"
+                    + " where id='1'");
+            try {
+                while (rs.next()) {
+                    rcambio = rs.getInt(1) ;
+                   // rcambio = rs.getDouble(2);
+                    System.out.println("folio="+folio);
+
+                }
+                txtdolar.setText("" + rcambio);
+              
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+                alertasql();
+            }
+        } catch (HeadlessException | NumberFormatException | SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            alertasql();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            alertasql();
+        }
+        
+        
+        
+        }
+    public void recuperafolio() {///metodo para traer cajero, folio, 
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+            st = conexion.createStatement();
+            st.executeUpdate("use prueba");
+            //Seleccionar datos
+            rs = st.executeQuery("SELECT   `folio`     FROM `folios`"
                     + " where caja='1'");
             try {
                 while (rs.next()) {
-                    rcajero = rs.getString(1).trim();
-                    rcambio = rs.getDouble(2);
-                    //  rfolio = rs.getInt(3);
-                    System.out.println("----------------------");
-                    System.out.println("DATOS DE COMPRABACION");
-                    System.out.println("CAJERO--->" + rcajero);
-                    System.out.println("CAMBIO--->" + rcambio);
-                    //    System.out.println("FOLIO---->"+rfolio);
-                    System.out.println("---------------------");
+                    folio = rs.getInt(1);
+                    // rcambio = rs.getDouble(2);
+                    System.out.println("folio=" + folio);
 
                 }
-
-                txtcajero.setText("" + rcajero);
-                txtdolar.setText("" + rcambio);
                 txtfolio.setText("" + folio);
 
             } catch (SQLException ex) {
@@ -95,6 +120,7 @@ public class Principal extends javax.swing.JFrame {
     }
 
     public void insertaventapagos() {
+        
         Statement e;
         PreparedStatement pse = null;
         double numarticulo = 1;
@@ -105,8 +131,8 @@ public class Principal extends javax.swing.JFrame {
             Class.forName("com.mysql.jdbc.Driver");
             java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
             Statement ste = conexion.createStatement();
-            ste.executeUpdate("USE prueba;");
-            pse = conexion.prepareStatement("INSERT INTO `ventaspagos`(`Sucursal`,  `Caja`, `Folio`, `Importe`, `Clavepago`, `NumeroTarjeta`, `NombreCliente`, `DireccionCliente`, `TelefonoCliente`, `CorreoCliente`) \n"
+            ste.executeUpdate("use prueba;");
+            pse = conexion.prepareStatement("insert into `ventaspagos`(`Sucursal`,  `Caja`, `Folio`, `Importe`, `Clavepago`, `NumeroTarjeta`, `NombreCliente`, `DireccionCliente`, `TelefonoCliente`, `CorreoCliente`) \n"
                     + "VALUES ('1','1','" + folio + "','" + total + "','01','0000','NULL','NULL','NULL','NULL')");
             numarticulo = numarticulo + 1;
             n = pse.executeUpdate();
@@ -122,7 +148,6 @@ public class Principal extends javax.swing.JFrame {
     }
 
     public void insertarventa() {
-
         Statement e;
         PreparedStatement pse = null;
         double numarticulo = 1;
@@ -194,6 +219,22 @@ public class Principal extends javax.swing.JFrame {
         sumar();
     }
 
+    
+    public void agregarfinalbebidas() {
+        DefaultTableModel model = (DefaultTableModel) jtfinal.getModel();
+
+        int filaseleccionada = jtbebidas.getSelectedRow();//OBTIENES EL ELEMENTO DE LA TABLA
+        if (filaseleccionada >= 0) {
+            Object obj0 = (jtbebidas.getValueAt(filaseleccionada, 0));///OBTIENES EL PRIMER FILA
+            Object obj1 = (jtbebidas.getValueAt(filaseleccionada, 1));///OBTIENES EL PRIMER FILA
+            Object obj2 = (jtbebidas.getValueAt(filaseleccionada, 2));//OBTIENES LA SEGUNDA FILA
+
+            
+             model.addRow(new Object[]{obj0, obj1, obj2, 1 });
+        }
+        sumar();
+    }
+
     public void aumentarfolio() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -207,6 +248,8 @@ public class Principal extends javax.swing.JFrame {
             if (n > 0) {
                 //   JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
                 st.close();
+                recuperafolio();
+                 Vaciartabla();
                 //  limpiarcampos();
             }
         } catch (HeadlessException | SQLException ex) {
@@ -336,12 +379,12 @@ public class Principal extends javax.swing.JFrame {
         jtbebidas.setModel(md);
         JTableHeader th;
         th = jtbebidas.getTableHeader();
-        th.setFont(new java.awt.Font("tahoma", 0, 18));
+        th.setFont(new java.awt.Font("tahoma", 0, 14));
 
         //Centrar el encabezado de la tabla
         TableCellRenderer rendererFromHeader = jtbebidas.getTableHeader().getDefaultRenderer();
         JLabel headerLabel = (JLabel) rendererFromHeader;
-        headerLabel.setHorizontalAlignment(JLabel.CENTER);
+        headerLabel.setHorizontalAlignment(JLabel.LEFT);
 
        jtbebidas.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jtbebidas.getColumnModel().getColumn(0).setPreferredWidth(60); //Matrícula
@@ -438,6 +481,7 @@ public class Principal extends javax.swing.JFrame {
                 public boolean isCellEditable (int rowIndex, int colIndex) {
                     return false; // No permitir la edición de ninguna celda
                 }};
+                btnagregarajtfinal1 = new javax.swing.JButton();
                 Ordenes2 = new javax.swing.JPanel();
                 jScrollPane6 = new javax.swing.JScrollPane();
                 jtboneless = new javax.swing.JTable();
@@ -692,13 +736,22 @@ public class Principal extends javax.swing.JFrame {
                         jtbebidas.getColumnModel().getColumn(0).setResizable(false);
                     }
 
+                    btnagregarajtfinal1.setText("Agregar");
+                    btnagregarajtfinal1.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                            btnagregarajtfinal1ActionPerformed(evt);
+                        }
+                    });
+
                     javax.swing.GroupLayout OrdenesLayout = new javax.swing.GroupLayout(Ordenes);
                     Ordenes.setLayout(OrdenesLayout);
                     OrdenesLayout.setHorizontalGroup(
                         OrdenesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(OrdenesLayout.createSequentialGroup()
                             .addContainerGap()
-                            .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(OrdenesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnagregarajtfinal1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addContainerGap(18, Short.MAX_VALUE))
                     );
                     OrdenesLayout.setVerticalGroup(
@@ -706,7 +759,9 @@ public class Principal extends javax.swing.JFrame {
                         .addGroup(OrdenesLayout.createSequentialGroup()
                             .addGap(40, 40, 40)
                             .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addContainerGap(247, Short.MAX_VALUE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(btnagregarajtfinal1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addContainerGap())
                     );
 
                     panelmenu.addTab("Refrescos", Ordenes);
@@ -1069,6 +1124,7 @@ public class Principal extends javax.swing.JFrame {
                     getContentPane().add(txtdolar, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 10, 60, 30));
 
                     pack();
+                    setLocationRelativeTo(null);
                 }// </editor-fold>//GEN-END:initComponents
     public static void vaciartabla(Object[] sergioelbailador) {
      DefaultTableModel mode = (DefaultTableModel) jtfinal.getModel();
@@ -1221,7 +1277,9 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnsinnadaActionPerformed
 
     private void jtbebidasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbebidasMouseClicked
-        // TODO add your handling code here:
+ if (evt.getClickCount() == 2) { 
+            agregarfinalbebidas();
+        }
     }//GEN-LAST:event_jtbebidasMouseClicked
 
     private void jtbebidasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtbebidasKeyPressed
@@ -1231,6 +1289,11 @@ public class Principal extends javax.swing.JFrame {
     private void jtbebidasKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtbebidasKeyTyped
         // TODO add your handling code here:
     }//GEN-LAST:event_jtbebidasKeyTyped
+
+    private void btnagregarajtfinal1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarajtfinal1ActionPerformed
+        // TODO add your handling code here:
+         agregarfinalbebidas(); 
+    }//GEN-LAST:event_btnagregarajtfinal1ActionPerformed
 
    
      public static void main(String args[]) {
@@ -1278,6 +1341,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JToggleButton btnNada1;
     private javax.swing.JToggleButton btnTodo1;
     private javax.swing.JButton btnagregarajtfinal;
+    private javax.swing.JButton btnagregarajtfinal1;
     private javax.swing.JToggleButton btnagregarhotdog;
     private javax.swing.JToggleButton btnagregarplato1;
     private javax.swing.JButton btnconfirmar;

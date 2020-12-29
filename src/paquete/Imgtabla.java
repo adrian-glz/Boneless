@@ -14,15 +14,18 @@ import javax.swing.table.DefaultTableCellRenderer;
  *
  * @author AGONZALEZ
  */
-public class Imgtabla extends DefaultTableCellRenderer{
-    
+public class Imgtabla extends DefaultTableCellRenderer {
+
     @Override
     public Component getTableCellRendererComponent(JTable table, Object o,
             boolean isSelected, boolean hasFocus, int row, int column) {
-        if(o instanceof  JLabel){
-            JLabel lbl=(JLabel)o;
+        if (o instanceof JLabel) {
+            
+            JLabel lbl = (JLabel) o;
             return lbl;
+        
         }
         return super.getTableCellRendererComponent(table, o, isSelected, hasFocus, row, column); //To change body of generated methods, choose Tools | Templates.
- 
-}}
+
+    }
+}

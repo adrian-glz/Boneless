@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+ 
 package paquete;
 
 import java.sql.DriverManager;
@@ -10,31 +6,28 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-/**
- *
- * @author AGONZALEZ
- */
 public class Agregar extends javax.swing.JFrame {
-       Statement st;
+
+    Statement st;
     PreparedStatement ps = null;
     ResultSet rs;
- 
+
     public Agregar() {
-        initComponents();      
-        btnagregar.setEnabled(false);    
+        initComponents();
+        btnagregar.setEnabled(false);
         llenarcategorias();
-        
     }
 
-     public void llenarcategorias(){
+    public void llenarcategorias() {
+        
         cbcategorias.removeAllItems();
         try {
             Class.forName("com.mysql.jdbc.Driver");
             java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
             st = conexion.createStatement();
             st.executeUpdate("use prueba;");
-            rs = st.executeQuery("SELECT * FROM categorias");
-
+            rs = st.executeQuery("select * from categorias");
+            cbcategorias.addItem("-------SELECCIONA-------");
             while (rs.next()) {
                 String elemento = rs.getString(1);
                 cbcategorias.addItem(elemento);
@@ -45,7 +38,8 @@ public class Agregar extends javax.swing.JFrame {
             e.printStackTrace();
             return;
         }
-     }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -126,10 +120,7 @@ public class Agregar extends javax.swing.JFrame {
     private void btnagregarcategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarcategoriaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnagregarcategoriaActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
+ 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
