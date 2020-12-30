@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
  * @author AGONZALEZ
  */
 public class Login extends javax.swing.JFrame {
- 
+   public static String nombrecompleto;
     public Login() {
         initComponents();
     }
@@ -94,13 +94,14 @@ public class Login extends javax.swing.JFrame {
                 Class.forName("com.mysql.jdbc.Driver");
                 java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/", "root", "");
                 Statement st = conexion.createStatement();
-                st.executeUpdate("use  prueba;");
+                st.executeUpdate("use prueba;");
 
                 //Seleccionar datos
                 ResultSet rs = st.executeQuery("select * from usuarios  where usuario='" + txtusuario.getText().trim() + "' or id='" + txtusuario.getText().trim() + "'");
                 if (rs.next()) {   //Si existe el usuario
                     if (pass.equals(rs.getString("password"))) {    //Si la contraseña es correcta
-                        JOptionPane.showMessageDialog(this, "Bienvenido");
+                       nombrecompleto=rs.getString(2)+" "+rs.getString(3)+" "+rs.getString(4);
+                        JOptionPane.showMessageDialog(this, "Bienvenido: "+nombrecompleto);
                         Principal p = new Principal();
                         this.dispose();
                         p.setVisible(true);

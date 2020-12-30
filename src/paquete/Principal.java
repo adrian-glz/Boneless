@@ -19,6 +19,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
+import static paquete.Login.nombrecompleto;
 
  
 public class Principal extends javax.swing.JFrame {
@@ -31,7 +32,8 @@ public class Principal extends javax.swing.JFrame {
     PreparedStatement ps = null;
     public static double rcambio;
     public static int rfolio;
-    public static String rcajero;
+    public static int numerocajero;
+    
    
     public Principal() {
         
@@ -51,59 +53,22 @@ public class Principal extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Error con SQL revisa los ajustes y consultas SQL, se va a cerrar el programa");
         System.exit(0);
     }
-         
-        public void recuperacostodolar(){
-         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
-            st = conexion.createStatement();
-            st.executeUpdate("use prueba");
-
-            //Seleccionar datos
-            rs = st.executeQuery("SELECT   compra    FROM `costeo`"
-                    + " where id='1'");
-            try {
-                while (rs.next()) {
-                    rcambio = rs.getInt(1) ;
-                   // rcambio = rs.getDouble(2);
-                    System.out.println("folio="+folio);
-
-                }
-                txtdolar.setText("" + rcambio);
-              
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage());
-                alertasql();
-            }
-        } catch (HeadlessException | NumberFormatException | SQLException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-            alertasql();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-            alertasql();
-        }
-        
-        
-        
-        }
-    public void recuperafolio() {///metodo para traer cajero, folio, 
-
+ 
+    public void recuperacostodolar() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
             st = conexion.createStatement();
             st.executeUpdate("use prueba");
+
             //Seleccionar datos
-            rs = st.executeQuery("SELECT   `folio`     FROM `folios`"
-                    + " where caja='1'");
+            rs = st.executeQuery("SELECT compra FROM `costeo`"
+                    + " where id='1'");
             try {
                 while (rs.next()) {
-                    folio = rs.getInt(1);
-                    // rcambio = rs.getDouble(2);
-                    System.out.println("folio=" + folio);
-
+                    rcambio = rs.getInt(1);
                 }
-                txtfolio.setText("" + folio);
+                txtdolar.setText("" + rcambio);
 
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
@@ -119,8 +84,41 @@ public class Principal extends javax.swing.JFrame {
 
     }
 
+    public void recuperafolio() {///metodo para traer cajero, folio, 
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+            st = conexion.createStatement();
+            st.executeUpdate("use prueba");
+            //Seleccionar datos
+            rs = st.executeQuery("SELECT folio FROM  folios "
+                    + " where caja='1'");
+            try {
+                while (rs.next()) {
+                    folio = rs.getInt(1);
+                    // rcambio = rs.getDouble(2);
+                //    System.out.println("folio=" + folio);
+
+                }
+                txtfolio.setText("" + folio);
+                txtcajero.setText(nombrecompleto);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+                alertasql();
+            }
+        } catch (HeadlessException | NumberFormatException | SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            alertasql();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            alertasql();
+        }
+
+    }
+
     public void insertaventapagos() {
-        
+
         Statement e;
         PreparedStatement pse = null;
         double numarticulo = 1;
@@ -219,7 +217,6 @@ public class Principal extends javax.swing.JFrame {
         sumar();
     }
 
-    
     public void agregarfinalbebidas() {
         DefaultTableModel model = (DefaultTableModel) jtfinal.getModel();
 
@@ -229,8 +226,7 @@ public class Principal extends javax.swing.JFrame {
             Object obj1 = (jtbebidas.getValueAt(filaseleccionada, 1));///OBTIENES EL PRIMER FILA
             Object obj2 = (jtbebidas.getValueAt(filaseleccionada, 2));//OBTIENES LA SEGUNDA FILA
 
-            
-             model.addRow(new Object[]{obj0, obj1, obj2, 1 });
+            model.addRow(new Object[]{obj0, obj1, obj2, 1});
         }
         sumar();
     }
@@ -249,7 +245,7 @@ public class Principal extends javax.swing.JFrame {
                 //   JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
                 st.close();
                 recuperafolio();
-                 Vaciartabla();
+                Vaciartabla();
                 //  limpiarcampos();
             }
         } catch (HeadlessException | SQLException ex) {
@@ -274,7 +270,7 @@ public class Principal extends javax.swing.JFrame {
             try {
                 while (rs.next()) {
                     try {
-                        folio = rs.getInt(1); 
+                        folio = rs.getInt(1);
                     } catch (Exception e) {
                         this.dispose();
                     }
@@ -363,8 +359,8 @@ public class Principal extends javax.swing.JFrame {
 
     public void Bebidas() {
         String data[][] = {};
-     String cabeza[] = {"Codigo", "Descripcion", "Precio", "Imagen"};///definimos nombre cada columna en encabezado
-        
+        String cabeza[] = {"Codigo", "Descripcion", "Precio", "Imagen"};///definimos nombre cada columna en encabezado
+
         jtbebidas.getTableHeader().setReorderingAllowed(false);
         md = new DefaultTableModel(data, cabeza) {
             @Override
@@ -386,7 +382,7 @@ public class Principal extends javax.swing.JFrame {
         JLabel headerLabel = (JLabel) rendererFromHeader;
         headerLabel.setHorizontalAlignment(JLabel.LEFT);
 
-       jtbebidas.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        jtbebidas.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jtbebidas.getColumnModel().getColumn(0).setPreferredWidth(60); //Matrícula
         jtbebidas.getColumnModel().getColumn(0).setMaxWidth(300);
         jtbebidas.getColumnModel().getColumn(0).setMinWidth(60);
@@ -410,16 +406,16 @@ public class Principal extends javax.swing.JFrame {
             st.executeUpdate("use prueba");
 
             rs = st.executeQuery("SELECT `codigo`, `descripcion`, `precio`, `cantidad`, `categoria`, `imagen` from productos where categoria='bebidas'");
-             md = (DefaultTableModel) jtbebidas.getModel();
+            md = (DefaultTableModel) jtbebidas.getModel();
             md.setRowCount(0);
             try {
-            
+
                 jtbebidas.setRowHeight(40);
                 while (rs.next()) {
-                 String RUTA = "/img/" + rs.getString(6);
+                    String RUTA = "/img/" + rs.getString(6);
                     Object[] fila = (new Object[]{rs.getString(1), rs.getString(2), "$" + rs.getString(3), new JLabel(new ImageIcon(getClass().getResource("" + RUTA + "")))});
                     md.addRow(fila);
-              }
+                }
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage() + "No se encontro el servidor");
             }
@@ -469,7 +465,7 @@ public class Principal extends javax.swing.JFrame {
             ch5 = new javax.swing.JCheckBox();
             ch6 = new javax.swing.JCheckBox();
             ch3 = new javax.swing.JCheckBox();
-            txt_codigo = new javax.swing.JTextField();
+            txt_hamburguesa = new javax.swing.JTextField();
             editbuscar = new javax.swing.JLabel();
             jButton3 = new javax.swing.JButton();
             btnagregarajtfinal = new javax.swing.JButton();
@@ -482,6 +478,8 @@ public class Principal extends javax.swing.JFrame {
                     return false; // No permitir la edición de ninguna celda
                 }};
                 btnagregarajtfinal1 = new javax.swing.JButton();
+                editbuscar1 = new javax.swing.JLabel();
+                txt_bebidas = new javax.swing.JTextField();
                 Ordenes2 = new javax.swing.JPanel();
                 jScrollPane6 = new javax.swing.JScrollPane();
                 jtboneless = new javax.swing.JTable();
@@ -610,9 +608,9 @@ public class Principal extends javax.swing.JFrame {
                     ch3.setPreferredSize(new java.awt.Dimension(90, 22));
                     jpingredentes.add(ch3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 60, 140, -1));
 
-                    txt_codigo.addKeyListener(new java.awt.event.KeyAdapter() {
+                    txt_hamburguesa.addKeyListener(new java.awt.event.KeyAdapter() {
                         public void keyReleased(java.awt.event.KeyEvent evt) {
-                            txt_codigoKeyReleased(evt);
+                            txt_hamburguesaKeyReleased(evt);
                         }
                     });
 
@@ -664,10 +662,9 @@ public class Principal extends javax.swing.JFrame {
                                     .addComponent(btnagregarajtfinal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(jpfondoLayout.createSequentialGroup()
-                                    .addGap(8, 8, 8)
                                     .addComponent(editbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(txt_codigo, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(12, 12, 12)
+                                    .addComponent(txt_hamburguesa, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(18, 18, 18)
                                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addContainerGap(18, Short.MAX_VALUE))
@@ -677,9 +674,10 @@ public class Principal extends javax.swing.JFrame {
                         .addGroup(jpfondoLayout.createSequentialGroup()
                             .addGap(9, 9, 9)
                             .addGroup(jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(editbuscar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jButton3)
-                                .addComponent(txt_codigo, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
+                                .addGroup(jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txt_hamburguesa, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                                    .addComponent(editbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -743,24 +741,43 @@ public class Principal extends javax.swing.JFrame {
                         }
                     });
 
+                    editbuscar1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+                    editbuscar1.setText("Buscar:");
+
+                    txt_bebidas.addKeyListener(new java.awt.event.KeyAdapter() {
+                        public void keyReleased(java.awt.event.KeyEvent evt) {
+                            txt_bebidasKeyReleased(evt);
+                        }
+                    });
+
                     javax.swing.GroupLayout OrdenesLayout = new javax.swing.GroupLayout(Ordenes);
                     Ordenes.setLayout(OrdenesLayout);
                     OrdenesLayout.setHorizontalGroup(
                         OrdenesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(OrdenesLayout.createSequentialGroup()
                             .addContainerGap()
-                            .addGroup(OrdenesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnagregarajtfinal1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(OrdenesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(OrdenesLayout.createSequentialGroup()
+                                    .addGap(323, 323, 323)
+                                    .addComponent(btnagregarajtfinal1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(OrdenesLayout.createSequentialGroup()
+                                    .addComponent(editbuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(txt_bebidas, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addContainerGap(18, Short.MAX_VALUE))
                     );
                     OrdenesLayout.setVerticalGroup(
                         OrdenesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(OrdenesLayout.createSequentialGroup()
-                            .addGap(40, 40, 40)
-                            .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(9, 9, 9)
+                            .addGroup(OrdenesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(editbuscar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txt_bebidas, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(btnagregarajtfinal1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnagregarajtfinal1, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
                             .addContainerGap())
                     );
 
@@ -1186,17 +1203,18 @@ public class Principal extends javax.swing.JFrame {
     private void ch6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ch6ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ch6ActionPerformed
-    DefaultTableModel dmm;
+    DefaultTableModel th;
 
     private void filtro(String consulta, JTable jtableBuscar) {
-        dmm = (DefaultTableModel) jthamburguesas.getModel();
-        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(dmm);
+        th = (DefaultTableModel) jthamburguesas.getModel();
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(th);
         jtableBuscar.setRowSorter(tr);
         tr.setRowFilter(RowFilter.regexFilter(consulta));
     }
-    private void txt_codigoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_codigoKeyReleased
-        filtro(txt_codigo.getText().toUpperCase(), jthamburguesas);
-    }//GEN-LAST:event_txt_codigoKeyReleased
+
+    private void txt_hamburguesaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_hamburguesaKeyReleased
+        filtro(txt_hamburguesa.getText().toUpperCase(), jthamburguesas);
+    }//GEN-LAST:event_txt_hamburguesaKeyReleased
 
     private void btnEliminarpiezaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarpiezaActionPerformed
         int filaseleccionada = jtfinal.getSelectedRow();
@@ -1294,6 +1312,17 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
          agregarfinalbebidas(); 
     }//GEN-LAST:event_btnagregarajtfinal1ActionPerformed
+    DefaultTableModel tb;
+
+    private void filtrobebidas(String consulta, JTable jtableBuscar) {
+        tb = (DefaultTableModel) jtbebidas.getModel();
+        TableRowSorter<DefaultTableModel> trb = new TableRowSorter<>(tb);
+        jtableBuscar.setRowSorter(trb);
+        trb.setRowFilter(RowFilter.regexFilter(consulta));
+    }
+    private void txt_bebidasKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_bebidasKeyReleased
+      filtrobebidas(txt_bebidas.getText().toUpperCase(), jtbebidas);
+    }//GEN-LAST:event_txt_bebidasKeyReleased
 
    
      public static void main(String args[]) {
@@ -1360,6 +1389,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JCheckBox ch8;
     private javax.swing.JCheckBox ch9;
     private javax.swing.JLabel editbuscar;
+    private javax.swing.JLabel editbuscar1;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.JButton jButton1;
@@ -1386,8 +1416,9 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JTable jthotdogs;
     private javax.swing.JTabbedPane panelmenu;
     private java.awt.PopupMenu popupMenu1;
-    private javax.swing.JTextField txt_codigo;
+    private javax.swing.JTextField txt_bebidas;
     private javax.swing.JTextField txt_codigo1;
+    private javax.swing.JTextField txt_hamburguesa;
     private javax.swing.JLabel txtcajero;
     private javax.swing.JLabel txtdolar;
     private javax.swing.JLabel txtfolio;

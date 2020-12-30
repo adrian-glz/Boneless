@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import static paquete.Principal.jtfinal;
+import static paquete.Principal.rcambio;
 
 /**
  *
@@ -30,7 +31,7 @@ public class Cobrar extends javax.swing.JFrame {
 
 //VARIABLES GLOBALES  
        String fecha=null;
-    double costeo = 21.00;
+   
     ResultSet rs;
     int count = 0;
     DefaultTableModel md;
@@ -91,8 +92,8 @@ public void calcularcambio(){
     double vfpdolares = Double.parseDouble(fpdolares);
     String fptarjeta = jtxttarjeta.getText().replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", "");
     double vfptarjeta = Double.parseDouble(fptarjeta);
-
-        double totalformadepago = vfppesos + (vfpdolares * costeo) + vfptarjeta;
+    System.out.println("costo cambio"+rcambio);
+        double totalformadepago = vfppesos + (vfpdolares * rcambio) + vfptarjeta;
 
     double cantidadrestante = (vtotal - totalformadepago);
     txtcr.setText("" + cantidadrestante);
