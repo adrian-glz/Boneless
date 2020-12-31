@@ -1,6 +1,7 @@
 package paquete;
 
 import java.awt.HeadlessException;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -517,7 +518,7 @@ public class Principal extends javax.swing.JFrame {
                     txttotal1 = new javax.swing.JLabel();
                     txttotalarticulos = new javax.swing.JLabel();
                     btnEliminarpieza = new javax.swing.JButton();
-                    jButton1 = new javax.swing.JButton();
+                    btncambiar = new javax.swing.JButton();
                     Limpiartblfinal = new javax.swing.JButton();
                     jLabel1 = new javax.swing.JLabel();
                     jLabel2 = new javax.swing.JLabel();
@@ -525,6 +526,7 @@ public class Principal extends javax.swing.JFrame {
                     txtcajero = new javax.swing.JLabel();
                     txtfolio = new javax.swing.JLabel();
                     txtdolar = new javax.swing.JLabel();
+                    btnconfiguracion = new javax.swing.JButton();
 
                     popupMenu1.setLabel("popupMenu1");
 
@@ -719,14 +721,6 @@ public class Principal extends javax.swing.JFrame {
                     jtbebidas.addMouseListener(new java.awt.event.MouseAdapter() {
                         public void mouseClicked(java.awt.event.MouseEvent evt) {
                             jtbebidasMouseClicked(evt);
-                        }
-                    });
-                    jtbebidas.addKeyListener(new java.awt.event.KeyAdapter() {
-                        public void keyPressed(java.awt.event.KeyEvent evt) {
-                            jtbebidasKeyPressed(evt);
-                        }
-                        public void keyTyped(java.awt.event.KeyEvent evt) {
-                            jtbebidasKeyTyped(evt);
                         }
                     });
                     jScrollPane8.setViewportView(jtbebidas);
@@ -1096,14 +1090,14 @@ public class Principal extends javax.swing.JFrame {
                     });
                     getContentPane().add(btnEliminarpieza, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 440, 110, 35));
 
-                    jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-                    jButton1.setText("...");
-                    jButton1.addActionListener(new java.awt.event.ActionListener() {
+                    btncambiar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+                    btncambiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cambiar.png"))); // NOI18N
+                    btncambiar.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                            jButton1ActionPerformed(evt);
+                            btncambiarActionPerformed(evt);
                         }
                     });
-                    getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 10, 40, 40));
+                    getContentPane().add(btncambiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 10, 60, 50));
 
                     Limpiartblfinal.setText("Limpiar todo");
                     Limpiartblfinal.addActionListener(new java.awt.event.ActionListener() {
@@ -1139,6 +1133,9 @@ public class Principal extends javax.swing.JFrame {
                     txtdolar.setForeground(new java.awt.Color(0, 204, 0));
                     txtdolar.setText("NA");
                     getContentPane().add(txtdolar, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 10, 60, 30));
+
+                    btnconfiguracion.setText(" ");
+                    getContentPane().add(btnconfiguracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 10, 60, 50));
 
                     pack();
                     setLocationRelativeTo(null);
@@ -1265,15 +1262,16 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_LimpiartblfinalActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-     insertarventa();
+        insertarventa();
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btncambiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncambiarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+       
+    }//GEN-LAST:event_btncambiarActionPerformed
 
     private void btnagregarajtfinalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarajtfinalActionPerformed
-     agregarfinal(); 
+        agregarfinal();
     }//GEN-LAST:event_btnagregarajtfinalActionPerformed
 
     private void btncontodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncontodoActionPerformed
@@ -1295,22 +1293,14 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnsinnadaActionPerformed
 
     private void jtbebidasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbebidasMouseClicked
- if (evt.getClickCount() == 2) { 
+        if (evt.getClickCount() == 2) {
             agregarfinalbebidas();
         }
     }//GEN-LAST:event_jtbebidasMouseClicked
 
-    private void jtbebidasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtbebidasKeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jtbebidasKeyPressed
-
-    private void jtbebidasKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtbebidasKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jtbebidasKeyTyped
-
     private void btnagregarajtfinal1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarajtfinal1ActionPerformed
         // TODO add your handling code here:
-         agregarfinalbebidas(); 
+        agregarfinalbebidas();
     }//GEN-LAST:event_btnagregarajtfinal1ActionPerformed
     DefaultTableModel tb;
 
@@ -1321,7 +1311,7 @@ public class Principal extends javax.swing.JFrame {
         trb.setRowFilter(RowFilter.regexFilter(consulta));
     }
     private void txt_bebidasKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_bebidasKeyReleased
-      filtrobebidas(txt_bebidas.getText().toUpperCase(), jtbebidas);
+        filtrobebidas(txt_bebidas.getText().toUpperCase(), jtbebidas);
     }//GEN-LAST:event_txt_bebidasKeyReleased
 
    
@@ -1373,6 +1363,8 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btnagregarajtfinal1;
     private javax.swing.JToggleButton btnagregarhotdog;
     private javax.swing.JToggleButton btnagregarplato1;
+    private javax.swing.JButton btncambiar;
+    private javax.swing.JButton btnconfiguracion;
     private javax.swing.JButton btnconfirmar;
     private javax.swing.JButton btncontodo;
     private javax.swing.JButton btnsinnada;
@@ -1392,7 +1384,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel editbuscar1;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
