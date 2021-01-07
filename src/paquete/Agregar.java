@@ -1,10 +1,15 @@
  
 package paquete;
 
+import java.awt.HeadlessException;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class Agregar extends javax.swing.JFrame {
 
@@ -18,8 +23,58 @@ public class Agregar extends javax.swing.JFrame {
         llenarcategorias();
     }
 
+    public void comprobarcodigo(){
+        try {
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+           java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+            st = conexion.createStatement();
+            
+            rs = st.executeQuery("select codigo, descripcion, grupo, precioventa from codigos where codigo='" + txtcodigo.getText() + "' or codigo2='" + txtcodigo.getText() + "'");
+
+            boolean friv = rs.next();
+            String s1 = Boolean.toString(friv);
+            try {
+                if (s1.equals("true")) {
+                    validarcodigo();
+                    while (rs.next()) {
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "UPPS!!  el codigo ----> " + txtcodigo.getText() + "  no existe o esta incorrecto ", "Alerta", JOptionPane.WARNING_MESSAGE);
+                    txtcodigo.setText("");
+                    lblresultado.setText("");
+                    txtcodigo.requestFocus();
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+            }
+        } catch (HeadlessException | NumberFormatException | SQLException e) {
+            JOptionPane.showMessageDialog(rootPane, e.getMessage());
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CapturaInventario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+     
+    
+    }
+    
+    public void agregar() {
+
+        String codigo = txtcodigo.getText().trim();
+        String cantidad = cbcantidad.toString().trim();
+        String categoria = cbcategorias.getSelectedItem().toString().trim();
+        String descripcionproducto = txt_nombreproducto.getText().trim();
+        double precio = Double.parseDouble(txt_precio.getText().trim());
+
+        if ((codigo.isEmpty()) || (cantidad.isEmpty()) || (categoria.isEmpty()) || (descripcionproducto.isEmpty())) {
+            JOptionPane.showMessageDialog(null, "Comprueba que TODOS los datos esten llenos");
+        } else {   //Checar que no estén vacíos
+            comprobarcodigo();
+        }
+    }
+
     public void llenarcategorias() {
-        
+
         cbcategorias.removeAllItems();
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -34,7 +89,7 @@ public class Agregar extends javax.swing.JFrame {
             }
             st.close();
         } catch (Exception e) {
-            System.out.println("ERROR: failed to load HSQLDB JDBC driver.");
+            // System.out.println("ERROR: failed to load HSQLDB JDBC driver.");
             e.printStackTrace();
             return;
         }
@@ -55,7 +110,7 @@ public class Agregar extends javax.swing.JFrame {
         btnagregar = new javax.swing.JButton();
         btnagregarcategoria = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
-        txt_nombreproducto1 = new javax.swing.JTextField();
+        txt_nombreproducto = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -85,13 +140,13 @@ public class Agregar extends javax.swing.JFrame {
         getContentPane().add(txt_precio, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 190, 170, 35));
 
         btnagregar.setBackground(new java.awt.Color(51, 255, 51));
-        btnagregar.setText("Aceptar");
+        btnagregar.setText("Agregar");
         btnagregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnagregarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnagregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 250, 230, 40));
+        getContentPane().add(btnagregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 270, 300, 40));
 
         btnagregarcategoria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/agregar1.png"))); // NOI18N
         btnagregarcategoria.setContentAreaFilled(false);
@@ -100,21 +155,22 @@ public class Agregar extends javax.swing.JFrame {
                 btnagregarcategoriaActionPerformed(evt);
             }
         });
-        getContentPane().add(btnagregarcategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 110, 40, 30));
+        getContentPane().add(btnagregarcategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 110, 40, 40));
 
         jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel7.setText("Nombre de producto:");
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 130, 34));
-        getContentPane().add(txt_nombreproducto1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 150, 170, 35));
+        getContentPane().add(txt_nombreproducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 150, 170, 35));
 
         jLabel1.setText("       ");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 270, 40, 30));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 310, 40, 20));
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnagregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarActionPerformed
-        // TODO add your handling code here:
+   
     }//GEN-LAST:event_btnagregarActionPerformed
 
     private void btnagregarcategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarcategoriaActionPerformed
@@ -164,7 +220,7 @@ public class Agregar extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JTextField txt_nombreproducto1;
+    private javax.swing.JTextField txt_nombreproducto;
     private javax.swing.JTextField txt_precio;
     private javax.swing.JTextField txtcodigo;
     // End of variables declaration//GEN-END:variables

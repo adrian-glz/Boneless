@@ -37,20 +37,18 @@ public class Principal extends javax.swing.JFrame {
     
    
     public Principal() {
-        
+
         initComponents();///inicializamos componentes al inicio del metodo
         obtenerfolio();
-        recuperafolio(); 
+        recuperafolio();
         recuperacostodolar();
         Bebidas();//llamamos el metodo de bebidas para llenar tablas
         Hamburguesas();//llamamos el metodo de Comidas para llenar Comidas
         tablafinal();
-        
-        
         jtfinal.getTableHeader().setReorderingAllowed(false);///INHABILITA EL MOVER CABECERAS los titulos de la tabla jtfinal
     }
 
-        public void alertasql() {
+    public void alertasql() {
         JOptionPane.showMessageDialog(this, "Error con SQL revisa los ajustes y consultas SQL, se va a cerrar el programa");
         System.exit(0);
     }
@@ -63,14 +61,13 @@ public class Principal extends javax.swing.JFrame {
             st.executeUpdate("use prueba");
 
             //Seleccionar datos
-            rs = st.executeQuery("SELECT compra FROM `costeo`"
+            rs = st.executeQuery("select compra from `costeo`"
                     + " where id='1'");
             try {
                 while (rs.next()) {
                     rcambio = rs.getInt(1);
                 }
                 txtdolar.setText("" + rcambio);
-
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
                 alertasql();
@@ -82,7 +79,6 @@ public class Principal extends javax.swing.JFrame {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
             alertasql();
         }
-
     }
 
     public void recuperafolio() {///metodo para traer cajero, folio, 
@@ -93,17 +89,15 @@ public class Principal extends javax.swing.JFrame {
             st = conexion.createStatement();
             st.executeUpdate("use prueba");
             //Seleccionar datos
-            rs = st.executeQuery("SELECT folio FROM  folios "
+            rs = st.executeQuery("select folio from  folios "
                     + " where caja='1'");
             try {
                 while (rs.next()) {
                     folio = rs.getInt(1);
-                    // rcambio = rs.getDouble(2);
-                //    System.out.println("folio=" + folio);
-
-                }
+                     }
                 txtfolio.setText("" + folio);
                 txtcajero.setText(nombrecompleto);
+             //   System.out.println("si CORRE"+nombrecompleto);
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
                 alertasql();
@@ -239,7 +233,7 @@ public class Principal extends javax.swing.JFrame {
             Statement st = conexion.createStatement();
             st.executeUpdate("use prueba;");
 
-            ps = conexion.prepareStatement("update `folios` set `folio`= folio+1 where `caja`=1 ");
+            ps = conexion.prepareStatement("update  folios  set  folio = folio+1 where `caja`=1 ");
 
             int n = ps.executeUpdate();
             if (n > 0) {
@@ -264,10 +258,7 @@ public class Principal extends javax.swing.JFrame {
             java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
             st = conexion.createStatement();
             st.executeUpdate("use prueba");
-
-            //Seleccionar datos
             rs = st.executeQuery("SELECT folio from folios where caja ='1'");
-
             try {
                 while (rs.next()) {
                     try {
@@ -337,7 +328,7 @@ public class Principal extends javax.swing.JFrame {
             st.executeUpdate("use prueba");
 
             //Seleccionar datos
-            rs = st.executeQuery("SELECT `codigo`, `descripcion`, `precio`, `cantidad`, `categoria`, `imagen` from productos where categoria='hamburguesa'");
+            rs = st.executeQuery("select `codigo`, `descripcion`, `precio`, `cantidad`, `categoria`, `imagen` from productos where categoria='hamburguesa'");
             md = (DefaultTableModel) jthamburguesas.getModel();
             md.setRowCount(0);
             try {
@@ -1134,14 +1125,19 @@ public class Principal extends javax.swing.JFrame {
                     txtdolar.setText("NA");
                     getContentPane().add(txtdolar, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 10, 60, 30));
 
-                    btnconfiguracion.setText(" ");
+                    btnconfiguracion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/com.png"))); // NOI18N
+                    btnconfiguracion.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                            btnconfiguracionActionPerformed(evt);
+                        }
+                    });
                     getContentPane().add(btnconfiguracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 10, 60, 50));
 
                     pack();
                     setLocationRelativeTo(null);
                 }// </editor-fold>//GEN-END:initComponents
     public static void vaciartabla(Object[] sergioelbailador) {
-     DefaultTableModel mode = (DefaultTableModel) jtfinal.getModel();
+        DefaultTableModel mode = (DefaultTableModel) jtfinal.getModel();
         int filas = mode.getRowCount();///pasamos el total de elementos a filas
         for (int i = 0; filas > i; i++) {
             mode.removeRow(0); //removes las columnas en base a la longitud de el arreglo
@@ -1159,7 +1155,6 @@ public class Principal extends javax.swing.JFrame {
             cb.txttotalc.setText(TXTTTOTAL);
             cb.txttotaldllsc.setText(TXTTOTALDLLS);
             cb.Enviartotal();
-
         } else {
             JOptionPane.showMessageDialog(this, "No has capturado ningun producto");
         }
@@ -1180,7 +1175,6 @@ public class Principal extends javax.swing.JFrame {
             if(evt.getKeyCode()==KeyEvent.VK_ESCAPE){
                 System.exit(0);
             }
-
     }//GEN-LAST:event_jthamburguesasKeyTyped
 
     private void jthamburguesasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jthamburguesasKeyPressed
@@ -1221,7 +1215,7 @@ public class Principal extends javax.swing.JFrame {
             dtm.removeRow(jtfinal.getSelectedRow());
             sumar();
         } else {
-            JOptionPane.showMessageDialog(null, "NO SELECCIONASTE NINGUN CODIGO ");
+            JOptionPane.showMessageDialog(null, "No Seleccionaste ningun codigo ");
         }
     }//GEN-LAST:event_btnEliminarpiezaActionPerformed
 
@@ -1266,8 +1260,9 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void btncambiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncambiarActionPerformed
-        // TODO add your handling code here:
-       
+        Verusuarios vu = new Verusuarios();
+        vu.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btncambiarActionPerformed
 
     private void btnagregarajtfinalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarajtfinalActionPerformed
@@ -1299,8 +1294,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jtbebidasMouseClicked
 
     private void btnagregarajtfinal1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarajtfinal1ActionPerformed
-        // TODO add your handling code here:
-        agregarfinalbebidas();
+       agregarfinalbebidas();
     }//GEN-LAST:event_btnagregarajtfinal1ActionPerformed
     DefaultTableModel tb;
 
@@ -1313,6 +1307,13 @@ public class Principal extends javax.swing.JFrame {
     private void txt_bebidasKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_bebidasKeyReleased
         filtrobebidas(txt_bebidas.getText().toUpperCase(), jtbebidas);
     }//GEN-LAST:event_txt_bebidasKeyReleased
+
+    private void btnconfiguracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnconfiguracionActionPerformed
+        // TODO add your handling code here:
+        
+        Configuracion c= new Configuracion();
+        c.setVisible(true);
+    }//GEN-LAST:event_btnconfiguracionActionPerformed
 
    
      public static void main(String args[]) {

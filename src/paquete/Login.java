@@ -13,12 +13,13 @@ import javax.swing.JOptionPane;
  * @author AGONZALEZ
  */
 public class Login extends javax.swing.JFrame {
-   public static String nombrecompleto;
+
+    public static String nombrecompleto = "";
+
     public Login() {
         initComponents();
     }
 
-     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -42,6 +43,11 @@ public class Login extends javax.swing.JFrame {
         jLabel2.setText("Contraseña:");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 244, -1, 20));
 
+        txtusuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtusuarioActionPerformed(evt);
+            }
+        });
         txtusuario.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtusuarioKeyTyped(evt);
@@ -82,8 +88,8 @@ public class Login extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-    public void ingresar(){
-        
+    public void ingresar() {
+
         String user = txtusuario.getText();   //Tomar el contenido de textField
         String pass = new String(txtpassword.getPassword()).toUpperCase();  //Tomar el contenido de password
         if ((user.isEmpty()) || (pass.isEmpty())) {   //Checar que no estén vacíos
@@ -100,8 +106,8 @@ public class Login extends javax.swing.JFrame {
                 ResultSet rs = st.executeQuery("select * from usuarios  where usuario='" + txtusuario.getText().trim() + "' or id='" + txtusuario.getText().trim() + "'");
                 if (rs.next()) {   //Si existe el usuario
                     if (pass.equals(rs.getString("password"))) {    //Si la contraseña es correcta
-                       nombrecompleto=rs.getString(2)+" "+rs.getString(3)+" "+rs.getString(4);
-                        JOptionPane.showMessageDialog(this, "Bienvenido: "+nombrecompleto);
+                        nombrecompleto = rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4);
+                        JOptionPane.showMessageDialog(this, "Bienvenido: " + nombrecompleto);
                         Principal p = new Principal();
                         this.dispose();
                         p.setVisible(true);
@@ -118,7 +124,7 @@ public class Login extends javax.swing.JFrame {
             }
         }
     }
-    
+
     
     private void txtpasswordKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtpasswordKeyTyped
         int k = (int) evt.getKeyChar();//k = al valor de la tecla presionada
@@ -141,6 +147,10 @@ public class Login extends javax.swing.JFrame {
           txtusuario.transferFocus();
         }
     }//GEN-LAST:event_txtusuarioKeyTyped
+
+    private void txtusuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtusuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtusuarioActionPerformed
 
     /**
      * @param args the command line arguments

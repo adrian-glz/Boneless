@@ -9,12 +9,12 @@ package paquete;
  *
  * @author AGONZALEZ
  */
-public class Opciones extends javax.swing.JFrame {
+public class Configuracion extends javax.swing.JFrame {
 
     /**
      * Creates new form Opciones
      */
-    public Opciones() {
+    public Configuracion() {
         initComponents();
     }
 
@@ -31,13 +31,19 @@ public class Opciones extends javax.swing.JFrame {
         Realizarcorte = new javax.swing.JButton();
         btnCambiarCosteo1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Configuracion y ajustes");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnagregarproducto.setText("Agregar producto nuevo");
+        btnagregarproducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnagregarproductoActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnagregarproducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 200, 60));
 
-        Realizarcorte.setText("Hacer Corte");
+        Realizarcorte.setText(" Corte");
         Realizarcorte.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 RealizarcorteActionPerformed(evt);
@@ -54,6 +60,7 @@ public class Opciones extends javax.swing.JFrame {
         getContentPane().add(btnCambiarCosteo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 10, 200, 60));
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void RealizarcorteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RealizarcorteActionPerformed
@@ -63,6 +70,12 @@ public class Opciones extends javax.swing.JFrame {
     private void btnCambiarCosteo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarCosteo1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCambiarCosteo1ActionPerformed
+
+    private void btnagregarproductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarproductoActionPerformed
+            Agregar a=new Agregar();
+            this.dispose();
+            a.setVisible(true);
+    }//GEN-LAST:event_btnagregarproductoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -81,20 +94,21 @@ public class Opciones extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Opciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Configuracion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Opciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Configuracion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Opciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Configuracion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Opciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Configuracion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Opciones().setVisible(true);
+                new Configuracion().setVisible(true);
             }
         });
     }
