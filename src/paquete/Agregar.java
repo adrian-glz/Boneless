@@ -153,6 +153,7 @@ public class Agregar extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         txt_nombreproducto = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        btncancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Agregar nuevo producto");
@@ -187,7 +188,7 @@ public class Agregar extends javax.swing.JFrame {
                 btnagregarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnagregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 270, 300, 40));
+        getContentPane().add(btnagregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, 340, 40));
 
         btnagregarcategoria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/agregar1.png"))); // NOI18N
         btnagregarcategoria.setContentAreaFilled(false);
@@ -204,7 +205,16 @@ public class Agregar extends javax.swing.JFrame {
         getContentPane().add(txt_nombreproducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 150, 170, 35));
 
         jLabel1.setText("       ");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 310, 40, 20));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 360, 40, 20));
+
+        btncancelar.setBackground(new java.awt.Color(255, 51, 51));
+        btncancelar.setText("Cancelar");
+        btncancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncancelarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btncancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, 340, 40));
 
         pack();
         setLocationRelativeTo(null);
@@ -217,6 +227,13 @@ public class Agregar extends javax.swing.JFrame {
     private void btnagregarcategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarcategoriaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnagregarcategoriaActionPerformed
+
+    private void btncancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelarActionPerformed
+        this.dispose();
+        Principal p=new Principal();
+        p.setVisible(true);
+
+    }//GEN-LAST:event_btncancelarActionPerformed
  
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -253,6 +270,7 @@ public class Agregar extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnagregar;
     private javax.swing.JButton btnagregarcategoria;
+    private javax.swing.JButton btncancelar;
     private javax.swing.JSpinner cbcantidad;
     private javax.swing.JComboBox cbcategorias;
     private javax.swing.JLabel jLabel1;

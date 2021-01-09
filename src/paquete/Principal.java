@@ -93,10 +93,10 @@ public class Principal extends javax.swing.JFrame {
             try {
                 while (rs.next()) {
                     folio = rs.getInt(1);
-                     }
+                }
                 txtfolio.setText("" + folio);
                 txtcajero.setText(nombrecompleto);
-             //   System.out.println("si CORRE"+nombrecompleto);
+                //   System.out.println("si CORRE"+nombrecompleto);
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
                 alertasql();
@@ -162,6 +162,43 @@ public class Principal extends javax.swing.JFrame {
                         + "VALUES ( '1','" + folio + "','1','" + numarticulo + "','" + vcodigo + "','00','" + vcantidad + "','" + vprecioformateado + "','1111','00','777','11:21')");
                 numarticulo = numarticulo + 1;
                 n = pse.executeUpdate();
+
+            } catch (HeadlessException | SQLException ex) {
+                JOptionPane.showMessageDialog(rootPane, "Error en la base de datos" + ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }///fin del cliclo for perro
+        if (n > 0) {
+            JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
+            insertaventapagos();
+            //  aumentarfolio(); 
+        }
+    }
+
+    public void insertapedido() {
+
+        PreparedStatement p = null;
+        double numarticulo = 1;
+        obtenerfolio();
+        int n = 0;
+        for (int x = 0; x < jtfinal.getRowCount(); x++) {
+
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+                Statement ste = conexion.createStatement();
+                ste.executeUpdate("use prueba;");
+                String vcodigo = ((String) jtfinal.getValueAt(x, 0));//obtener valor de precio
+                String vdescripcion = ((String) jtfinal.getValueAt(x, 1));//obtener valor de precio
+                String vprecio = ((String) jtfinal.getValueAt(x, 2));///obtienes el valor de la cantidad
+                int vcantidad = ((int) jtfinal.getValueAt(x, 3));///obtienes el valor de la cantidad
+                String vprecioformateado = vprecio.replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", "");//dejameos solo los elementos"[^0-1-2-3-4-5-6-7-8-9-.00]"
+                double vprecioparseado = Double.parseDouble(vprecioformateado);
+                p = conexion.prepareStatement("insert into pedido ( `Sucursal`, `Folio`, `Caja`, `Codigo`, `Descripcion` , `Cantidad`, `Precioventa`, `Vendedor`, `Cajero`, `Claveventa`, `Hora`) "
+                        + "VALUES ( '1','" + folio + "','1','" + numarticulo + "','" + vcodigo + "','00','" + vcantidad + "','" + vprecioformateado + "','1111','00','777','11:21')");
+                numarticulo = numarticulo + 1;
+                n = p.executeUpdate();
 
             } catch (HeadlessException | SQLException ex) {
                 JOptionPane.showMessageDialog(rootPane, "Error en la base de datos" + ex);
@@ -347,6 +384,7 @@ public class Principal extends javax.swing.JFrame {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     public void Tortas() {
         String data[][] = {};
         String cabeza[] = {"Codigo", "Descripcion", "Precio", "Imagen"};///definimos nombre cada columna en encabezado
@@ -368,7 +406,7 @@ public class Principal extends javax.swing.JFrame {
         th = jttortas.getTableHeader();
         th.setFont(new java.awt.Font("tahoma", 0, 14));//seteamos fuente en el header
         //<Centrar el encabezado de la tabla>
-        TableCellRenderer rendererFromHeader = jthamburguesas.getTableHeader().getDefaultRenderer();//
+        TableCellRenderer rendererFromHeader = jttortas.getTableHeader().getDefaultRenderer();//
         JLabel headerLabel = (JLabel) rendererFromHeader;
         headerLabel.setHorizontalAlignment(JLabel.LEFT);
         /////////////////////////////////////////////////////////>
