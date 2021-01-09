@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -16,34 +18,63 @@ public class Agregar extends javax.swing.JFrame {
     Statement st;
     PreparedStatement ps = null;
     ResultSet rs;
+    String codigo;
+    int cantidad;
+    String categoria;
+    String descripcionproducto;
+    double precio;
 
     public Agregar() {
         initComponents();
-        btnagregar.setEnabled(false);
         llenarcategorias();
+    }
+
+
+    public void insertarcodigo(){
+    
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SS");
+        LocalDateTime date = LocalDateTime.now();
+        System.out.println(dtf.format(date));
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+            Statement st = conexion.createStatement();
+            st.executeUpdate("use prueba");
+            //      System.out.println(">>>>>xxxx" + txtgondola.getText().toUpperCase() + txtcantidad.getText().toUpperCase() + date);
+            ps = conexion.prepareStatement("INSERT INTO `productos`(`codigo`, `descripcion`, `precio`, `cantidad`, `categoria`, `imagen`)\n"
+                    + "   VALUES('" + codigo + "','" + descripcionproducto + "','" + precio + "','" + cantidad + "','" + categoria + "','" + categoria + "')    ");
+
+            System.out.println(codigo + descripcionproducto + precio + cantidad + categoria);
+            int n = ps.executeUpdate();
+            if (n > 0) {
+                JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
+            }
+        } catch (HeadlessException | SQLException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Error en la base de datos 111");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Agregar.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         
     }
 
     public void comprobarcodigo(){
         try {
-            Class.forName("net.sourceforge.jtds.jdbc.Driver");
-           java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
-            st = conexion.createStatement();
-            
-            rs = st.executeQuery("select codigo, descripcion, grupo, precioventa from codigos where codigo='" + txtcodigo.getText() + "' or codigo2='" + txtcodigo.getText() + "'");
-
+            Class.forName("com.mysql.jdbc.Driver");
+            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+            st = conexion.createStatement(); 
+            st.executeUpdate("use prueba");
+            rs = st.executeQuery("select codigo  from productos where codigo='" + txtcodigo.getText()  + "'");
+           
             boolean friv = rs.next();
             String s1 = Boolean.toString(friv);
             try {
+                System.out.println("><><>"+s1);
                 if (s1.equals("true")) {
-                    validarcodigo();
+                    JOptionPane.showMessageDialog(null, "UPPS!!  el codigo ----> " + txtcodigo.getText() + "  Ya existe ", "Alerta", JOptionPane.WARNING_MESSAGE);                
                     while (rs.next()) {
                     }
-
                 } else {
-                    JOptionPane.showMessageDialog(null, "UPPS!!  el codigo ----> " + txtcodigo.getText() + "  no existe o esta incorrecto ", "Alerta", JOptionPane.WARNING_MESSAGE);
-                    txtcodigo.setText("");
-                    lblresultado.setText("");
-                    txtcodigo.requestFocus();
+                     compruebacampos();                  
                 }
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(rootPane, ex.getMessage());
@@ -51,25 +82,35 @@ public class Agregar extends javax.swing.JFrame {
         } catch (HeadlessException | NumberFormatException | SQLException e) {
             JOptionPane.showMessageDialog(rootPane, e.getMessage());
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(CapturaInventario.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Agregar.class.getName()).log(Level.SEVERE, null, ex);
         }
 
      
     
     }
     
-    public void agregar() {
+    public void limpiarcampos(){
+    
+    txtcodigo.setText("");
+    cbcantidad.setValue(0);
+    llenarcategorias();
+    txt_nombreproducto.setText("");
+    txt_precio.setText("");
+    }
+    
+    public void compruebacampos() {
 
-        String codigo = txtcodigo.getText().trim();
-        String cantidad = cbcantidad.toString().trim();
-        String categoria = cbcategorias.getSelectedItem().toString().trim();
-        String descripcionproducto = txt_nombreproducto.getText().trim();
-        double precio = Double.parseDouble(txt_precio.getText().trim());
+        codigo = txtcodigo.getText().trim();
+        cantidad = (int) cbcantidad.getValue();
+        categoria = cbcategorias.getSelectedItem().toString().trim();
+        descripcionproducto = txt_nombreproducto.getText().trim();
+        precio = Double.parseDouble(txt_precio.getText().trim());
 
-        if ((codigo.isEmpty()) || (cantidad.isEmpty()) || (categoria.isEmpty()) || (descripcionproducto.isEmpty())) {
-            JOptionPane.showMessageDialog(null, "Comprueba que TODOS los datos esten llenos");
+        if ((codigo.isEmpty()) || (categoria.equals("-------SELECCIONA-------")) || (descripcionproducto.isEmpty())) {
+            JOptionPane.showMessageDialog(null, "Comprueba que todos los campos esten llenos");
+      
         } else {   //Checar que no estén vacíos
-            comprobarcodigo();
+            insertarcodigo();
         }
     }
 
@@ -148,7 +189,7 @@ public class Agregar extends javax.swing.JFrame {
         });
         getContentPane().add(btnagregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 270, 300, 40));
 
-        btnagregarcategoria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/agregar1.png"))); // NOI18N
+        btnagregarcategoria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/agregar1.png"))); // NOI18N
         btnagregarcategoria.setContentAreaFilled(false);
         btnagregarcategoria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -170,7 +211,7 @@ public class Agregar extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnagregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarActionPerformed
-   
+        comprobarcodigo();
     }//GEN-LAST:event_btnagregarActionPerformed
 
     private void btnagregarcategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarcategoriaActionPerformed
