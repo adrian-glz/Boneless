@@ -1,7 +1,6 @@
- 
 package paquete;
-
 import java.awt.HeadlessException;
+import java.io.File;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,7 +10,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Agregar extends javax.swing.JFrame {
 
@@ -23,6 +24,7 @@ public class Agregar extends javax.swing.JFrame {
     String categoria;
     String descripcionproducto;
     double precio;
+    String urlimagen;
 
     public Agregar() {
         initComponents();
@@ -30,8 +32,7 @@ public class Agregar extends javax.swing.JFrame {
     }
 
 
-    public void insertarcodigo(){
-    
+    public void insertarcodigo() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SS");
         LocalDateTime date = LocalDateTime.now();
         System.out.println(dtf.format(date));
@@ -42,9 +43,7 @@ public class Agregar extends javax.swing.JFrame {
             st.executeUpdate("use prueba");
             //      System.out.println(">>>>>xxxx" + txtgondola.getText().toUpperCase() + txtcantidad.getText().toUpperCase() + date);
             ps = conexion.prepareStatement("INSERT INTO `productos`(`codigo`, `descripcion`, `precio`, `cantidad`, `categoria`, `imagen`)\n"
-                    + "   VALUES('" + codigo + "','" + descripcionproducto + "','" + precio + "','" + cantidad + "','" + categoria + "','" + categoria + "')    ");
-
-            System.out.println(codigo + descripcionproducto + precio + cantidad + categoria);
+                    + "   VALUES('" + codigo + "','" + descripcionproducto + "','" + precio + "','" + cantidad + "','" + categoria + "','" + urlimagen + "')    ");
             int n = ps.executeUpdate();
             if (n > 0) {
                 JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
@@ -54,7 +53,6 @@ public class Agregar extends javax.swing.JFrame {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Agregar.class.getName()).log(Level.SEVERE, null, ex);
         }
-         
     }
 
     public void comprobarcodigo(){
@@ -90,7 +88,6 @@ public class Agregar extends javax.swing.JFrame {
     }
     
     public void limpiarcampos(){
-    
     txtcodigo.setText("");
     cbcantidad.setValue(0);
     llenarcategorias();
@@ -154,6 +151,8 @@ public class Agregar extends javax.swing.JFrame {
         txt_nombreproducto = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         btncancelar = new javax.swing.JButton();
+        btnbuscar = new javax.swing.JButton();
+        txt_ruta = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Agregar nuevo producto");
@@ -216,6 +215,19 @@ public class Agregar extends javax.swing.JFrame {
         });
         getContentPane().add(btncancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, 340, 40));
 
+        btnbuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/file.png"))); // NOI18N
+        btnbuscar.setText("...");
+        btnbuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnbuscarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 230, 100, 30));
+
+        txt_ruta.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        txt_ruta.setText("Ruta....");
+        getContentPane().add(txt_ruta, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 230, 160, 30));
+
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
@@ -234,6 +246,27 @@ public class Agregar extends javax.swing.JFrame {
         p.setVisible(true);
 
     }//GEN-LAST:event_btncancelarActionPerformed
+
+    private void btnbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuscarActionPerformed
+         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        
+        FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("JPG & GIF Images", "jpg", "gif");    
+        fileChooser.setFileFilter(imgFilter);
+
+        int result = fileChooser.showOpenDialog(this);
+        if (result != JFileChooser.CANCEL_OPTION) {
+
+            File fileName = fileChooser.getSelectedFile();
+            if ((fileName == null) || (fileName.getName().equals(""))) {
+                txt_ruta.setText("...");
+            } else {
+            urlimagen=    fileName.getName().trim();
+                System.out.println("    "+urlimagen);
+                txt_ruta.setText(urlimagen);
+            }
+        }
+    }//GEN-LAST:event_btnbuscarActionPerformed
  
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -270,6 +303,7 @@ public class Agregar extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnagregar;
     private javax.swing.JButton btnagregarcategoria;
+    private javax.swing.JButton btnbuscar;
     private javax.swing.JButton btncancelar;
     private javax.swing.JSpinner cbcantidad;
     private javax.swing.JComboBox cbcategorias;
@@ -281,6 +315,7 @@ public class Agregar extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JTextField txt_nombreproducto;
     private javax.swing.JTextField txt_precio;
+    private javax.swing.JLabel txt_ruta;
     private javax.swing.JTextField txtcodigo;
     // End of variables declaration//GEN-END:variables
 }

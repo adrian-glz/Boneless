@@ -16,9 +16,11 @@ public class Configuracion extends javax.swing.JFrame {
         btnTablaMaestra = new javax.swing.JButton();
         btnFondo = new javax.swing.JButton();
         Realizarcorte1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Configuracion y ajustes");
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnagregarproducto.setText("Agregar producto nuevo");
@@ -68,6 +70,9 @@ public class Configuracion extends javax.swing.JFrame {
             }
         });
         getContentPane().add(Realizarcorte1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 80, 200, 60));
+
+        jLabel1.setText("       ");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 140, 30, -1));
 
         pack();
         setLocationRelativeTo(null);
@@ -147,5 +152,6 @@ public class Configuracion extends javax.swing.JFrame {
     private javax.swing.JButton btnFondo;
     private javax.swing.JButton btnTablaMaestra;
     private javax.swing.JButton btnagregarproducto;
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

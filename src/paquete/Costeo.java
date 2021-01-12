@@ -76,15 +76,16 @@ public class Costeo extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         txt_venta = new javax.swing.JTextField();
         btnvolver = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cambio de Costeo");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        getContentPane().add(txt_compra, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 60, 170, 40));
+        getContentPane().add(txt_compra, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, 170, 40));
 
         jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel7.setText("Compra:");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 60, 40));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 60, 40));
 
         jButton1.setBackground(new java.awt.Color(51, 255, 51));
         jButton1.setText("Actualizar");
@@ -93,7 +94,7 @@ public class Costeo extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 160, 170, 45));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, 170, 45));
 
         btnrefrescar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/refresh.png"))); // NOI18N
         btnrefrescar.addActionListener(new java.awt.event.ActionListener() {
@@ -101,15 +102,15 @@ public class Costeo extends javax.swing.JFrame {
                 btnrefrescarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnrefrescar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 60, 43, 38));
+        getContentPane().add(btnrefrescar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 20, 43, 38));
 
         jLabel1.setText("  ");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 220, 40, -1));
 
         jLabel8.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel8.setText("Venta:");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 50, 40));
-        getContentPane().add(txt_venta, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 110, 170, 40));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 50, 40));
+        getContentPane().add(txt_venta, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 70, 170, 40));
 
         btnvolver.setText("Volver");
         btnvolver.addActionListener(new java.awt.event.ActionListener() {
@@ -117,7 +118,10 @@ public class Costeo extends javax.swing.JFrame {
                 btnvolverActionPerformed(evt);
             }
         });
-        getContentPane().add(btnvolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 220, 170, 40));
+        getContentPane().add(btnvolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 180, 170, 40));
+
+        jLabel2.setText("           ");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 220, -1, -1));
 
         pack();
         setLocationRelativeTo(null);
@@ -211,6 +215,7 @@ public class Costeo extends javax.swing.JFrame {
     private javax.swing.JButton btnvolver;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JTextField txt_compra;

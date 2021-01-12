@@ -100,7 +100,7 @@ public class EditaProductos extends javax.swing.JFrame {
             }
         });
 
-        btnregresar.setText("Regresar");
+        btnregresar.setText("Volver");
         btnregresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnregresarActionPerformed(evt);
@@ -141,7 +141,7 @@ public class EditaProductos extends javax.swing.JFrame {
                         .addComponent(btneliminar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnrefrescar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnregresar)))
                 .addGap(48, 48, 48))
         );
