@@ -243,6 +243,8 @@ public class Principal extends javax.swing.JFrame {
             } else {
                 combinar = "CON TODO";
             }
+            
+            
             model.addRow(new Object[]{obj0, obj1, obj2, 1, combinar});
         }
         sumar();
@@ -646,6 +648,7 @@ public class Principal extends javax.swing.JFrame {
                         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
                         setTitle("Bienvenido Punto de venta");
                         setBackground(new java.awt.Color(255, 255, 51));
+                        setResizable(false);
                         addKeyListener(new java.awt.event.KeyAdapter() {
                             public void keyPressed(java.awt.event.KeyEvent evt) {
                                 formKeyPressed(evt);
