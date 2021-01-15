@@ -87,9 +87,7 @@ public class Agregar extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, e.getMessage()+"102");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Agregar.class.getName()).log(Level.SEVERE, null, ex+"103");
-        }
-       
-     
+        }      
         }
     }
     
