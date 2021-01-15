@@ -56,6 +56,12 @@ public class Agregar extends javax.swing.JFrame {
     }
 
     public void comprobarcodigo(){
+       String x=txtcodigo.getText();
+        if(x.length()<1){ 
+            System.out.println(txtcodigo.getText());
+           JOptionPane.showMessageDialog(null, "Teclea el codigo", "Alerta", JOptionPane.WARNING_MESSAGE);                
+                 
+        }else{
         try {
             Class.forName("com.mysql.jdbc.Driver");
             java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
@@ -75,16 +81,16 @@ public class Agregar extends javax.swing.JFrame {
                      compruebacampos();                  
                 }
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+                JOptionPane.showMessageDialog(rootPane,"101"+ ex.getMessage());
             }
         } catch (HeadlessException | NumberFormatException | SQLException e) {
-            JOptionPane.showMessageDialog(rootPane, e.getMessage());
+            JOptionPane.showMessageDialog(rootPane, e.getMessage()+"102");
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Agregar.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Agregar.class.getName()).log(Level.SEVERE, null, ex+"103");
         }
-
+       
      
-    
+        }
     }
     
     public void limpiarcampos(){
@@ -249,10 +255,10 @@ public class Agregar extends javax.swing.JFrame {
     }//GEN-LAST:event_btncancelarActionPerformed
 
     private void btnbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuscarActionPerformed
-         JFileChooser fileChooser = new JFileChooser();
+        JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        
-        FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("JPG & GIF Images", "jpg", "gif");    
+
+        FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("JPG & GIF Images", "jpg", "gif");
         fileChooser.setFileFilter(imgFilter);
 
         int result = fileChooser.showOpenDialog(this);
@@ -262,8 +268,8 @@ public class Agregar extends javax.swing.JFrame {
             if ((fileName == null) || (fileName.getName().equals(""))) {
                 txt_ruta.setText("...");
             } else {
-            urlimagen=    fileName.getName().trim();
-                System.out.println("    "+urlimagen);
+                urlimagen = fileName.getName().trim();
+            System.out.println("" + urlimagen);
                 txt_ruta.setText(urlimagen);
             }
         }

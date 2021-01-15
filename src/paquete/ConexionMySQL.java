@@ -83,8 +83,7 @@ public class ConexionMySQL  {
             } else {
                 JOptionPane.showMessageDialog(null, "compruebe que config.txt EXISTA Y/O tenga los parametros necesarios");
                 System.out.println("No se ha encontrado el archivo:en C:\\Program Files\\Sistema\\config.txt");
-            System.exit(0);
-                
+            System.exit(0);                
             }
         }
     }

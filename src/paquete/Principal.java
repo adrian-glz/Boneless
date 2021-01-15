@@ -34,7 +34,7 @@ public class Principal extends javax.swing.JFrame {
     public static int rfolio;
     public static int numerocajero;
     
-   
+      String combinar ;
     public Principal() {
 
         initComponents();///inicializamos componentes al inicio del metodo
@@ -47,6 +47,8 @@ public class Principal extends javax.swing.JFrame {
         jtfinal.getTableHeader().setReorderingAllowed(false);///INHABILITA EL MOVER CABECERAS los titulos de la tabla jtfinal
     }
 
+   
+    
     public void alertasql() {
         JOptionPane.showMessageDialog(this, "Error con SQL revisa los ajustes y consultas SQL, se va a cerrar el programa");
         System.exit(0);
@@ -134,8 +136,8 @@ public class Principal extends javax.swing.JFrame {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
         if (n > 0) {
-            JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
-            aumentarfolio();
+         //   JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
+           insertapedido();
         }
     }
 
@@ -170,7 +172,7 @@ public class Principal extends javax.swing.JFrame {
             }
         }///fin del cliclo for perro
         if (n > 0) {
-            JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
+           // JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
             insertaventapagos();
             //  aumentarfolio(); 
         }
@@ -193,10 +195,12 @@ public class Principal extends javax.swing.JFrame {
                 String vdescripcion = ((String) jtfinal.getValueAt(x, 1));//obtener valor de precio
                 String vprecio = ((String) jtfinal.getValueAt(x, 2));///obtienes el valor de la cantidad
                 int vcantidad = ((int) jtfinal.getValueAt(x, 3));///obtienes el valor de la cantidad
+                String vdetalle = ((String) jtfinal.getValueAt(x, 4));///obtienes el valor de la cantidad
+
                 String vprecioformateado = vprecio.replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", "");//dejameos solo los elementos"[^0-1-2-3-4-5-6-7-8-9-.00]"
                 double vprecioparseado = Double.parseDouble(vprecioformateado);
-                p = conexion.prepareStatement("insert into pedido ( `Sucursal`, `Folio`, `Caja`, `Codigo`, `Descripcion` , `Cantidad`, `Precioventa`, `Vendedor`, `Cajero`, `Claveventa`, `Hora`) "
-                        + "VALUES ( '1','" + folio + "','1','" + numarticulo + "','" + vcodigo + "','00','" + vcantidad + "','" + vprecioformateado + "','1111','00','777','11:21')");
+                p = conexion.prepareStatement("INSERT INTO `pedidos`(`folio`, `Codigo`, `Descripcion`, `Detalle`, `cantidad`, `Articulo`, `Nota`, `Estado`)  "
+                        + "VALUES ( '" + folio + "','" + vcodigo + "','" + vdescripcion + "','"+vdetalle+"','" + vcantidad + "','" + numarticulo + "','" + txt_nota.getText().toUpperCase() + "','EN PROCESO')");
                 numarticulo = numarticulo + 1;
                 n = p.executeUpdate();
 
@@ -207,9 +211,9 @@ public class Principal extends javax.swing.JFrame {
             }
         }///fin del cliclo for perro
         if (n > 0) {
-            JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
-            insertaventapagos();
-            //  aumentarfolio(); 
+         //   JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
+         
+             aumentarfolio();
         }
     }
 
@@ -221,8 +225,7 @@ public class Principal extends javax.swing.JFrame {
             Object obj0 = (jthamburguesas.getValueAt(filaseleccionada, 0));///OBTIENES EL PRIMER FILA
             Object obj1 = (jthamburguesas.getValueAt(filaseleccionada, 1));///OBTIENES EL PRIMER FILA
             Object obj2 = (jthamburguesas.getValueAt(filaseleccionada, 2));//OBTIENES LA SEGUNDA FILA
-
-            String combinar = "";
+            combinar = "";
             if (ch1.isSelected()) {
                 combinar += "SIN CEBOLLA,";
             }
@@ -243,8 +246,6 @@ public class Principal extends javax.swing.JFrame {
             } else {
                 combinar = "CON TODO";
             }
-            
-            
             model.addRow(new Object[]{obj0, obj1, obj2, 1, combinar});
         }
         sumar();
@@ -571,6 +572,8 @@ public class Principal extends javax.swing.JFrame {
             btnagregarajtfinal = new javax.swing.JButton();
             btncontodo = new javax.swing.JButton();
             btnsinnada = new javax.swing.JButton();
+            txt_nota = new javax.swing.JTextField();
+            jLabel6 = new javax.swing.JLabel();
             Ordenes = new javax.swing.JPanel();
             jScrollPane8 = new javax.swing.JScrollPane();
             jtbebidas = new javax.swing.JTable(){
@@ -755,6 +758,8 @@ public class Principal extends javax.swing.JFrame {
                             }
                         });
 
+                        jLabel6.setText("Anotaciones, Detalles,Nombre cliente:");
+
                         javax.swing.GroupLayout jpfondoLayout = new javax.swing.GroupLayout(jpfondo);
                         jpfondo.setLayout(jpfondoLayout);
                         jpfondoLayout.setHorizontalGroup(
@@ -763,11 +768,16 @@ public class Principal extends javax.swing.JFrame {
                                 .addContainerGap()
                                 .addGroup(jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(jpfondoLayout.createSequentialGroup()
-                                        .addComponent(jpingredentes, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(btncontodo, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
-                                            .addComponent(btnsinnada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addGroup(jpfondoLayout.createSequentialGroup()
+                                                .addGroup(jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(jpingredentes, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
+                                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(btncontodo, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
+                                                    .addComponent(btnsinnada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                            .addComponent(txt_nota))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(btnagregarajtfinal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -792,6 +802,7 @@ public class Principal extends javax.swing.JFrame {
                                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnagregarajtfinal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(jpfondoLayout.createSequentialGroup()
                                         .addGroup(jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jpingredentes, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -799,8 +810,11 @@ public class Principal extends javax.swing.JFrame {
                                                 .addComponent(btnsinnada)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(btncontodo)))
-                                        .addGap(0, 117, Short.MAX_VALUE))
-                                    .addComponent(btnagregarajtfinal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jLabel6)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txt_nota, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 37, Short.MAX_VALUE)))
                                 .addContainerGap())
                         );
 
@@ -1472,6 +1486,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void btnagregarajtfinalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarajtfinalActionPerformed
         agregarfinal();
+      //  txt_nota.setText("");
     }//GEN-LAST:event_btnagregarajtfinalActionPerformed
 
     private void btncontodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncontodoActionPerformed
@@ -1623,6 +1638,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel2;
@@ -1646,6 +1662,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JTextField txt_bebidas;
     private javax.swing.JTextField txt_codigo1;
     private javax.swing.JTextField txt_hamburguesa;
+    private javax.swing.JTextField txt_nota;
     private javax.swing.JTextField txt_tortas;
     private javax.swing.JLabel txtcajero;
     private javax.swing.JLabel txtdolar;
@@ -1669,6 +1686,7 @@ public class Principal extends javax.swing.JFrame {
         for (int i = vt.getRowCount() - 1; i >= 0; i--) {
             vt.removeRow(i);
         }
+        txt_nota.setText("");
         sumar();
     }
 
