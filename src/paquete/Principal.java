@@ -33,11 +33,13 @@ public class Principal extends javax.swing.JFrame {
     public static double rcambio;
     public static int rfolio;
     public static int numerocajero;
-    
+    public  static String rhora;
+    public  static String rfecha;
       String combinar ;
     public Principal() {
 
         initComponents();///inicializamos componentes al inicio del metodo
+        
         obtenerfolio();
         recuperafolio();
         recuperacostodolar();
@@ -48,10 +50,70 @@ public class Principal extends javax.swing.JFrame {
     }
 
    
+    public void obtenerhoraservidor(){//SELECT TIME_FORMAT(NOW(), "%r") AS Tiempo;
+        
+           try {
+            Class.forName("com.mysql.jdbc.Driver");
+            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+            st = conexion.createStatement();
+            st.executeUpdate("use prueba");
+
+            //Seleccionar datos
+            rs = st.executeQuery("SELECT TIME_FORMAT(NOW(), \"%r\") AS Tiempo;");
+            try {
+                while (rs.next()) {
+                    rhora= rs.getString(1);
+                }
+                
+            //   JOptionPane.showMessageDialog(this, "Son las "+rhora);
+       
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+                alertasql();
+            }
+        } catch (HeadlessException | NumberFormatException | SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            alertasql();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            alertasql();
+        }
     
+    }
+    
+    public void obtenerfechaservidor(){//SELECT TIME_FORMAT(NOW(), "%r") AS Tiempo;
+        
+           try {
+            Class.forName("com.mysql.jdbc.Driver");
+            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+            st = conexion.createStatement();
+            st.executeUpdate("use prueba");
+
+            //Seleccionar datos
+            rs = st.executeQuery("select CURDATE()");
+            try {
+                while (rs.next()) {
+                    rfecha= rs.getString(1);
+                }
+                
+            //   JOptionPane.showMessageDialog(this, "Son las "+rhora);
+       
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+                alertasql();
+            }
+        } catch (HeadlessException | NumberFormatException | SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            alertasql();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            alertasql();
+        }
+    
+    }
     public void alertasql() {
         JOptionPane.showMessageDialog(this, "Error con SQL revisa los ajustes y consultas SQL, se va a cerrar el programa");
-        System.exit(0);
+         System.exit(0);
     }
  
     public void recuperacostodolar() {
@@ -126,8 +188,8 @@ public class Principal extends javax.swing.JFrame {
             java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
             Statement ste = conexion.createStatement();
             ste.executeUpdate("use prueba;");
-            pse = conexion.prepareStatement("insert into `ventaspagos`(`Sucursal`,  `Caja`, `Folio`, `Importe`, `Clavepago`, `NumeroTarjeta`, `NombreCliente`, `DireccionCliente`, `TelefonoCliente`, `CorreoCliente`) \n"
-                    + "VALUES ('1','1','" + folio + "','" + total + "','01','0000','NULL','NULL','NULL','NULL')");
+            pse = conexion.prepareStatement("insert into `ventaspagos`(`fecha`,`Sucursal`,  `Caja`, `Folio`, `Importe`, `Clavepago`, `NumeroTarjeta`, `NombreCliente`, `DireccionCliente`, `TelefonoCliente`, `CorreoCliente`) \n"
+                    + "VALUES ('"+rfecha+"','1','1','" + folio + "','" + total + "','01','0000','NULL','NULL','NULL','NULL')");
             numarticulo = numarticulo + 1;
             n = pse.executeUpdate();
         } catch (HeadlessException | SQLException ex) {
@@ -147,6 +209,8 @@ public class Principal extends javax.swing.JFrame {
         double numarticulo = 1;
         obtenerfolio();
         int n = 0;
+        obtenerhoraservidor();
+        obtenerfechaservidor();
         for (int x = 0; x < jtfinal.getRowCount(); x++) {
 
             try {
@@ -160,13 +224,14 @@ public class Principal extends javax.swing.JFrame {
                 int vcantidad = ((int) jtfinal.getValueAt(x, 3));///obtienes el valor de la cantidad
                 String vprecioformateado = vprecio.replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", "");//dejameos solo los elementos"[^0-1-2-3-4-5-6-7-8-9-.00]"
                 double vprecioparseado = Double.parseDouble(vprecioformateado);
-                pse = conexion.prepareStatement("INSERT INTO ventas ( `Sucursal`, `Folio`, `Caja`, `Articulo`, `Codigo`, `Grupo`, `Cantidad`, `Precioventa`, `Vendedor`, `Cajero`, `Claveventa`, `Hora`) "
-                        + "VALUES ( '1','" + folio + "','1','" + numarticulo + "','" + vcodigo + "','00','" + vcantidad + "','" + vprecioformateado + "','1111','00','777','11:21')");
+                pse = conexion.prepareStatement("INSERT INTO ventas ( `fecha`,`Sucursal`, `Folio`, `Caja`, `Articulo`, `Codigo`, `Grupo`, `Cantidad`, `Precioventa`, `Vendedor`, `Cajero`, `Claveventa`, `Hora`) "
+                        + "VALUES ( '"+rfecha+"','1','" + folio + "','1','" + numarticulo + "','" + vcodigo + "','00','" + vcantidad + "','" + vprecioformateado + "','1111','00','777','"+rhora+"')");
+               // System.out.println("datos====================="+rfecha+rhora);
                 numarticulo = numarticulo + 1;
                 n = pse.executeUpdate();
 
             } catch (HeadlessException | SQLException ex) {
-                JOptionPane.showMessageDialog(rootPane, "Error en la base de datos" + ex);
+                JOptionPane.showMessageDialog(rootPane, "Error en la base de datos 501" + ex);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -199,13 +264,13 @@ public class Principal extends javax.swing.JFrame {
 
                 String vprecioformateado = vprecio.replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", "");//dejameos solo los elementos"[^0-1-2-3-4-5-6-7-8-9-.00]"
                 double vprecioparseado = Double.parseDouble(vprecioformateado);
-                p = conexion.prepareStatement("INSERT INTO `pedidos`(`folio`, `Codigo`, `Descripcion`, `Detalle`, `cantidad`, `Articulo`, `Nota`, `Estado`)  "
-                        + "VALUES ( '" + folio + "','" + vcodigo + "','" + vdescripcion + "','"+vdetalle+"','" + vcantidad + "','" + numarticulo + "','" + txt_nota.getText().toUpperCase() + "','EN PROCESO')");
+                p = conexion.prepareStatement("INSERT INTO `pedidos`(`folio`, `Codigo`, `Descripcion`, `Detalle`, `cantidad`, `Articulo`, `Nota`,`fecha`, `Estado`,`hora`)  "
+                        + "VALUES ( '" + folio + "','" + vcodigo + "','" + vdescripcion + "','"+vdetalle+"','" + vcantidad + "','" + numarticulo + "','" + txt_nota.getText().toUpperCase() + "','"+rfecha+"','EN PROCESO','"+rhora+"')");
                 numarticulo = numarticulo + 1;
                 n = p.executeUpdate();
 
             } catch (HeadlessException | SQLException ex) {
-                JOptionPane.showMessageDialog(rootPane, "Error en la base de datos" + ex);
+                JOptionPane.showMessageDialog(rootPane, "Error en la base de datos 502" + ex);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -217,6 +282,7 @@ public class Principal extends javax.swing.JFrame {
         }
     }
 
+    
     public void agregarfinal() {
         DefaultTableModel model = (DefaultTableModel) jtfinal.getModel();
 
@@ -225,6 +291,7 @@ public class Principal extends javax.swing.JFrame {
             Object obj0 = (jthamburguesas.getValueAt(filaseleccionada, 0));///OBTIENES EL PRIMER FILA
             Object obj1 = (jthamburguesas.getValueAt(filaseleccionada, 1));///OBTIENES EL PRIMER FILA
             Object obj2 = (jthamburguesas.getValueAt(filaseleccionada, 2));//OBTIENES LA SEGUNDA FILA
+
             combinar = "";
             if (ch1.isSelected()) {
                 combinar += "SIN CEBOLLA,";
@@ -233,19 +300,23 @@ public class Principal extends javax.swing.JFrame {
                 combinar += "SIN CHILE,";
             }
             if (ch3.isSelected()) {
-                combinar += "SIN PEPINILLOS,";
+                combinar += "SIN KETCHUP,";
             }
             if (ch4.isSelected()) {
-                combinar += "SIN TOMATE,";
+                combinar += "SIN PEPINILLOS,";
             }
             if (ch5.isSelected()) {
-                combinar += "SIN MOSTAZA,";
+                combinar += "SIN TOMATE,";
             }
             if (ch6.isSelected()) {
-                combinar += "SIN KETCHUP";
-            } else {
-                combinar = "CON TODO";
+                combinar += "SIN MOSTAZA";
             }
+            if (ch1.isSelected() && ch2.isSelected() && ch3.isSelected() && ch4.isSelected() && ch5.isSelected() && ch6.isSelected()) {
+                combinar = "SIN CEBOLLA,SIN CHILE,SIN KETCHUP,SIN PEPINILLOS,SIN TOMATE,SIN MOSTAZA";
+            }
+                if(combinar.equals("")){
+                combinar="CON TODO";
+                }
             model.addRow(new Object[]{obj0, obj1, obj2, 1, combinar});
         }
         sumar();
@@ -561,11 +632,11 @@ public class Principal extends javax.swing.JFrame {
             }};
             jpingredentes = new javax.swing.JPanel();
             ch1 = new javax.swing.JCheckBox();
-            ch4 = new javax.swing.JCheckBox();
-            ch2 = new javax.swing.JCheckBox();
             ch5 = new javax.swing.JCheckBox();
+            ch2 = new javax.swing.JCheckBox();
             ch6 = new javax.swing.JCheckBox();
             ch3 = new javax.swing.JCheckBox();
+            ch4 = new javax.swing.JCheckBox();
             txt_hamburguesa = new javax.swing.JTextField();
             editbuscar = new javax.swing.JLabel();
             jButton3 = new javax.swing.JButton();
@@ -696,30 +767,30 @@ public class Principal extends javax.swing.JFrame {
                         ch1.setPreferredSize(new java.awt.Dimension(90, 22));
                         jpingredentes.add(ch1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 102, -1));
 
-                        ch4.setText("SIN TOMATE");
-                        ch4.setPreferredSize(new java.awt.Dimension(90, 22));
-                        jpingredentes.add(ch4, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 2, 100, 20));
+                        ch5.setText("SIN TOMATE");
+                        ch5.setPreferredSize(new java.awt.Dimension(90, 22));
+                        jpingredentes.add(ch5, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 2, 100, 20));
 
                         ch2.setText("SIN CHILE");
                         ch2.setPreferredSize(new java.awt.Dimension(90, 22));
                         jpingredentes.add(ch2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 20, 102, -1));
 
-                        ch5.setText("SIN MOSTAZA");
-                        ch5.setPreferredSize(new java.awt.Dimension(90, 22));
-                        jpingredentes.add(ch5, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 22, 100, 20));
-
-                        ch6.setText("SIN KETCHUP");
+                        ch6.setText("SIN MOSTAZA");
                         ch6.setPreferredSize(new java.awt.Dimension(90, 22));
-                        ch6.addActionListener(new java.awt.event.ActionListener() {
+                        jpingredentes.add(ch6, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 22, 100, 20));
+
+                        ch3.setText("SIN KETCHUP");
+                        ch3.setPreferredSize(new java.awt.Dimension(90, 22));
+                        ch3.addActionListener(new java.awt.event.ActionListener() {
                             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                ch6ActionPerformed(evt);
+                                ch3ActionPerformed(evt);
                             }
                         });
-                        jpingredentes.add(ch6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 40, 140, -1));
+                        jpingredentes.add(ch3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 40, 140, -1));
 
-                        ch3.setText("SIN PEPINILLOS");
-                        ch3.setPreferredSize(new java.awt.Dimension(90, 22));
-                        jpingredentes.add(ch3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 60, 140, -1));
+                        ch4.setText("SIN PEPINILLOS");
+                        ch4.setPreferredSize(new java.awt.Dimension(90, 22));
+                        jpingredentes.add(ch4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 60, 140, -1));
 
                         txt_hamburguesa.addKeyListener(new java.awt.event.KeyAdapter() {
                             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -1410,9 +1481,9 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jthamburguesasMouseClicked
 
-    private void ch6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ch6ActionPerformed
+    private void ch3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ch3ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ch6ActionPerformed
+    }//GEN-LAST:event_ch3ActionPerformed
     DefaultTableModel th;
 
     private void filtro(String consulta, JTable jtableBuscar) {
@@ -1492,19 +1563,20 @@ public class Principal extends javax.swing.JFrame {
     private void btncontodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncontodoActionPerformed
         ch1.setSelected(false);
         ch2.setSelected(false);
-        ch3.setSelected(false);
         ch4.setSelected(false);
         ch5.setSelected(false);
         ch6.setSelected(false);
+        ch3.setSelected(false);
+        combinar="CON TODO";
     }//GEN-LAST:event_btncontodoActionPerformed
 
     private void btnsinnadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsinnadaActionPerformed
         ch1.setSelected(true);
         ch2.setSelected(true);
-        ch3.setSelected(true);
         ch4.setSelected(true);
         ch5.setSelected(true);
         ch6.setSelected(true);
+        ch3.setSelected(true);
     }//GEN-LAST:event_btnsinnadaActionPerformed
 
     private void jtbebidasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbebidasMouseClicked
