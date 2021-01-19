@@ -33,7 +33,8 @@ public class Principal extends javax.swing.JFrame {
     public static double rcambio;
     public static int rfolio;
     public static int numerocajero;
-    
+        public  static String rhora;
+    public  static String rfecha;
       String combinar ;
     public Principal() {
 
@@ -47,13 +48,71 @@ public class Principal extends javax.swing.JFrame {
         jtfinal.getTableHeader().setReorderingAllowed(false);///INHABILITA EL MOVER CABECERAS los titulos de la tabla jtfinal
     }
 
-   
-    
+    public void obtenerfechaservidor() {//SELECT TIME_FORMAT(NOW(), "%r") AS Tiempo;
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+            st = conexion.createStatement();
+            st.executeUpdate("use prueba");
+
+            //Seleccionar datos
+            rs = st.executeQuery("select CURDATE()");
+            try {
+                while (rs.next()) {
+                    rfecha = rs.getString(1);
+                }
+
+            //   JOptionPane.showMessageDialog(this, "Son las "+rhora);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+                alertasql();
+            }
+        } catch (HeadlessException | NumberFormatException | SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            alertasql();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            alertasql();
+        }
+
+    }
+
+    public void obtenerhoraservidor() {//SELECT TIME_FORMAT(NOW(), "%r") AS Tiempo;
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+            st = conexion.createStatement();
+            st.executeUpdate("use prueba");
+
+            //Seleccionar datos
+            rs = st.executeQuery("SELECT TIME_FORMAT(NOW(), \"%r\") AS Tiempo;");
+            try {
+                while (rs.next()) {
+                    rhora = rs.getString(1);
+                }
+
+            //   JOptionPane.showMessageDialog(this, "Son las "+rhora);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+                alertasql();
+            }
+        } catch (HeadlessException | NumberFormatException | SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            alertasql();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            alertasql();
+        }
+
+    }
+
     public void alertasql() {
         JOptionPane.showMessageDialog(this, "Error con SQL revisa los ajustes y consultas SQL, se va a cerrar el programa");
         System.exit(0);
     }
- 
+
     public void recuperacostodolar() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -126,12 +185,12 @@ public class Principal extends javax.swing.JFrame {
             java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
             Statement ste = conexion.createStatement();
             ste.executeUpdate("use prueba;");
-            pse = conexion.prepareStatement("insert into `ventaspagos`(`Sucursal`,  `Caja`, `Folio`, `Importe`, `Clavepago`, `NumeroTarjeta`, `NombreCliente`, `DireccionCliente`, `TelefonoCliente`, `CorreoCliente`) \n"
-                    + "VALUES ('1','1','" + folio + "','" + total + "','01','0000','NULL','NULL','NULL','NULL')");
-            numarticulo = numarticulo + 1;
+           pse = conexion.prepareStatement("insert into `ventaspagos`(`fecha`,`Sucursal`,  `Caja`, `Folio`, `Importe`, `Clavepago`, `NumeroTarjeta`, `NombreCliente`, `DireccionCliente`, `TelefonoCliente`, `CorreoCliente`) \n"
+                    + "VALUES ('"+rfecha+"','1','1','" + folio + "','" + total + "','01','0000','NULL','NULL','NULL','NULL')");  
+           numarticulo = numarticulo + 1;
             n = pse.executeUpdate();
         } catch (HeadlessException | SQLException ex) {
-            JOptionPane.showMessageDialog(rootPane, "Error en la base de datos" + ex);
+            JOptionPane.showMessageDialog(rootPane, "Error en la base de datos903" + ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -147,6 +206,8 @@ public class Principal extends javax.swing.JFrame {
         double numarticulo = 1;
         obtenerfolio();
         int n = 0;
+          obtenerhoraservidor();
+        obtenerfechaservidor();
         for (int x = 0; x < jtfinal.getRowCount(); x++) {
 
             try {
@@ -160,13 +221,13 @@ public class Principal extends javax.swing.JFrame {
                 int vcantidad = ((int) jtfinal.getValueAt(x, 3));///obtienes el valor de la cantidad
                 String vprecioformateado = vprecio.replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", "");//dejameos solo los elementos"[^0-1-2-3-4-5-6-7-8-9-.00]"
                 double vprecioparseado = Double.parseDouble(vprecioformateado);
-                pse = conexion.prepareStatement("INSERT INTO ventas ( `Sucursal`, `Folio`, `Caja`, `Articulo`, `Codigo`, `Grupo`, `Cantidad`, `Precioventa`, `Vendedor`, `Cajero`, `Claveventa`, `Hora`) "
-                        + "VALUES ( '1','" + folio + "','1','" + numarticulo + "','" + vcodigo + "','00','" + vcantidad + "','" + vprecioformateado + "','1111','00','777','11:21')");
-                numarticulo = numarticulo + 1;
+               pse = conexion.prepareStatement("INSERT INTO ventas ( `fecha`,`Sucursal`, `Folio`, `Caja`, `Articulo`, `Codigo`, `Grupo`, `Cantidad`, `Precioventa`, `Vendedor`, `Cajero`, `Claveventa`, `Hora`) "
+                        + "VALUES ( '"+rfecha+"','1','" + folio + "','1','" + numarticulo + "','" + vcodigo + "','00','" + vcantidad + "','" + vprecioformateado + "','1111','00','777','"+rhora+"')");
+               numarticulo = numarticulo + 1;
                 n = pse.executeUpdate();
 
             } catch (HeadlessException | SQLException ex) {
-                JOptionPane.showMessageDialog(rootPane, "Error en la base de datos" + ex);
+                JOptionPane.showMessageDialog(rootPane, "Error en la base de datos 901" + ex);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -199,13 +260,12 @@ public class Principal extends javax.swing.JFrame {
 
                 String vprecioformateado = vprecio.replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", "");//dejameos solo los elementos"[^0-1-2-3-4-5-6-7-8-9-.00]"
                 double vprecioparseado = Double.parseDouble(vprecioformateado);
-                p = conexion.prepareStatement("INSERT INTO `pedidos`(`folio`, `Codigo`, `Descripcion`, `Detalle`, `cantidad`, `Articulo`, `Nota`, `Estado`)  "
-                        + "VALUES ( '" + folio + "','" + vcodigo + "','" + vdescripcion + "','"+vdetalle+"','" + vcantidad + "','" + numarticulo + "','" + txt_nota.getText().toUpperCase() + "','EN PROCESO')");
-                numarticulo = numarticulo + 1;
+                p = conexion.prepareStatement("INSERT INTO `pedidos`(`folio`, `Codigo`, `Descripcion`, `Detalle`, `cantidad`, `Articulo`, `Nota`,`fecha`, `Estado`,`hora`)  "
+                        + "VALUES ( '" + folio + "','" + vcodigo + "','" + vdescripcion + "','"+vdetalle+"','" + vcantidad + "','" + numarticulo + "','" + txt_nota.getText().toUpperCase() + "','"+rfecha+"','EN PROCESO','"+rhora+"')");          numarticulo = numarticulo + 1;
                 n = p.executeUpdate();
 
             } catch (HeadlessException | SQLException ex) {
-                JOptionPane.showMessageDialog(rootPane, "Error en la base de datos" + ex);
+                JOptionPane.showMessageDialog(rootPane, "Error en la base de datos 902" + ex);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
             }
