@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,6 +19,8 @@ public class Login extends javax.swing.JFrame {
 
     public Login() {
         initComponents();
+        imagendebarra();
+
     }
 
     @SuppressWarnings("unchecked")
@@ -88,6 +91,15 @@ public class Login extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+    public void imagendebarra(){
+      try{
+          setIconImage(new ImageIcon(getClass().getResource("/img/logo.png")).getImage());
+        }catch(Exception  e){
+        
+        }
+    
+    }
+    
     public void ingresar() {
 
         String user = txtusuario.getText();   //Tomar el contenido de textField
@@ -95,6 +107,7 @@ public class Login extends javax.swing.JFrame {
         if ((user.isEmpty()) || (pass.isEmpty())) {   //Checar que no estén vacíos
             JOptionPane.showMessageDialog(null, "Ingrese su nombre de usuario y contraseña");
         } else {
+            
             try {
                 //Conexión a la BD
                 Class.forName("com.mysql.jdbc.Driver");

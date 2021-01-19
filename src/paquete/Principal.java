@@ -21,10 +21,9 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 import static paquete.Login.nombrecompleto;
- 
+
 public class Principal extends javax.swing.JFrame {
 
-    
     int folio; ///variable que almacena el folio cuando lo obtiene de sql 
     DefaultTableModel md;
     Statement st;
@@ -33,11 +32,13 @@ public class Principal extends javax.swing.JFrame {
     public static double rcambio;
     public static int rfolio;
     public static int numerocajero;
-        public  static String rhora;
-    public  static String rfecha;
-      String combinar ;
+    public static String rhora;
+    public static String rfecha;
+    String combinar;
+
     public Principal() {
 
+        imagendebarra();
         initComponents();///inicializamos componentes al inicio del metodo
         obtenerfolio();
         recuperafolio();
@@ -46,6 +47,14 @@ public class Principal extends javax.swing.JFrame {
         Hamburguesas();//llamamos el metodo de Comidas para llenar Comidas
         tablafinal();
         jtfinal.getTableHeader().setReorderingAllowed(false);///INHABILITA EL MOVER CABECERAS los titulos de la tabla jtfinal
+    }
+
+    public void imagendebarra() {
+        try {
+            setIconImage(new ImageIcon(getClass().getResource("/img/logo.png")).getImage());
+        } catch (Exception e) {
+
+        }
     }
 
     public void obtenerfechaservidor() {//SELECT TIME_FORMAT(NOW(), "%r") AS Tiempo;
@@ -63,7 +72,7 @@ public class Principal extends javax.swing.JFrame {
                     rfecha = rs.getString(1);
                 }
 
-            //   JOptionPane.showMessageDialog(this, "Son las "+rhora);
+                //   JOptionPane.showMessageDialog(this, "Son las "+rhora);
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
                 alertasql();
@@ -93,7 +102,7 @@ public class Principal extends javax.swing.JFrame {
                     rhora = rs.getString(1);
                 }
 
-            //   JOptionPane.showMessageDialog(this, "Son las "+rhora);
+                //   JOptionPane.showMessageDialog(this, "Son las "+rhora);
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
                 alertasql();
@@ -185,9 +194,9 @@ public class Principal extends javax.swing.JFrame {
             java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
             Statement ste = conexion.createStatement();
             ste.executeUpdate("use prueba;");
-           pse = conexion.prepareStatement("insert into `ventaspagos`(`fecha`,`Sucursal`,  `Caja`, `Folio`, `Importe`, `Clavepago`, `NumeroTarjeta`, `NombreCliente`, `DireccionCliente`, `TelefonoCliente`, `CorreoCliente`) \n"
-                    + "VALUES ('"+rfecha+"','1','1','" + folio + "','" + total + "','01','0000','NULL','NULL','NULL','NULL')");  
-           numarticulo = numarticulo + 1;
+            pse = conexion.prepareStatement("insert into `ventaspagos`(`fecha`,`Sucursal`,  `Caja`, `Folio`, `Importe`, `Clavepago`, `NumeroTarjeta`, `NombreCliente`, `DireccionCliente`, `TelefonoCliente`, `CorreoCliente`) \n"
+                    + "VALUES ('" + rfecha + "','1','1','" + folio + "','" + total + "','01','0000','NULL','NULL','NULL','NULL')");
+            numarticulo = numarticulo + 1;
             n = pse.executeUpdate();
         } catch (HeadlessException | SQLException ex) {
             JOptionPane.showMessageDialog(rootPane, "Error en la base de datos903" + ex);
@@ -195,8 +204,8 @@ public class Principal extends javax.swing.JFrame {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
         if (n > 0) {
-         //   JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
-           insertapedido();
+            //   JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
+            insertapedido();
         }
     }
 
@@ -206,7 +215,7 @@ public class Principal extends javax.swing.JFrame {
         double numarticulo = 1;
         obtenerfolio();
         int n = 0;
-          obtenerhoraservidor();
+        obtenerhoraservidor();
         obtenerfechaservidor();
         for (int x = 0; x < jtfinal.getRowCount(); x++) {
 
@@ -221,9 +230,9 @@ public class Principal extends javax.swing.JFrame {
                 int vcantidad = ((int) jtfinal.getValueAt(x, 3));///obtienes el valor de la cantidad
                 String vprecioformateado = vprecio.replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", "");//dejameos solo los elementos"[^0-1-2-3-4-5-6-7-8-9-.00]"
                 double vprecioparseado = Double.parseDouble(vprecioformateado);
-               pse = conexion.prepareStatement("INSERT INTO ventas ( `fecha`,`Sucursal`, `Folio`, `Caja`, `Articulo`, `Codigo`, `Grupo`, `Cantidad`, `Precioventa`, `Vendedor`, `Cajero`, `Claveventa`, `Hora`) "
-                        + "VALUES ( '"+rfecha+"','1','" + folio + "','1','" + numarticulo + "','" + vcodigo + "','00','" + vcantidad + "','" + vprecioformateado + "','1111','00','777','"+rhora+"')");
-               numarticulo = numarticulo + 1;
+                pse = conexion.prepareStatement("INSERT INTO ventas ( `fecha`,`Sucursal`, `Folio`, `Caja`, `Articulo`, `Codigo`, `Grupo`, `Cantidad`, `Precioventa`, `Vendedor`, `Cajero`, `Claveventa`, `Hora`) "
+                        + "VALUES ( '" + rfecha + "','1','" + folio + "','1','" + numarticulo + "','" + vcodigo + "','00','" + vcantidad + "','" + vprecioformateado + "','1111','00','777','" + rhora + "')");
+                numarticulo = numarticulo + 1;
                 n = pse.executeUpdate();
 
             } catch (HeadlessException | SQLException ex) {
@@ -233,7 +242,7 @@ public class Principal extends javax.swing.JFrame {
             }
         }///fin del cliclo for perro
         if (n > 0) {
-           // JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
+            // JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
             insertaventapagos();
             //  aumentarfolio(); 
         }
@@ -261,7 +270,8 @@ public class Principal extends javax.swing.JFrame {
                 String vprecioformateado = vprecio.replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", "");//dejameos solo los elementos"[^0-1-2-3-4-5-6-7-8-9-.00]"
                 double vprecioparseado = Double.parseDouble(vprecioformateado);
                 p = conexion.prepareStatement("INSERT INTO `pedidos`(`folio`, `Codigo`, `Descripcion`, `Detalle`, `cantidad`, `Articulo`, `Nota`,`fecha`, `Estado`,`hora`)  "
-                        + "VALUES ( '" + folio + "','" + vcodigo + "','" + vdescripcion + "','"+vdetalle+"','" + vcantidad + "','" + numarticulo + "','" + txt_nota.getText().toUpperCase() + "','"+rfecha+"','EN PROCESO','"+rhora+"')");          numarticulo = numarticulo + 1;
+                        + "VALUES ( '" + folio + "','" + vcodigo + "','" + vdescripcion + "','" + vdetalle + "','" + vcantidad + "','" + numarticulo + "','" + txt_nota.getText().toUpperCase() + "','" + rfecha + "','EN PROCESO','" + rhora + "')");
+                numarticulo = numarticulo + 1;
                 n = p.executeUpdate();
 
             } catch (HeadlessException | SQLException ex) {
@@ -271,8 +281,8 @@ public class Principal extends javax.swing.JFrame {
             }
         }///fin del cliclo for perro
         if (n > 0) {
-      
-             aumentarfolio();
+
+            aumentarfolio();
         }
     }
 
@@ -301,19 +311,13 @@ public class Principal extends javax.swing.JFrame {
                 combinar += "SIN MOSTAZA,";
             }
             if (ch6.isSelected()) {
- 
- 
-                combinar += "SIN MOSTAZA.";
+                combinar += "SIN KETCHUP.";
             }
             if (ch1.isSelected() && ch2.isSelected() && ch3.isSelected() && ch4.isSelected() && ch5.isSelected() && ch6.isSelected()) {
-                combinar = "SIN CEBOLLA,SIN CHILE,SIN KETCHUP,SIN PEPINILLOS,SIN TOMATE,SIN MOSTAZA.";
- 
-                combinar += "SIN KETCHUP";
-            } else {
+                combinar = "SIN NADA";
+            } 
+            if (ch1.isSelected()==false && ch2.isSelected()==false && ch3.isSelected()==false && ch4.isSelected()==false && ch5.isSelected()==false && ch6.isSelected()==false) {
                 combinar = "CON TODO";
-
- 
-         
             }
             model.addRow(new Object[]{obj0, obj1, obj2, 1, combinar});
         }
@@ -767,7 +771,7 @@ public class Principal extends javax.swing.JFrame {
 
                         ch4.setText("SIN TOMATE");
                         ch4.setPreferredSize(new java.awt.Dimension(90, 22));
-                        jpingredentes.add(ch4, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 2, 100, 20));
+                        jpingredentes.add(ch4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 60, 100, 20));
 
                         ch2.setText("SIN CHILE");
                         ch2.setPreferredSize(new java.awt.Dimension(90, 22));
@@ -775,7 +779,7 @@ public class Principal extends javax.swing.JFrame {
 
                         ch5.setText("SIN MOSTAZA");
                         ch5.setPreferredSize(new java.awt.Dimension(90, 22));
-                        jpingredentes.add(ch5, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 22, 100, 20));
+                        jpingredentes.add(ch5, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 3, 100, 20));
 
                         ch6.setText("SIN KETCHUP");
                         ch6.setPreferredSize(new java.awt.Dimension(90, 22));
@@ -784,11 +788,11 @@ public class Principal extends javax.swing.JFrame {
                                 ch6ActionPerformed(evt);
                             }
                         });
-                        jpingredentes.add(ch6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 40, 140, -1));
+                        jpingredentes.add(ch6, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 20, 120, -1));
 
                         ch3.setText("SIN PEPINILLOS");
                         ch3.setPreferredSize(new java.awt.Dimension(90, 22));
-                        jpingredentes.add(ch3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 60, 140, -1));
+                        jpingredentes.add(ch3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 40, 140, -1));
 
                         txt_hamburguesa.addKeyListener(new java.awt.event.KeyAdapter() {
                             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -840,9 +844,12 @@ public class Principal extends javax.swing.JFrame {
                                         .addGroup(jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addGroup(jpfondoLayout.createSequentialGroup()
                                                 .addGroup(jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(jpingredentes, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
-                                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addGroup(jpfondoLayout.createSequentialGroup()
+                                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGap(14, 14, 14))
+                                                    .addGroup(jpfondoLayout.createSequentialGroup()
+                                                        .addComponent(jpingredentes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                                                 .addGroup(jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                     .addComponent(btncontodo, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
                                                     .addComponent(btnsinnada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
