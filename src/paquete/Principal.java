@@ -388,7 +388,7 @@ public class Principal extends javax.swing.JFrame {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex + "xd");
         }
-
+        System.out.println("-----");
     }
 
     public void Hamburguesas() {
