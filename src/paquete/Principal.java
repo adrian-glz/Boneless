@@ -276,8 +276,7 @@ public class Principal extends javax.swing.JFrame {
             }
         }///fin del cliclo for perro
         if (n > 0) {
-         //   JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
-         
+      
              aumentarfolio();
         }
     }
@@ -309,10 +308,10 @@ public class Principal extends javax.swing.JFrame {
                 combinar += "SIN TOMATE,";
             }
             if (ch6.isSelected()) {
-                combinar += "SIN MOSTAZA";
+                combinar += "SIN MOSTAZA.";
             }
             if (ch1.isSelected() && ch2.isSelected() && ch3.isSelected() && ch4.isSelected() && ch5.isSelected() && ch6.isSelected()) {
-                combinar = "SIN CEBOLLA,SIN CHILE,SIN KETCHUP,SIN PEPINILLOS,SIN TOMATE,SIN MOSTAZA";
+                combinar = "SIN CEBOLLA,SIN CHILE,SIN KETCHUP,SIN PEPINILLOS,SIN TOMATE,SIN MOSTAZA.";
             }
                 if(combinar.equals("")){
                 combinar="CON TODO";
