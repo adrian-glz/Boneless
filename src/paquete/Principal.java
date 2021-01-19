@@ -242,6 +242,7 @@ public class Principal extends javax.swing.JFrame {
             }
             if (ch6.isSelected()) {
  
+ 
                 combinar += "SIN MOSTAZA.";
             }
             if (ch1.isSelected() && ch2.isSelected() && ch3.isSelected() && ch4.isSelected() && ch5.isSelected() && ch6.isSelected()) {
@@ -251,6 +252,8 @@ public class Principal extends javax.swing.JFrame {
             } else {
                 combinar = "CON TODO";
 
+ 
+         
             }
             model.addRow(new Object[]{obj0, obj1, obj2, 1, combinar});
         }
