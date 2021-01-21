@@ -315,8 +315,8 @@ public class Principal extends javax.swing.JFrame {
             }
             if (ch1.isSelected() && ch2.isSelected() && ch3.isSelected() && ch4.isSelected() && ch5.isSelected() && ch6.isSelected()) {
                 combinar = "SIN NADA";
-            } 
-            if (ch1.isSelected()==false && ch2.isSelected()==false && ch3.isSelected()==false && ch4.isSelected()==false && ch5.isSelected()==false && ch6.isSelected()==false) {
+            }
+            if (ch1.isSelected() == false && ch2.isSelected() == false && ch3.isSelected() == false && ch4.isSelected() == false && ch5.isSelected() == false && ch6.isSelected() == false) {
                 combinar = "CON TODO";
             }
             model.addRow(new Object[]{obj0, obj1, obj2, 1, combinar});
@@ -1473,15 +1473,15 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnconfirmarActionPerformed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-            /*    if(evt.getKeyCode()==KeyEvent.VK_ENTER){
-                    JOptionPane.showMessageDialog(null, "Has pulsado Enter");
-                }
-                if(evt.getKeyCode()==KeyEvent.VK_ESCAPE){             
-                }*/
+        /*    if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+         JOptionPane.showMessageDialog(null, "Has pulsado Enter");
+         }
+         if(evt.getKeyCode()==KeyEvent.VK_ESCAPE){             
+         }*/
     }//GEN-LAST:event_formKeyPressed
 
     private void jthamburguesasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jthamburguesasMouseClicked
-        if (evt.getClickCount() == 2) { 
+        if (evt.getClickCount() == 2) {
             agregarfinal();
         }
     }//GEN-LAST:event_jthamburguesasMouseClicked
@@ -1562,7 +1562,6 @@ public class Principal extends javax.swing.JFrame {
 
     private void btnagregarajtfinalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarajtfinalActionPerformed
         agregarfinal();
-      //  txt_nota.setText("");
     }//GEN-LAST:event_btnagregarajtfinalActionPerformed
 
     private void btncontodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncontodoActionPerformed
@@ -1590,9 +1589,10 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jtbebidasMouseClicked
 
     private void btnagregarajtfinal1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarajtfinal1ActionPerformed
-       agregarfinalbebidas();
+        agregarfinalbebidas();
     }//GEN-LAST:event_btnagregarajtfinal1ActionPerformed
-    DefaultTableModel tb;
+        DefaultTableModel tb;
+
     private void filtrobebidas(String consulta, JTable jtableBuscar) {
         tb = (DefaultTableModel) jtbebidas.getModel();
         TableRowSorter<DefaultTableModel> trb = new TableRowSorter<>(tb);
@@ -1604,7 +1604,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_txt_bebidasKeyReleased
 
     private void btnconfiguracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnconfiguracionActionPerformed
-        Configuracion c= new Configuracion();
+        Configuracion c = new Configuracion();
         c.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnconfiguracionActionPerformed

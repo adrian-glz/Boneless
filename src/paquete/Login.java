@@ -41,7 +41,7 @@ public class Login extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Usuario:");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 70, 30));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, 50, 30));
 
         jLabel2.setText("Contraseña:");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 244, -1, 20));
@@ -106,8 +106,7 @@ public class Login extends javax.swing.JFrame {
         String pass = new String(txtpassword.getPassword()).toUpperCase();  //Tomar el contenido de password
         if ((user.isEmpty()) || (pass.isEmpty())) {   //Checar que no estén vacíos
             JOptionPane.showMessageDialog(null, "Ingrese su nombre de usuario y contraseña");
-        } else {
-            
+        } else {           
             try {
                 //Conexión a la BD
                 Class.forName("com.mysql.jdbc.Driver");
