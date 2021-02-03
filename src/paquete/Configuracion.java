@@ -85,7 +85,7 @@ public class Configuracion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void RealizarcorteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RealizarcorteActionPerformed
-        // TODO add your handling code here:
+      
     }//GEN-LAST:event_RealizarcorteActionPerformed
 
     private void btnCambiarCosteoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarCosteoActionPerformed
