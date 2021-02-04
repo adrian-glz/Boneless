@@ -19,7 +19,6 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
  * @author AGONZALEZ
  */
 public class Corte extends javax.swing.JFrame {
@@ -40,11 +39,11 @@ public class Corte extends javax.swing.JFrame {
     }
 
  public void generarcorte(){
- try {
+         try {
             Class.forName("com.mysql.jdbc.Driver");
             java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", ""); 
             Statement st = conexion.createStatement();
-            st.executeUpdate("use prueba;");
+            st.executeUpdate("use prueba");
 
           ps = conexion.prepareStatement("update  folios  set  fondo ='" + txt_fondo.getText().trim() + "'  where caja='1'");
    
@@ -86,9 +85,9 @@ public class Corte extends javax.swing.JFrame {
         setTitle("Fon de caja");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
         jLabel7.setText("Fecha corte:");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 100, 40));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 100, 50));
 
         btngenerarcorte.setBackground(new java.awt.Color(51, 255, 51));
         btngenerarcorte.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -118,7 +117,19 @@ public class Corte extends javax.swing.JFrame {
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 220, -1, -1));
 
         jtfecha.setDateFormatString("yyyy/MM/dd");
-        getContentPane().add(jtfecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, 270, 40));
+        jtfecha.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jtfecha.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jtfechaKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfechaKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtfechaKeyTyped(evt);
+            }
+        });
+        getContentPane().add(jtfecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 20, 290, 50));
 
         pack();
         setLocationRelativeTo(null);
@@ -160,6 +171,25 @@ public class Corte extends javax.swing.JFrame {
       Principal p= new Principal();
       p.setVisible(true);
     }//GEN-LAST:event_btnvolverActionPerformed
+
+    private void jtfechaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfechaKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            jtfecha.requestFocus();
+        }
+    }//GEN-LAST:event_jtfechaKeyPressed
+
+    private void jtfechaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfechaKeyReleased
+        /*  // TODO add your handling code here:
+        String jc = txtfecha.getDateFormatString().toString();
+        System.out.println("mames"+jc);
+        btngenerar.setEnabled(
+            jc.length() != 0
+        );*/
+    }//GEN-LAST:event_jtfechaKeyReleased
+
+    private void jtfechaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfechaKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtfechaKeyTyped
 
     /**
      * @param args the command line arguments

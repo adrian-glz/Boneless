@@ -1,2 +1,0 @@
-paquete.Leer_fichero
-paquete.ConexionMySQL

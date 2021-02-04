@@ -845,11 +845,11 @@ public class Principal extends javax.swing.JFrame {
                                             .addGroup(jpfondoLayout.createSequentialGroup()
                                                 .addGroup(jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                     .addGroup(jpfondoLayout.createSequentialGroup()
-                                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addGap(14, 14, 14))
+                                                        .addComponent(jpingredentes, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                                                     .addGroup(jpfondoLayout.createSequentialGroup()
-                                                        .addComponent(jpingredentes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                                        .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addGap(14, 14, 14)))
                                                 .addGroup(jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                     .addComponent(btncontodo, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
                                                     .addComponent(btnsinnada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -1768,12 +1768,12 @@ public class Principal extends javax.swing.JFrame {
 
     public void tablafinal() {
         String data[][] = {};
-        String cabeza[] = {"Codigo", "Descripcion", "Precio", "Cantidad", "Detalles"};
+        String cabeza[] = {"Codigo", "Descripcion", "Precio", "Cantidad", "Detalles", "categoria"};
         jtfinal.getTableHeader().setReorderingAllowed(false);
         md = new DefaultTableModel(data, cabeza) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                if (column != 5) {
+                if (column != 6) {
                     return false;
                 } else {
                     return true;
@@ -1811,5 +1811,13 @@ public class Principal extends javax.swing.JFrame {
         jtfinal.getColumnModel().getColumn(4).setPreferredWidth(220);
         jtfinal.getColumnModel().getColumn(4).setMaxWidth(500);
         jtfinal.getColumnModel().getColumn(4).setMinWidth(220);
+    
+    
+        jtfinal.getColumnModel().getColumn(5).setPreferredWidth(220);
+        jtfinal.getColumnModel().getColumn(5).setMaxWidth(500);
+        jtfinal.getColumnModel().getColumn(5).setMinWidth(220);
+    
+    
+        
     }
 }
