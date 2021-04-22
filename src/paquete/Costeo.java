@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -30,22 +31,36 @@ public class Costeo extends javax.swing.JFrame {
     public Costeo() {
         initComponents();
         recuperacosteo();
+        imagendebarra();
     }
 
- public void actualizar(){
- try {
+    public void imagendebarra() {
+        try {
+            setIconImage(new ImageIcon(getClass().getResource("/img/logo.png")).getImage());
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void limpiarcampos() {
+        recuperacosteo();
+
+    }
+
+    public void actualizar() {
+        try {
             Class.forName("com.mysql.jdbc.Driver");
-            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", ""); 
+            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
             Statement st = conexion.createStatement();
             st.executeUpdate("use prueba;");
 
-          ps = conexion.prepareStatement("UPDATE  costeo  SET  `compra`='" + txt_compra.getText().trim() + "',`venta`='" + txt_venta.getText().trim() + "' WHERE id='1'");
-   
+            ps = conexion.prepareStatement("UPDATE  costeo  SET  `compra`='" + txt_compra.getText().trim() + "',`venta`='" + txt_venta.getText().trim() + "' WHERE id='1'");
+
             int n = ps.executeUpdate();
             if (n > 0) {
                 JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
                 st.close();
-                //  limpiarcampos();
+               limpiarcampos();
             }
         } catch (HeadlessException | SQLException ex) {
             JOptionPane.showMessageDialog(rootPane, "Error en la base de datos" + ex);
@@ -77,24 +92,28 @@ public class Costeo extends javax.swing.JFrame {
         txt_venta = new javax.swing.JTextField();
         btnvolver = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cambio de Costeo");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        getContentPane().add(txt_compra, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, 170, 40));
 
-        jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        txt_compra.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        getContentPane().add(txt_compra, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, 270, 60));
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
         jLabel7.setText("Compra:");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 60, 40));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 80, 60));
 
         jButton1.setBackground(new java.awt.Color(51, 255, 51));
+        jButton1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jButton1.setText("Actualizar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, 170, 45));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 160, 340, 60));
 
         btnrefrescar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/refresh.png"))); // NOI18N
         btnrefrescar.addActionListener(new java.awt.event.ActionListener() {
@@ -102,26 +121,32 @@ public class Costeo extends javax.swing.JFrame {
                 btnrefrescarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnrefrescar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 20, 43, 38));
+        getContentPane().add(btnrefrescar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 30, 43, 38));
 
         jLabel1.setText("  ");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 220, 40, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 260, 40, -1));
 
-        jLabel8.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
         jLabel8.setText("Venta:");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 50, 40));
-        getContentPane().add(txt_venta, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 70, 170, 40));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 70, 60));
 
+        txt_venta.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        getContentPane().add(txt_venta, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 90, 270, 60));
+
+        btnvolver.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnvolver.setText("Volver");
         btnvolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnvolverActionPerformed(evt);
             }
         });
-        getContentPane().add(btnvolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 180, 170, 40));
+        getContentPane().add(btnvolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 230, 340, 60));
 
         jLabel2.setText("           ");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 220, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 260, -1, -1));
+
+        jLabel3.setText("   ");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 300, 40, -1));
 
         pack();
         setLocationRelativeTo(null);
@@ -172,6 +197,8 @@ public class Costeo extends javax.swing.JFrame {
 
     private void btnvolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnvolverActionPerformed
       Principal p= new Principal();
+     
+      this.dispose();
       p.setVisible(true);
     }//GEN-LAST:event_btnvolverActionPerformed
 
@@ -216,6 +243,7 @@ public class Costeo extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JTextField txt_compra;

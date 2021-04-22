@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -29,8 +30,16 @@ public class Agregar extends javax.swing.JFrame {
     public Agregar() {
         initComponents();
         llenarcategorias();
+        imagendebarra();
     }
-
+  public void imagendebarra(){
+      try{
+          setIconImage(new ImageIcon(getClass().getResource("/img/logo.png")).getImage());
+        }catch(Exception  e){
+        
+        }
+    
+    }
 
     public void insertarcodigo() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SS");
@@ -186,6 +195,7 @@ public class Agregar extends javax.swing.JFrame {
         getContentPane().add(txt_precio, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 190, 170, 35));
 
         btnagregar.setBackground(new java.awt.Color(51, 255, 51));
+        btnagregar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnagregar.setText("Agregar");
         btnagregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -212,6 +222,7 @@ public class Agregar extends javax.swing.JFrame {
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 360, 40, 20));
 
         btncancelar.setBackground(new java.awt.Color(255, 51, 51));
+        btncancelar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btncancelar.setText("Cancelar");
         btncancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

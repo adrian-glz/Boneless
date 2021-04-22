@@ -1,9 +1,21 @@
 package paquete;
 
+import javax.swing.ImageIcon;
+
 public class Configuracion extends javax.swing.JFrame {
 
     public Configuracion() {
         initComponents();
+        imagendebarra();
+    }
+
+    public void imagendebarra() {
+        try {
+            setIconImage(new ImageIcon(getClass().getResource("/img/logo.png")).getImage());
+        } catch (Exception e) {
+
+        }
+
     }
 
     @SuppressWarnings("unchecked")
@@ -85,7 +97,9 @@ public class Configuracion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void RealizarcorteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RealizarcorteActionPerformed
-      
+        Corte c = new Corte();
+        c.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_RealizarcorteActionPerformed
 
     private void btnCambiarCosteoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarCosteoActionPerformed
@@ -101,14 +115,17 @@ public class Configuracion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnagregarproductoActionPerformed
 
     private void btnTablaMaestraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTablaMaestraActionPerformed
-       EditaProductos t= new EditaProductos();
-       t.setVisible(true);
-       this.dispose();
-               
+        EditaProductos t = new EditaProductos();
+        t.setVisible(true);
+        this.dispose();
+
     }//GEN-LAST:event_btnTablaMaestraActionPerformed
 
     private void btnFondoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFondoActionPerformed
-        // TODO add your handling code here:
+        Fondo f = new Fondo();
+        f.setVisible(true);
+        this.dispose();
+
     }//GEN-LAST:event_btnFondoActionPerformed
 
     private void CancelarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarPedidoActionPerformed
@@ -126,7 +143,7 @@ public class Configuracion extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }

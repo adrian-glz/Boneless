@@ -8,7 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DecimalFormat; 
+import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -38,9 +38,9 @@ public class Principal extends javax.swing.JFrame {
 
     public Principal() {
 
-        imagendebarra();
         initComponents();///inicializamos componentes al inicio del metodo
         obtenerfolio();
+        imagendebarra();
         recuperafolio();
         recuperacostodolar();
         Bebidas();//llamamos el metodo de bebidas para llenar tablas
@@ -55,6 +55,7 @@ public class Principal extends javax.swing.JFrame {
         } catch (Exception e) {
 
         }
+
     }
 
     public void obtenerfechaservidor() {//SELECT TIME_FORMAT(NOW(), "%r") AS Tiempo;
@@ -1591,7 +1592,7 @@ public class Principal extends javax.swing.JFrame {
     private void btnagregarajtfinal1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarajtfinal1ActionPerformed
         agregarfinalbebidas();
     }//GEN-LAST:event_btnagregarajtfinal1ActionPerformed
-        DefaultTableModel tb;
+    DefaultTableModel tb;
 
     private void filtrobebidas(String consulta, JTable jtableBuscar) {
         tb = (DefaultTableModel) jtbebidas.getModel();
@@ -1629,8 +1630,7 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnsinnada1ActionPerformed
 
-   
-     public static void main(String args[]) {
+    public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -1656,13 +1656,12 @@ public class Principal extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() { 
-                new Principal().setVisible(true); 
+            public void run() {
+                new Principal().setVisible(true);
             }
         });
     }
 
- 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Limpiartblfinal;
@@ -1757,7 +1756,7 @@ public class Principal extends javax.swing.JFrame {
         txttotalarticulos.setText("" + r);//preciototal
     }
 
- public void Vaciartabla() {
+    public void Vaciartabla() {
         DefaultTableModel vt = (DefaultTableModel) jtfinal.getModel();
         for (int i = vt.getRowCount() - 1; i >= 0; i--) {
             vt.removeRow(i);
@@ -1811,13 +1810,10 @@ public class Principal extends javax.swing.JFrame {
         jtfinal.getColumnModel().getColumn(4).setPreferredWidth(220);
         jtfinal.getColumnModel().getColumn(4).setMaxWidth(500);
         jtfinal.getColumnModel().getColumn(4).setMinWidth(220);
-    
-    
+
         jtfinal.getColumnModel().getColumn(5).setPreferredWidth(220);
         jtfinal.getColumnModel().getColumn(5).setMaxWidth(500);
         jtfinal.getColumnModel().getColumn(5).setMinWidth(220);
-    
-    
-        
+
     }
 }

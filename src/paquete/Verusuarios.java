@@ -99,8 +99,6 @@ public class Verusuarios extends javax.swing.JFrame {
 
     }
 
-    
-    
     public void cambiarusuario() {
         DefaultTableModel model = (DefaultTableModel) jtverusuarios.getModel();
 
@@ -115,7 +113,6 @@ public class Verusuarios extends javax.swing.JFrame {
         }
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -146,6 +143,11 @@ public class Verusuarios extends javax.swing.JFrame {
                 "Title 1"
             }
         ));
+        jtverusuarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtverusuariosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jtverusuarios);
 
         btncancelar.setBackground(new java.awt.Color(255, 51, 51));
@@ -189,11 +191,17 @@ public class Verusuarios extends javax.swing.JFrame {
     }//GEN-LAST:event_btncambiarusuarioActionPerformed
 
     private void btncancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelarActionPerformed
-      this.dispose();
-      Principal p=new Principal();
-      p.setVisible(true);
-             
+        this.dispose();
+        Principal p = new Principal();
+        p.setVisible(true);
+
     }//GEN-LAST:event_btncancelarActionPerformed
+
+    private void jtverusuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtverusuariosMouseClicked
+        if (evt.getClickCount() == 2) {
+            cambiarusuario();
+        }
+    }//GEN-LAST:event_jtverusuariosMouseClicked
 
     /**
      * @param args the command line arguments
@@ -206,7 +214,7 @@ public class Verusuarios extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
