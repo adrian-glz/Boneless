@@ -27,10 +27,10 @@ import static paquete.ConexionMySQL.IMPRESORA;
  * @author AGONZALEZ
  */
 public class ConexionMySQL  {         
-    public String db = "cml";
-    public String url = "jdbc:jtds:sqlserver://192.168.1.80:55024/"+db;
-    public String user = "usounds";
-    public String pass = "madljda";
+    public String db = "prueba";
+    public String url = "jdbc:mysql://localhost:3306/"+db;
+    public String user = "root";
+    public String pass = "";
     
     public static String IPSUCURSAL;
     public static String SUCURSAL;
@@ -41,7 +41,7 @@ public class ConexionMySQL  {
         public Connection Conectar() {
             Connection link = null;
             try {
-                Class.forName("net.sourceforge.jtds.jdbc.Driver");
+                Class.forName("com.mysql.jdbc.Driver");
                 link = DriverManager.getConnection(this.url, this.user, this.pass);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "ERROR VERIFIQUE LA CONEXION O COMUNIQUESE CON SISTEMAS" + ex);

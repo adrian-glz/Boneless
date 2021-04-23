@@ -7,6 +7,7 @@ package paquete;
 
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,11 +15,21 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
+import static paquete.Login.nombrecompleto;
 
 /**
  * @author AGONZALEZ
@@ -39,8 +50,8 @@ public class Corte extends javax.swing.JFrame {
         String fechadisplay = dd.format(gg.getTime());
         jtfecha.setDate(gg.getTime());
         fondo();
-        corte();
-        imprimeconsola();
+       
+      //  imprimeconsola();
     }
 
     public void imagendebarra() {
@@ -49,29 +60,26 @@ public class Corte extends javax.swing.JFrame {
         } catch (Exception e) {
 
         }
-    
+
     }
 
-    public void imprimeconsola() {
-        System.out.println("corte***\n"
-                + "fondo de caja:" + Fondo + ""
-                + "Total de caja sin fondo" + Corte);
-    }
+     
 
     public void corte() {
-
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String fecha = sdf.format(jtfecha.getDate());
         try {
             Class.forName("com.mysql.jdbc.Driver");
             java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
             st = conexion.createStatement();
             st.executeUpdate("use prueba");
-
+            System.out.println("fecha llengado ad corte"+fecha);
             //Seleccionar datos
-            rs = st.executeQuery("select sum(cantidad*precioventa) from ventas where caja='1'and fecha='2021-4-22' ");
+            rs = st.executeQuery("select sum(cantidad*precioventa) from ventas where caja='1'and fecha= '" + fecha + "'  ");
             try {
                 while (rs.next()) {
                     Corte = rs.getString(1);
-                    System.out.println(">>>>>>>>>"+Corte);
+                    System.out.println(">>>>>>>>>" + Corte);
                 }
 
 
@@ -87,13 +95,73 @@ public class Corte extends javax.swing.JFrame {
     }
 
     public void confirmar() {
-        int result = JOptionPane.showConfirmDialog(null, "¿Seguro que quieres modificar el costeo?", "ATENCION",
+        int result = JOptionPane.showConfirmDialog(null, "¿Se va a realizar el corte estas seguro, se reiniciara el contador de folio y no podras ingresar mas ventas a este dia?", "ATENCION",
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (result == JOptionPane.YES_OPTION) {
-              imprimeconsola();
+         //   imprimeconsola();
+            imprimeticketcorte();
+            //reiniciafolio();
         } else if (result == JOptionPane.NO_OPTION) {
 
         }
+    }
+
+    public void imprimeticketcorte() {
+        corte();
+        String user = System.getProperty("user.name");
+        double total = Double.parseDouble(Corte);
+        // File archivo = new File("C:\\Users\\" + user + "\\Desktop\\LEEME.txt");
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String fecha = sdf.format(jtfecha.getDate());
+
+            String cajero = nombrecompleto;
+            ConexionMySQL con = new ConexionMySQL();
+            Connection conn = con.Conectar();
+        System.out.println("cajero::" + cajero);
+          JasperReport reporte = null;
+          Map parametro = new HashMap(); // MAPEO DE MAPA TIPO HASH
+          parametro.put("txt_fecha", "'" +fecha+ "'");
+       //   System.out.println("fecha"+fecha);
+          parametro.put("txt_total",total);          
+          parametro.put("txtcajero",cajero.trim());          
+          String path = "C:\\Program Files\\PV\\src\\Plantillas\\Corte.jasper";
+       //   String path = "C:\\Users\\"+user+"\\Documents\\NetBeansProjects\\Inventario\\src\\reportes\\Dia.jasper";
+          reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
+          JasperPrint jprint = JasperFillManager.fillReport(reporte, parametro, conn);
+          JasperViewer view = new JasperViewer(jprint, false);
+          view.setTitle("Corte");
+          view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+          view.setVisible(true); 
+         // this.dispose();
+        } catch (JRException ex) {
+            Logger.getLogger(Corte.class.getName()).log(Level.SEVERE, null, ex);
+             JOptionPane.showMessageDialog(null, ">>"+ex);
+            
+        }
+    }
+    public void reiniciafolio() {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+            Statement st = conexion.createStatement();
+            st.executeUpdate("use prueba;");
+
+            ps = conexion.prepareStatement("update  folios  set FOLIO = '1' where `caja`=1");
+
+            int n = ps.executeUpdate();
+            if (n > 0) {
+                //   JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
+                st.close();
+
+                //  limpiarcampos();
+            }
+        } catch (HeadlessException | SQLException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Error en la base de datos, no se pudo guardar el folio" + ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     @SuppressWarnings("unchecked")
@@ -110,6 +178,7 @@ public class Corte extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Realiza corte");
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
@@ -125,7 +194,7 @@ public class Corte extends javax.swing.JFrame {
                 btngenerarcorteActionPerformed(evt);
             }
         });
-        getContentPane().add(btngenerarcorte, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 90, 270, 60));
+        getContentPane().add(btngenerarcorte, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 90, 360, 60));
 
         jLabel1.setText("  ");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 220, 40, -1));
@@ -138,7 +207,7 @@ public class Corte extends javax.swing.JFrame {
                 btnvolverActionPerformed(evt);
             }
         });
-        getContentPane().add(btnvolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 160, 270, 60));
+        getContentPane().add(btnvolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 160, 360, 60));
 
         jLabel2.setText("           ");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 220, -1, -1));
@@ -164,8 +233,7 @@ public class Corte extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-    public void fondo() 
-    {
+    public void fondo() {
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -178,6 +246,7 @@ public class Corte extends javax.swing.JFrame {
             try {
                 while (rs.next()) {
                     Fondo = rs.getString("fondo");
+                    System.out.println("metodo fondo "+Fondo);
                 }
 
             } catch (SQLException ex) {
@@ -190,7 +259,7 @@ public class Corte extends javax.swing.JFrame {
             Logger.getLogger(Corte.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void btngenerarcorteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btngenerarcorteActionPerformed
         if (jtfecha.equals(" ")) {
             JOptionPane.showMessageDialog(rootPane, "Un campo esta vacio");
@@ -213,11 +282,11 @@ public class Corte extends javax.swing.JFrame {
 
     private void jtfechaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfechaKeyReleased
         /*  // TODO add your handling code here:
-        String jc = txtfecha.getDateFormatString().toString();
-        System.out.println("mames"+jc);
-        btngenerar.setEnabled(
-            jc.length() != 0
-        );*/
+         String jc = txtfecha.getDateFormatString().toString();
+         System.out.println("mames"+jc);
+         btngenerar.setEnabled(
+         jc.length() != 0
+         );*/
     }//GEN-LAST:event_jtfechaKeyReleased
 
     private void jtfechaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfechaKeyTyped

@@ -53,9 +53,7 @@ public class Principal extends javax.swing.JFrame {
         try {
             setIconImage(new ImageIcon(getClass().getResource("/img/logo.png")).getImage());
         } catch (Exception e) {
-
         }
-
     }
 
     public void obtenerfechaservidor() {//SELECT TIME_FORMAT(NOW(), "%r") AS Tiempo;
@@ -324,7 +322,7 @@ public class Principal extends javax.swing.JFrame {
         }
         sumar();
     }
-
+  
     public void agregarfinalbebidas() {
         DefaultTableModel model = (DefaultTableModel) jtfinal.getModel();
 

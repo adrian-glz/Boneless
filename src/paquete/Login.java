@@ -38,6 +38,7 @@ public class Login extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login");
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Usuario:");
@@ -94,10 +95,8 @@ public class Login extends javax.swing.JFrame {
     public void imagendebarra(){
       try{
           setIconImage(new ImageIcon(getClass().getResource("/img/logo.png")).getImage());
-        }catch(Exception  e){
-        
+        }catch(Exception  e){        
         }
-    
     }
     
     public void ingresar() {

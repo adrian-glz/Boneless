@@ -124,6 +124,7 @@ public class Verusuarios extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cambiar Usuario");
+        setResizable(false);
 
         btncambiarusuario.setText("Cambiar usuario");
         btncambiarusuario.addActionListener(new java.awt.event.ActionListener() {

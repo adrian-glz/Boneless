@@ -4,7 +4,7 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<queryString>
-		<![CDATA[SELECT `folio`, `Codigo`, `Descripcion`, `Detalle`, sum(cantidad) AS TotalaCocinar,Articulo,   `Nota`, `Fecha`, `Estado`,`hora` FROM `pedidos`  WHERE FECHA='2021-02-03' and folio=26
+		<![CDATA[SELECT `folio`, `Codigo`, `Descripcion`, `Detalle`, sum(cantidad) AS TotalaCocinar,Articulo,   `Nota`, `Fecha`, `Estado`,`hora` FROM `pedidos`  WHERE FECHA='2021-04-23' and folio=1
 group by folio,codigo,Detalle]]>
 	</queryString>
 	<field name="folio" class="java.lang.Integer">
@@ -41,83 +41,83 @@ group by folio,codigo,Detalle]]>
 	<title>
 		<band height="19" splitType="Stretch">
 			<textField>
-				<reportElement x="99" y="-12" width="30" height="14" uuid="388a2e4a-f75f-4952-b4bd-617b54c657b2"/>
+				<reportElement x="75" y="-12" width="41" height="14" uuid="388a2e4a-f75f-4952-b4bd-617b54c657b2"/>
 				<textElement>
-					<font size="8"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{folio}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="167" y="-12" width="31" height="12" uuid="9a739223-7fe6-46e7-b5ea-8223bca40511"/>
 				<textElement>
-					<font size="8"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Fecha}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="141" y="-12" width="26" height="12" uuid="f7ae3124-34eb-4c9a-b58d-f4b383791aab"/>
+				<reportElement x="135" y="-12" width="32" height="12" uuid="f7ae3124-34eb-4c9a-b58d-f4b383791aab"/>
 				<textElement>
-					<font size="8"/>
+					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Fecha:]]></text>
+				<text><![CDATA[FECHA:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="144" y="7" width="54" height="12" uuid="abaa02ca-ca5b-4179-b890-c3644940053a"/>
+				<reportElement x="181" y="7" width="17" height="12" uuid="abaa02ca-ca5b-4179-b890-c3644940053a"/>
 				<textElement textAlignment="Right">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Piezas]]></text>
+				<text><![CDATA[PZS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="78" y="-12" width="21" height="12" uuid="be5b2f5e-44fd-456f-9409-3bc8f0a7b588"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<text><![CDATA[Folio:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="7" width="51" height="12" uuid="2919599c-e501-40bd-842f-c514bf66e796"/>
+				<reportElement x="0" y="-12" width="75" height="12" uuid="be5b2f5e-44fd-456f-9409-3bc8f0a7b588"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Descripcion]]></text>
+				<text><![CDATA[ORDEN COCINA:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="61" y="7" width="83" height="12" uuid="f55e06a4-245c-4173-a3a6-68b8b8a3d8cc"/>
+				<reportElement x="0" y="7" width="61" height="12" uuid="2919599c-e501-40bd-842f-c514bf66e796"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Detalle]]></text>
+				<text><![CDATA[DESCRIPCION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="61" y="7" width="120" height="12" uuid="f55e06a4-245c-4173-a3a6-68b8b8a3d8cc"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DETALLE]]></text>
 			</staticText>
 		</band>
 	</title>
 	<detail>
-		<band height="11" splitType="Stretch">
+		<band height="22" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="1" width="61" height="10" uuid="f2dd82aa-b0d6-4481-b22a-ef5eae23109b"/>
+				<reportElement x="0" y="1" width="61" height="21" uuid="f2dd82aa-b0d6-4481-b22a-ef5eae23109b"/>
 				<textElement>
 					<font size="6"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Descripcion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="61" y="1" width="111" height="10" uuid="83293d3a-e82a-49b2-bc26-cbbefa14e0a1"/>
+				<reportElement x="61" y="1" width="120" height="21" uuid="83293d3a-e82a-49b2-bc26-cbbefa14e0a1"/>
 				<textElement>
 					<font size="6"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Detalle}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="172" y="1" width="26" height="10" uuid="b7c7f45e-1785-454c-8aa7-7fa5b4d0a82f"/>
+				<reportElement x="181" y="1" width="17" height="18" uuid="b7c7f45e-1785-454c-8aa7-7fa5b4d0a82f"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="6"/>
+					<font size="6" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TotalaCocinar}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
-	<summary>
-		<band height="50">
+	<pageFooter>
+		<band height="12">
 			<textField>
 				<reportElement x="156" y="0" width="42" height="12" uuid="325fc19d-8526-47a4-8fdf-5a5b1591ebe6"/>
 				<textElement textAlignment="Right">
@@ -126,5 +126,5 @@ group by folio,codigo,Detalle]]>
 				<textFieldExpression><![CDATA[$F{hora}]]></textFieldExpression>
 			</textField>
 		</band>
-	</summary>
+	</pageFooter>
 </jasperReport>
