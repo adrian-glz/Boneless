@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="226" pageHeight="226" columnWidth="198" leftMargin="14" rightMargin="14" topMargin="14" bottomMargin="14" uuid="0136b787-0dfd-4949-b21d-3f729507fc3c">
-	<property name="ireport.zoom" value="4.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="7.0"/>
+	<property name="ireport.x" value="588"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="txt_total" class="java.lang.Double">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -13,7 +13,7 @@
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[select CODIGO,(select descripcion from productos where codigo=ventas.Codigo)as DESCRIPCION,SUM(CANTIDAD) AS CANTIDAD ,PRECIOVENTA,SUM(CANTIDAD*PRECIOVENTA)AS TOTAL FROM ventas where fecha=$P!{txt_fecha}
+		<![CDATA[select CODIGO,(select descripcion from productos where codigo=ventas.Codigo)as DESCRIPCION,SUM(CANTIDAD) AS CANTIDAD ,PRECIOVENTA,SUM(CANTIDAD*PRECIOVENTA)AS TOTAL FROM ventas where fecha='2021-04-27'
 GROUP BY CODIGO]]>
 	</queryString>
 	<field name="CODIGO" class="java.lang.String">
@@ -33,60 +33,60 @@ GROUP BY CODIGO]]>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="19" splitType="Stretch">
+		<band height="17" splitType="Stretch">
 			<staticText>
-				<reportElement x="146" y="7" width="13" height="12" uuid="abaa02ca-ca5b-4179-b890-c3644940053a"/>
+				<reportElement x="148" y="5" width="13" height="12" uuid="abaa02ca-ca5b-4179-b890-c3644940053a"/>
 				<textElement textAlignment="Right">
 					<font size="6" isBold="true"/>
 				</textElement>
 				<text><![CDATA[PZS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="66" y="-12" width="56" height="12" uuid="be5b2f5e-44fd-456f-9409-3bc8f0a7b588"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6" isBold="true"/>
+				<reportElement x="74" y="-12" width="48" height="12" uuid="be5b2f5e-44fd-456f-9409-3bc8f0a7b588"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Gadugi" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[CORTE]]></text>
+				<text><![CDATA[Corte]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="122" y="7" width="24" height="12" uuid="2919599c-e501-40bd-842f-c514bf66e796"/>
+				<reportElement x="124" y="5" width="24" height="12" uuid="2919599c-e501-40bd-842f-c514bf66e796"/>
 				<textElement>
 					<font size="6" isBold="true"/>
 				</textElement>
 				<text><![CDATA[PRECIO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="7" width="44" height="12" uuid="263fbd32-97be-465e-bfb9-a4745daf3b86"/>
+				<reportElement x="0" y="5" width="44" height="12" uuid="263fbd32-97be-465e-bfb9-a4745daf3b86"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[CODIGO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="164" y="7" width="34" height="12" uuid="05fd3c12-6509-4d73-8592-8d0479164154"/>
+				<reportElement x="164" y="5" width="34" height="12" uuid="05fd3c12-6509-4d73-8592-8d0479164154"/>
 				<textElement textAlignment="Right">
 					<font size="6" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SUBTOTAL]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="46" y="7" width="76" height="12" uuid="48ba6df8-baf5-4f7f-a3a2-ad662e9b62dc"/>
+				<reportElement x="46" y="5" width="76" height="12" uuid="48ba6df8-baf5-4f7f-a3a2-ad662e9b62dc"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[DESCRIPCION]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="122" y="-5" width="32" height="12" uuid="c60e0d99-50e9-44d3-afb3-771fa2ebb0fe"/>
+				<reportElement x="146" y="-12" width="24" height="12" uuid="c60e0d99-50e9-44d3-afb3-771fa2ebb0fe"/>
 				<textElement verticalAlignment="Middle">
-					<font size="6" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
-				<text><![CDATA[FECHA:]]></text>
+				<text><![CDATA[Fecha:]]></text>
 			</staticText>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="146" y="-5" width="36" height="12" uuid="1c22dfe7-7b27-4945-9e9f-3594784cedb1"/>
+				<reportElement x="170" y="-12" width="36" height="12" uuid="1c22dfe7-7b27-4945-9e9f-3594784cedb1"/>
 				<textElement verticalAlignment="Middle">
-					<font size="6"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
@@ -138,8 +138,7 @@ GROUP BY CODIGO]]>
 				<textElement verticalAlignment="Middle">
 					<font size="6" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{txt_total}
-]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{txt_total}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="0" width="135" height="12" uuid="618c6f7f-2067-4bca-820d-814fd1752311"/>

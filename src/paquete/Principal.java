@@ -24,7 +24,7 @@ import static paquete.Login.nombrecompleto;
 
 public class Principal extends javax.swing.JFrame {
 
-    int folio; ///variable que almacena el folio cuando lo obtiene de sql 
+   public  int folio; ///variable que almacena el folio cuando lo obtiene de sql 
     DefaultTableModel md;
     Statement st;
     ResultSet rs;
@@ -34,6 +34,7 @@ public class Principal extends javax.swing.JFrame {
     public static int numerocajero;
     public static String rhora;
     public static String rfecha;
+    public static String rtxtnota;
     String combinar;
 
     public Principal() {
@@ -209,7 +210,8 @@ public class Principal extends javax.swing.JFrame {
     }
 
     public void insertarventa() {
-        Statement e;
+      /*
+          Statement e;
         PreparedStatement pse = null;
         double numarticulo = 1;
         obtenerfolio();
@@ -222,7 +224,7 @@ public class Principal extends javax.swing.JFrame {
                 Class.forName("com.mysql.jdbc.Driver");
                 java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
                 Statement ste = conexion.createStatement();
-                ste.executeUpdate("USE prueba;");
+                ste.executeUpdate("use prueba;");
                 String vcodigo = ((String) jtfinal.getValueAt(x, 0));//obtener valor de precio
                 String vdescripcion = ((String) jtfinal.getValueAt(x, 1));//obtener valor de precio
                 String vprecio = ((String) jtfinal.getValueAt(x, 2));///obtienes el valor de la cantidad
@@ -244,7 +246,7 @@ public class Principal extends javax.swing.JFrame {
             // JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
             insertaventapagos();
             //  aumentarfolio(); 
-        }
+        }*/
     }
 
     public void insertapedido() {
@@ -318,7 +320,9 @@ public class Principal extends javax.swing.JFrame {
             if (ch1.isSelected() == false && ch2.isSelected() == false && ch3.isSelected() == false && ch4.isSelected() == false && ch5.isSelected() == false && ch6.isSelected() == false) {
                 combinar = "CON TODO";
             }
-            model.addRow(new Object[]{obj0, obj1, obj2, 1, combinar});
+            String detalle=txt_nota.getText().trim().toUpperCase();
+            
+            model.addRow(new Object[]{obj0, obj1, obj2, 1, combinar,detalle});
         }
         sumar();
     }
@@ -350,8 +354,11 @@ public class Principal extends javax.swing.JFrame {
             if (n > 0) {
                 //   JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
                 st.close();
+                Principal pri= new Principal();
+                pri.setVisible(true);
                 recuperafolio();
                 Vaciartabla();
+                
                 //  limpiarcampos();
             }
         } catch (HeadlessException | SQLException ex) {
@@ -1321,7 +1328,7 @@ public class Principal extends javax.swing.JFrame {
 
                             },
                             new String [] {
-                                "Codigo", "Descripcion", "Precio", "Cantidad", "Detalles"
+                                "Codigo", "Descripcion", "Precio", "Cantidad", "Detalle"
                             }
                         ) {
                             boolean[] canEdit = new boolean [] {
@@ -1338,7 +1345,7 @@ public class Principal extends javax.swing.JFrame {
                             jtfinal.getColumnModel().getColumn(1).setPreferredWidth(100);
                             jtfinal.getColumnModel().getColumn(2).setPreferredWidth(50);
                             jtfinal.getColumnModel().getColumn(3).setPreferredWidth(50);
-                            jtfinal.getColumnModel().getColumn(4).setPreferredWidth(10);
+                            jtfinal.getColumnModel().getColumn(4).setResizable(false);
                         }
 
                         getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 70, 520, 360));
@@ -1448,6 +1455,9 @@ public class Principal extends javax.swing.JFrame {
                         pack();
                         setLocationRelativeTo(null);
                     }// </editor-fold>//GEN-END:initComponents
+   
+   
+    
     public static void vaciartabla(Object[] sergioelbailador) {
         DefaultTableModel mode = (DefaultTableModel) jtfinal.getModel();
         int filas = mode.getRowCount();///pasamos el total de elementos a filas
@@ -1457,7 +1467,9 @@ public class Principal extends javax.swing.JFrame {
         txttotal.setText("$0.00");///seteamos el valor en 0
         txttotaldlls.setText("$0.00");///seteamos el valor en 0
     }
+    
     private void btnconfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnconfirmarActionPerformed
+       
         if (jtfinal.getRowCount() > 0) {
             Cobrar cb = new Cobrar();
             String TXTTTOTAL = txttotal.getText();
@@ -1466,6 +1478,9 @@ public class Principal extends javax.swing.JFrame {
             cb.txttotalc.setText(TXTTTOTAL);
             cb.txttotaldllsc.setText(TXTTOTALDLLS);
             cb.Enviartotal();
+            obtenerhoraservidor();
+            obtenerfechaservidor();
+        this.dispose();
         } else {
             JOptionPane.showMessageDialog(this, "No has capturado ningun producto");
         }
@@ -1735,7 +1750,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JTextField txt_bebidas;
     private javax.swing.JTextField txt_codigo1;
     private javax.swing.JTextField txt_hamburguesa;
-    private javax.swing.JTextField txt_nota;
+    public static javax.swing.JTextField txt_nota;
     private javax.swing.JTextField txt_tortas;
     private javax.swing.JLabel txtcajero;
     private javax.swing.JLabel txtdolar;
@@ -1745,7 +1760,7 @@ public class Principal extends javax.swing.JFrame {
     private static javax.swing.JLabel txttotalarticulos;
     private static javax.swing.JLabel txttotaldlls;
     // End of variables declaration//GEN-END:variables
- public void Totaldearticulos() {
+    public void Totaldearticulos() {
         int r = 0;
         for (int x = 0; x < jtfinal.getRowCount(); x++) {
             int vcantidad = Integer.parseInt(jtfinal.getValueAt(x, 3).toString().replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", ""));///obtienes el valor de la cantidad
@@ -1765,7 +1780,7 @@ public class Principal extends javax.swing.JFrame {
 
     public void tablafinal() {
         String data[][] = {};
-        String cabeza[] = {"Codigo", "Descripcion", "Precio", "Cantidad", "Detalles", "categoria"};
+        String cabeza[] = {"Codigo", "Descripcion", "Precio", "Cantidad", "Detalles", "Nota"};
         jtfinal.getTableHeader().setReorderingAllowed(false);
         md = new DefaultTableModel(data, cabeza) {
             @Override
