@@ -647,7 +647,6 @@ public class Principal extends javax.swing.JFrame {
             ch3 = new javax.swing.JCheckBox();
             txt_hamburguesa = new javax.swing.JTextField();
             editbuscar = new javax.swing.JLabel();
-            jButton3 = new javax.swing.JButton();
             btnagregarajtfinal = new javax.swing.JButton();
             btncontodo = new javax.swing.JButton();
             btnsinnada = new javax.swing.JButton();
@@ -724,6 +723,7 @@ public class Principal extends javax.swing.JFrame {
                         txtfolio = new javax.swing.JLabel();
                         txtdolar = new javax.swing.JLabel();
                         btnconfiguracion = new javax.swing.JButton();
+                        btnmonitor = new javax.swing.JButton();
 
                         popupMenu1.setLabel("popupMenu1");
 
@@ -809,13 +809,6 @@ public class Principal extends javax.swing.JFrame {
                         editbuscar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
                         editbuscar.setText("Buscar:");
 
-                        jButton3.setText("VER REG");
-                        jButton3.addActionListener(new java.awt.event.ActionListener() {
-                            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jButton3ActionPerformed(evt);
-                            }
-                        });
-
                         btnagregarajtfinal.setText("Agregar");
                         btnagregarajtfinal.addActionListener(new java.awt.event.ActionListener() {
                             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -866,20 +859,16 @@ public class Principal extends javax.swing.JFrame {
                                     .addGroup(jpfondoLayout.createSequentialGroup()
                                         .addComponent(editbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(12, 12, 12)
-                                        .addComponent(txt_hamburguesa, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                        .addComponent(txt_hamburguesa, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addContainerGap(18, Short.MAX_VALUE))
                         );
                         jpfondoLayout.setVerticalGroup(
                             jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jpfondoLayout.createSequentialGroup()
                                 .addGap(9, 9, 9)
-                                .addGroup(jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton3)
-                                    .addGroup(jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(txt_hamburguesa, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
-                                        .addComponent(editbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txt_hamburguesa, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                                    .addComponent(editbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1452,6 +1441,9 @@ public class Principal extends javax.swing.JFrame {
                         });
                         getContentPane().add(btnconfiguracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 10, 60, 50));
 
+                        btnmonitor.setText("Monitor Pedidos");
+                        getContentPane().add(btnmonitor, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 480, 110, 30));
+
                         pack();
                         setLocationRelativeTo(null);
                     }// </editor-fold>//GEN-END:initComponents
@@ -1563,10 +1555,6 @@ public class Principal extends javax.swing.JFrame {
     private void LimpiartblfinalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LimpiartblfinalActionPerformed
         Vaciartabla();
     }//GEN-LAST:event_LimpiartblfinalActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        insertarventa();
-    }//GEN-LAST:event_jButton3ActionPerformed
 
     private void btncambiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncambiarActionPerformed
         Verusuarios vu = new Verusuarios();
@@ -1695,6 +1683,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btnconfirmar;
     private javax.swing.JButton btncontodo;
     private javax.swing.JButton btncontodo1;
+    private javax.swing.JButton btnmonitor;
     private javax.swing.JButton btnsinnada;
     private javax.swing.JButton btnsinnada1;
     private javax.swing.JCheckBox ch1;
@@ -1720,7 +1709,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel editbuscar2;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

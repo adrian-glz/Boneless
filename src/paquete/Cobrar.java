@@ -40,8 +40,8 @@ public class Cobrar extends javax.swing.JFrame {
 
 //VARIABLES GLOBALES  
     String fecha = null;
-  int folio; ///variable que almacena el folio cuando lo obtiene de sql 
-  public static String FPP,FPD,FPT;
+    int folio; ///variable que almacena el folio cuando lo obtiene de sql 
+    public static String FPP, FPD, FPT;
     ResultSet rs;
     int count = 0;
     DefaultTableModel md;
