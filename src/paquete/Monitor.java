@@ -16,7 +16,6 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
-import static paquete.Principal.jtfinal;
 
 public class Monitor extends javax.swing.JFrame {
 
@@ -102,7 +101,7 @@ public class Monitor extends javax.swing.JFrame {
             st.executeUpdate("use prueba");
 
             //Seleccionar datos
-            rs = st.executeQuery("select * from pedidos where fecha='2021-04-28' ");
+            rs = st.executeQuery("select * from pedidos   ");
             md = (DefaultTableModel) jtpedidos.getModel();
             md.setRowCount(0);
             try {
@@ -110,16 +109,16 @@ public class Monitor extends javax.swing.JFrame {
                 while (rs.next()) {
                 
                     Object[] fila = (new Object[]{
-                        rs.getString("Folio").trim(),
-                        rs.getString("Codigo").trim(),
-                        rs.getString("Descripcion").trim(),
-                        rs.getString("Detalle").trim(),
-                        rs.getString("Cantidad").trim(),
-                        rs.getString("Articulo").trim(),
-                        rs.getString("Nota").trim(),
-                        rs.getString("Fecha").trim(),
-                        rs.getString("Estado").trim(),
-                        rs.getString("Hora").trim(),
+                        rs.getString("Folio"),
+                        rs.getString("Codigo"),
+                        rs.getString("Descripcion"),
+                        rs.getString("Detalle"),
+                        rs.getString("Cantidad"),
+                        rs.getString("Articulo"),
+                        rs.getString("Nota"),
+                        rs.getString("Fecha"),
+                        rs.getString("Estado"),
+                        rs.getString("Hora"),
                        
                         
                         
@@ -128,7 +127,7 @@ public class Monitor extends javax.swing.JFrame {
                         
                        });
                     md.addRow(fila);
-                    Colorear();
+              
                    //   jtpedidos.setBackground(Color.decode("#058dc7"));
                     //
                 }
@@ -147,12 +146,13 @@ public class Monitor extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jtpedidos = new javax.swing.JTable();
+        jtpedidos = new colorcelda();
         jPanel1 = new javax.swing.JPanel();
         btnfinalizar = new javax.swing.JToggleButton();
         btncancelar = new javax.swing.JToggleButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -209,13 +209,24 @@ public class Monitor extends javax.swing.JFrame {
         jLabel2.setText("        ");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 510, -1, -1));
 
+        jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--EN PROCESO--", "--ENTREGADO--", "--CANCELADO--" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 10, 220, 50));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    public void Colorear(){
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
-    }
+    
+ 
     /**
      * @param args the command line arguments
      */
@@ -254,6 +265,7 @@ public class Monitor extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton btncancelar;
     private javax.swing.JToggleButton btnfinalizar;
+    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

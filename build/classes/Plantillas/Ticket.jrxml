@@ -97,13 +97,6 @@ ORDER BY ARTICULO]]>
 				<textFieldExpression><![CDATA["$"+$F{TOTAL}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="1" y="8" width="60" height="7" uuid="d2a5d359-7f34-4aa6-8ed3-c928a1d0f285"/>
-				<textElement>
-					<font size="5" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{CODIGO}]]></textFieldExpression>
-			</textField>
-			<textField>
 				<reportElement x="1" y="0" width="84" height="8" uuid="299c56f2-3d24-4739-aa34-eb118cdaff57"/>
 				<textElement>
 					<font size="6"/>
