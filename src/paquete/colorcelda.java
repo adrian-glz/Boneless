@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package paquete;
 
 import java.awt.Color;
@@ -11,10 +6,6 @@ import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
-/**
- *
- * @author agonzalez
- */
 public class colorcelda extends JTable {
 
     @Override
@@ -24,15 +15,17 @@ public class colorcelda extends JTable {
             String valor = ((String) this.getValueAt(rowIndex, ColumnIndex));
 
             if (valor.equals("EN PROCESO")) {
+                componente.setBackground(Color.yellow);
+                componente.setForeground(Color.black);
+            }
+            if (valor.equals("ENTREGADO")) {
                 componente.setBackground(Color.green);
                 componente.setForeground(Color.black);
             }
-        } 
-        else {
+        } else {
             componente.setBackground(white);
             componente.setForeground(Color.black);
         }
         return componente;
     }
-
 }

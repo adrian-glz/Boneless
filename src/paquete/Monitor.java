@@ -119,11 +119,6 @@ public class Monitor extends javax.swing.JFrame {
                         rs.getString("Fecha"),
                         rs.getString("Estado"),
                         rs.getString("Hora"),
-                       
-                        
-                        
-                        
-                        
                         
                        });
                     md.addRow(fila);
