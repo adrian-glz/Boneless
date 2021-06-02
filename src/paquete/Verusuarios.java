@@ -33,8 +33,16 @@ public class Verusuarios extends javax.swing.JFrame {
     public Verusuarios() {
         initComponents();
         llenartabla();
+        imagendebarra();
     }
+ public void imagendebarra() {
+        try {
+            setIconImage(new ImageIcon(getClass().getResource("/img/logo.png")).getImage());
+        } catch (Exception e) {
 
+        }
+
+    }
     public void llenartabla() {
 
         String data[][] = {};

@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
@@ -30,7 +31,7 @@ import static paquete.Principal.jtfinal;
 import static paquete.Principal.rcambio;
 import static paquete.Principal.rfecha;
 import static paquete.Principal.rhora;
-import static paquete.Principal.txt_nota;
+//import static paquete.Principal.txt_nota;
 
 /**
  *
@@ -51,6 +52,7 @@ public class Cobrar extends javax.swing.JFrame {
     public Cobrar() {
 
         initComponents();
+        imagendebarra();
         obtenerfolio();
         lblcambio.setText("$" + rcambio);
         btnefectuarpago.setEnabled(false);
@@ -58,6 +60,14 @@ public class Cobrar extends javax.swing.JFrame {
         String vcantidad = txttotaldllsc.getText();///obtienes el valor de la cantidad
         String vp = vprecio.replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", "");//dejameos solo los elementos"[^0-1-2-3-4-5-6-7-8-9-.00]"
         String vc = vcantidad.replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", "");//dejameos solo los elementos"[^0-1-2-3-4-5-6-7-8-9-.00]"
+
+    }
+     public void imagendebarra() {
+        try {
+            setIconImage(new ImageIcon(getClass().getResource("/img/logo.png")).getImage());
+        } catch (Exception e) {
+
+        }
 
     }
 
@@ -318,8 +328,8 @@ public class Cobrar extends javax.swing.JFrame {
         getContentPane().add(lblcambio, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 10, 150, 30));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel11.setText("Dolar");
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 0, 50, 50));
+        jLabel11.setText("Dolar costo");
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 0, 80, 50));
 
         pack();
         setLocationRelativeTo(null);
@@ -344,6 +354,8 @@ public class Cobrar extends javax.swing.JFrame {
 
     private void btnregresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnregresarActionPerformed
         this.dispose();
+        Principal p = new Principal();
+        p.setVisible(true);
     }//GEN-LAST:event_btnregresarActionPerformed
 
     private void btnefectuarpagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnefectuarpagoActionPerformed
@@ -472,8 +484,10 @@ public class Cobrar extends javax.swing.JFrame {
             //imprimirpedido();
             Principal pr = new Principal();
             pr.aumentarfolio();
+            
         }
     }
+    
      public void imprimeticket () {
                 
         String user = System.getProperty("user.name");

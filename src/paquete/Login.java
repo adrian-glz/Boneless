@@ -1,4 +1,5 @@
 package paquete;
+
 import java.awt.HeadlessException;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -20,7 +21,6 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
         imagendebarra();
-
     }
 
     @SuppressWarnings("unchecked")
@@ -92,20 +92,20 @@ public class Login extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-    public void imagendebarra(){
-      try{
-          setIconImage(new ImageIcon(getClass().getResource("/img/logo.png")).getImage());
-        }catch(Exception  e){        
+    public void imagendebarra() {
+        try {
+            setIconImage(new ImageIcon(getClass().getResource("/img/logo.png")).getImage());
+        } catch (Exception e) {
         }
     }
-    
+
     public void ingresar() {
 
         String user = txtusuario.getText();   //Tomar el contenido de textField
         String pass = new String(txtpassword.getPassword()).toUpperCase();  //Tomar el contenido de password
         if ((user.isEmpty()) || (pass.isEmpty())) {   //Checar que no estén vacíos
             JOptionPane.showMessageDialog(null, "Ingrese su nombre de usuario y contraseña");
-        } else {           
+        } else {
             try {
                 //Conexión a la BD
                 Class.forName("com.mysql.jdbc.Driver");

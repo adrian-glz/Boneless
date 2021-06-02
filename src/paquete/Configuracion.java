@@ -29,9 +29,10 @@ public class Configuracion extends javax.swing.JFrame {
         btnFondo = new javax.swing.JButton();
         CancelarPedido = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        btnFondo1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Configuracion y ajustes");
+        setTitle("Configuracion y ajustes Adicionales");
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -78,7 +79,7 @@ public class Configuracion extends javax.swing.JFrame {
                 btnFondoActionPerformed(evt);
             }
         });
-        getContentPane().add(btnFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 80, 200, 60));
+        getContentPane().add(btnFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 200, 60));
 
         CancelarPedido.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cancel.png"))); // NOI18N
         CancelarPedido.setText("Cancela Pedido");
@@ -91,6 +92,15 @@ public class Configuracion extends javax.swing.JFrame {
 
         jLabel1.setText("       ");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 140, 30, -1));
+
+        btnFondo1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/reimprimir.png"))); // NOI18N
+        btnFondo1.setText("Reimpresion");
+        btnFondo1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFondo1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnFondo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 80, 200, 60));
 
         pack();
         setLocationRelativeTo(null);
@@ -131,6 +141,10 @@ public class Configuracion extends javax.swing.JFrame {
     private void CancelarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarPedidoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_CancelarPedidoActionPerformed
+
+    private void btnFondo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFondo1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnFondo1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -173,6 +187,7 @@ public class Configuracion extends javax.swing.JFrame {
     private javax.swing.JButton Realizarcorte;
     private javax.swing.JButton btnCambiarCosteo;
     private javax.swing.JButton btnFondo;
+    private javax.swing.JButton btnFondo1;
     private javax.swing.JButton btnTablaMaestra;
     private javax.swing.JButton btnagregarproducto;
     private javax.swing.JLabel jLabel1;

@@ -22,6 +22,11 @@ public class colorcelda extends JTable {
                 componente.setBackground(Color.green);
                 componente.setForeground(Color.black);
             }
+            
+                if (valor.equals("CANCELADO")) {
+                componente.setBackground(Color.red);
+                componente.setForeground(Color.black);
+            }
         } else {
             componente.setBackground(white);
             componente.setForeground(Color.black);
