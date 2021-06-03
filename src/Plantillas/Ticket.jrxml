@@ -44,21 +44,21 @@ ORDER BY ARTICULO]]>
 				<text><![CDATA[Ticket de Venta]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="138" y="7" width="60" height="15" uuid="f38dab34-397a-4915-8c0a-ee1d2d4abd51"/>
+				<reportElement x="175" y="6" width="23" height="15" uuid="f38dab34-397a-4915-8c0a-ee1d2d4abd51"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SUBTOTAL]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="85" y="7" width="53" height="8" uuid="563bc6ff-f879-4ae2-a5b7-7f3cd34dcea2"/>
+				<reportElement x="85" y="7" width="37" height="8" uuid="563bc6ff-f879-4ae2-a5b7-7f3cd34dcea2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6" isBold="true"/>
 				</textElement>
 				<text><![CDATA[PRECIO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="85" y="14" width="53" height="8" uuid="63ed9acf-46c7-4e55-aae1-89e3206f08e0"/>
+				<reportElement x="122" y="7" width="53" height="8" uuid="63ed9acf-46c7-4e55-aae1-89e3206f08e0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6" isBold="true"/>
 				</textElement>
