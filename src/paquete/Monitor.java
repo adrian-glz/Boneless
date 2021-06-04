@@ -6,8 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -170,6 +168,7 @@ public class Monitor extends javax.swing.JFrame {
         setTitle("Pedidos");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jtpedidos.setAutoCreateRowSorter(true);
         jtpedidos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -187,7 +186,7 @@ public class Monitor extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        btncancelar.setText("Cancelar articulo Pedido");
+        btncancelar.setText("Cancelar articulo ");
         btncancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btncancelarActionPerformed(evt);
@@ -342,8 +341,8 @@ public class Monitor extends javax.swing.JFrame {
                    java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
                    st = conexion.createStatement();
                    st.executeUpdate("use prueba");
-
-                   String updateTableSQL = ("UPDATE pedidos SET estado='CANCELADO' WHERE codigo='" + vcodigo + "'  and  folio='" + vfolio + "' and codigo='" + vcodigo + "'   and descripcion='" + vdescripcion + "' and detalle='" + vdetalle + "'  and cantidad='" + vcantidad + "' and articulo='" + varticulo + "'  and nota='" + vnota + "' and fecha='" + vfecha + "' and estado='" + vestado + "'  and hora='" + vhora + "'             ;");
+                   String negativo="-"+vcantidad.trim();
+                   String updateTableSQL = ("UPDATE pedidos SET estado='CANCELADO',cantidad ='"+negativo+" ' WHERE codigo='" + vcodigo + "'  and  folio='" + vfolio + "' and codigo='" + vcodigo + "'   and descripcion='" + vdescripcion + "' and detalle='" + vdetalle + "'  and cantidad='" + vcantidad + "' and articulo='" + varticulo + "'  and nota='" + vnota + "' and fecha='" + vfecha + "' and estado='" + vestado + "'  and hora='" + vhora + "'             ;");
                    PreparedStatement preparedStatement = conexion.prepareStatement(updateTableSQL);
                    preparedStatement.executeUpdate();
                    int n = preparedStatement.executeUpdate();

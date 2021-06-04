@@ -13,9 +13,7 @@ public class Configuracion extends javax.swing.JFrame {
         try {
             setIconImage(new ImageIcon(getClass().getResource("/img/logo.png")).getImage());
         } catch (Exception e) {
-
         }
-
     }
 
     @SuppressWarnings("unchecked")
@@ -91,7 +89,7 @@ public class Configuracion extends javax.swing.JFrame {
         getContentPane().add(CancelarPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 80, 200, 60));
 
         jLabel1.setText("       ");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 140, 30, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, 640, 0));
 
         btnFondo1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/reimprimir.png"))); // NOI18N
         btnFondo1.setText("Reimpresion");
@@ -143,7 +141,7 @@ public class Configuracion extends javax.swing.JFrame {
     }//GEN-LAST:event_CancelarPedidoActionPerformed
 
     private void btnFondo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFondo1ActionPerformed
-        // TODO add your handling code here:
+  
     }//GEN-LAST:event_btnFondo1ActionPerformed
 
     /**

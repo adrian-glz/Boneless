@@ -1,4 +1,5 @@
 package paquete;
+
 import java.awt.HeadlessException;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -42,7 +43,7 @@ public class Acceso extends javax.swing.JFrame {
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 70, 30));
 
         jLabel2.setText("Contraseña:");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 244, -1, 20));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 244, 90, 20));
 
         txtusuario.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
