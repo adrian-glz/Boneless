@@ -233,7 +233,7 @@ public class Monitor extends javax.swing.JFrame {
                 cbestadoActionPerformed(evt);
             }
         });
-        getContentPane().add(cbestado, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 10, 220, 50));
+        getContentPane().add(cbestado, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 10, 150, 50));
 
         jButton1.setText("Regresar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
