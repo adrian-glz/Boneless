@@ -546,6 +546,7 @@ public class Cobrar extends javax.swing.JFrame {
         }
         System.out.println("-----");
     }
+    
      public void imprimeticketventa () {
          //necesito fecha y folio padre
          totalventafoliotemp();
@@ -566,7 +567,7 @@ public class Cobrar extends javax.swing.JFrame {
              parametro.put("txt_total", ventafoliotemp);
              parametro.put("txt_folio", folio);
              System.out.println(" imprime variables folio:  " + folio + "FECHA:" + rfecha+"totsl de venta "+ventafoliotemp);
-             parametro.put("txtcajero", cajero.trim());
+             parametro.put("txt_cajero", cajero.trim());
              String path = "C:\\Users\\agonzalez\\Documents\\GitHub\\Boneless\\src\\Plantillas/Ticket.jasper";
              //   String path = "C:\\Users\\"+user+"\\Documents\\NetBeansProjects\\Inventario\\src\\reportes\\Dia.jasper";
              reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
