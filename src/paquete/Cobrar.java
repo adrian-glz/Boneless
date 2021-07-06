@@ -508,12 +508,12 @@ public class Cobrar extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(rootPane, "Error en la base de datos 902" + ex);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            } 
         }///fin del cliclo for perro
         if (n > 0) {
             
-       imprimeticketventa();
-            //imprimirpedido();
+     //  imprimeticketventa();
+            imprimirpedido();
             Principal pr = new Principal();
             pr.aumentarfolio();
             //imprimirfolio
@@ -569,6 +569,27 @@ public class Cobrar extends javax.swing.JFrame {
              System.out.println(" imprime variables folio:  " + folio + "FECHA:" + rfecha+"totsl de venta "+ventafoliotemp);
              parametro.put("txt_cajero", cajero.trim());
              String path = "C:\\Users\\agonzalez\\Documents\\GitHub\\Boneless\\src\\Plantillas/Ticket.jasper";
+             //   String path = "C:\\Users\\"+user+"\\Documents\\NetBeansProjects\\Inventario\\src\\reportes\\Dia.jasper";
+             reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
+             JasperPrint jprint = JasperFillManager.fillReport(reporte, parametro, conn);
+             JasperPrintManager.printReport(jprint, true);
+           
+        } catch (JRException ex) {
+            Logger.getLogger(Corte.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, ">>" + ex);
+
+        }
+    }
+     public void imprimirpedido () {
+       try {
+              ConexionMySQL con = new ConexionMySQL();
+             Connection conn = con.Conectar();
+             JasperReport reporte = null;
+             Map parametro = new HashMap(); // MAPEO DE MAPA TIPO HASH
+             parametro.put("txt_fecha", "'" + rfecha + "'");
+             parametro.put("txt_folio", folio);
+             System.out.println(" imprime variables folio:  " + folio + "FECHA:" + rfecha+"totsl de venta "+ventafoliotemp);
+              String path = "C:\\Users\\agonzalez\\Documents\\GitHub\\Boneless\\src\\Plantillas/Ticketpedido.jasper";
              //   String path = "C:\\Users\\"+user+"\\Documents\\NetBeansProjects\\Inventario\\src\\reportes\\Dia.jasper";
              reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
              JasperPrint jprint = JasperFillManager.fillReport(reporte, parametro, conn);
