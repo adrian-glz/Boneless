@@ -563,22 +563,16 @@ public class Cobrar extends javax.swing.JFrame {
              JasperReport reporte = null;
              Map parametro = new HashMap(); // MAPEO DE MAPA TIPO HASH
              parametro.put("txt_fecha", "'" + rfecha + "'");
-             parametro.put("txt_total", txttotalc);
+             parametro.put("txt_total", ventafoliotemp);
              parametro.put("txt_folio", folio);
-             System.out.println(" imprime variables folio:  " + folio + "FECHA:" + rfecha);
+             System.out.println(" imprime variables folio:  " + folio + "FECHA:" + rfecha+"totsl de venta "+ventafoliotemp);
              parametro.put("txtcajero", cajero.trim());
              String path = "C:\\Users\\agonzalez\\Documents\\GitHub\\Boneless\\src\\Plantillas/Ticket.jasper";
              //   String path = "C:\\Users\\"+user+"\\Documents\\NetBeansProjects\\Inventario\\src\\reportes\\Dia.jasper";
              reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
              JasperPrint jprint = JasperFillManager.fillReport(reporte, parametro, conn);
              JasperPrintManager.printReport(jprint, true);
-             /*            JasperViewer view = new JasperViewer(jprint, false);
-              view.setTitle("Corte"+fecha);
-              view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-              view.setVisible(true);
-             */
-          //  reiniciafolio();
-            // this.dispose();
+           
         } catch (JRException ex) {
             Logger.getLogger(Corte.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, ">>" + ex);
