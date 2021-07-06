@@ -42,6 +42,7 @@ public class Cobrar extends javax.swing.JFrame {
 //VARIABLES GLOBALES  
     String fecha = null;
     int folio; ///variable que almacena el folio cuando lo obtiene de sql 
+    int ventafoliotemp; ///variable que almacena el folio cuando lo obtiene de sql 
     public static String FPP, FPD, FPT;
     ResultSet rs;
     int count = 0;
@@ -62,7 +63,38 @@ public class Cobrar extends javax.swing.JFrame {
         String vc = vcantidad.replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", "");//dejameos solo los elementos"[^0-1-2-3-4-5-6-7-8-9-.00]"
 
     }
-     public void imagendebarra() {
+
+    public void obtenerfechaservidor() {//SELECT TIME_FORMAT(NOW(), "%r") AS Tiempo;
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+            st = conexion.createStatement();
+            st.executeUpdate("use prueba");
+
+            //Seleccionar datos
+            rs = st.executeQuery("select CURDATE()");
+            try {
+                while (rs.next()) {
+                    rfecha = rs.getString(1);
+                }
+
+                //   JOptionPane.showMessageDialog(this, "Son las "+rhora);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+                //      alertasql();
+            }
+        } catch (HeadlessException | NumberFormatException | SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            // alertasql();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            //alertasql();
+        }
+
+    }
+
+    public void imagendebarra() {
         try {
             setIconImage(new ImageIcon(getClass().getResource("/img/logo.png")).getImage());
         } catch (Exception e) {
@@ -125,13 +157,13 @@ public class Cobrar extends javax.swing.JFrame {
         //*****************************************************************************
 
         String fppesos = jtxtpesos.getText().replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", "");
-    double vfppesos = 0;
+        double vfppesos = 0;
         try {
-           vfppesos = Double.parseDouble(fppesos);
-     
-     } catch(Exception e){
-      }
-     
+            vfppesos = Double.parseDouble(fppesos);
+
+        } catch (Exception e) {
+        }
+
         String fpdolares = jtxtdolares.getText().replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", "");
         double vfpdolares = Double.parseDouble(fpdolares);
         String fptarjeta = jtxttarjeta.getText().replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", "");
@@ -480,33 +512,62 @@ public class Cobrar extends javax.swing.JFrame {
         }///fin del cliclo for perro
         if (n > 0) {
             
-            //imprimirticket();
+       imprimeticketventa();
             //imprimirpedido();
             Principal pr = new Principal();
             pr.aumentarfolio();
-            
+            //imprimirfolio
         }
     }
+    public void totalventafoliotemp(){
     
-     public void imprimeticket () {
-                
-        String user = System.getProperty("user.name");
-      //  double total = Double.parseDouble(Corte);
-        // File archivo = new File("C:\\Users\\" + user + "\\Desktop\\LEEME.txt");
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-           
-            String cajero = nombrecompleto;
-            ConexionMySQL con = new ConexionMySQL();
-            Connection conn = con.Conectar();
+            Class.forName("com.mysql.jdbc.Driver");
+            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+            st = conexion.createStatement();
+            st.executeUpdate("use prueba");
+            rs = st.executeQuery("SELECT sum(cantidad*precioventa) from ventas where folio ='"+folio+"' and fecha='"+rfecha+"'    ");
+            try {
+                while (rs.next()) {
+                    try {
+                       ventafoliotemp = rs.getInt(1);
+                    } catch (Exception e) {
+                        this.dispose();
+                    }
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage() + "><><");
+            }
+        } catch (HeadlessException | NumberFormatException | SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage() + "><");
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex + "xd");
+        }
+        System.out.println("-----");
+    }
+     public void imprimeticketventa () {
+         //necesito fecha y folio padre
+         totalventafoliotemp();
+         obtenerfechaservidor();
+         String user = System.getProperty("user.name");
+      //  double total = Double.parseDouble(Corte);
+         // File archivo = new File("C:\\Users\\" + user + "\\Desktop\\LEEME.txt");
+         try {
+             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+             String cajero = nombrecompleto;
+             ConexionMySQL con = new ConexionMySQL();
+             Connection conn = con.Conectar();
             System.out.println("cajero:" + cajero);
             JasperReport reporte = null;
             Map parametro = new HashMap(); // MAPEO DE MAPA TIPO HASH
-            parametro.put("txt_fecha", "'" + rfecha + "'");
-            //   System.out.println("fecha"+fecha);
+            parametro.put("txt_fecha", "'" + rfecha + "'");           
             parametro.put("txt_total", txttotalc);
+            parametro.put("txt_folio", folio);
+            System.out.println(" imprime variables folio y fecha"+folio+""+rfecha);
             parametro.put("txtcajero", cajero.trim());
-            String path = "C:\\Program Files\\PV\\src\\Plantillas\\Ticket.jasper";
+            String path = "C:\\Users\\agonzalez\\Documents\\GitHub\\Boneless\\src\\Plantillas/Ticket.jasper";
             //   String path = "C:\\Users\\"+user+"\\Documents\\NetBeansProjects\\Inventario\\src\\reportes\\Dia.jasper";
             reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
             JasperPrint jprint = JasperFillManager.fillReport(reporte, parametro, conn);

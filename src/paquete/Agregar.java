@@ -1,6 +1,11 @@
 package paquete;
 import java.awt.HeadlessException;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,6 +46,29 @@ public class Agregar extends javax.swing.JFrame {
     
     }
 
+    public void copiaimagen() {
+        //Seleccionamos el archivo
+       
+        //Verificamos la selección de un archivo 
+      
+            try {
+                //Definimos el destino del archivo, que será la carpeta Imágenes"
+                String Dest = System.getProperty("user.dir") + "/img/" + urlimagen;
+                System.out.println("Dest"+Dest);
+                Path Destino = Paths.get(Dest);
+                //Definimos el origen, que será el archivo seleccionado 
+               
+                Path Origen = Paths.get(Dest);
+                //Copiamos el nuevo archivo con la clase Files, reemplazamos si a existe uno igual .
+                Files.copy(Origen, Destino, REPLACE_EXISTING);
+                //Mostramos mensaje de confirmación de la copia realizada y la r ta.
+                JOptionPane.showMessageDialog(null, "El archivo fué copiado con 'xito a la carpeta: " + Dest);
+            } catch (IOException ex) {
+                Logger.getLogger(Agregar.class.getName()).log(Level.SEVERE, null, ex);
+
+            }
+        
+    }
     public void insertarcodigo() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SS");
         LocalDateTime date = LocalDateTime.now();
@@ -56,6 +84,8 @@ public class Agregar extends javax.swing.JFrame {
             int n = ps.executeUpdate();
             if (n > 0) {
                 JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
+                
+             //   copiaimagen();
             }
         } catch (HeadlessException | SQLException ex) {
             JOptionPane.showMessageDialog(rootPane, "Error en la base de datos 111");
@@ -278,6 +308,7 @@ public class Agregar extends javax.swing.JFrame {
                 txt_ruta.setText("...");
             } else {
                 urlimagen = fileName.getName().trim();
+                
             System.out.println("" + urlimagen);
                 txt_ruta.setText(urlimagen);
             }

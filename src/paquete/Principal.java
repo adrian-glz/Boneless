@@ -46,7 +46,7 @@ public class Principal extends javax.swing.JFrame {
         recuperacostodolar();       
         Bebidas();//llamamos el metodo de bebidas para llenar tablas
         Hamburguesas();//llamamos el metodo de Comidas para llenar Comidas
-       // Boneless();
+      Boneless();
         Tortasytacos();
         Antojos();
         tablafinal();
@@ -371,6 +371,22 @@ public class Principal extends javax.swing.JFrame {
         sumar();
     }
 
+     public void bonelessagregarfinal() {
+        DefaultTableModel model = (DefaultTableModel) jtfinal.getModel();
+
+        int filaseleccionada = jtboneless.getSelectedRow();//OBTIENES EL ELEMENTO DE LA TABLA
+        if (filaseleccionada >= 0) {
+            Object obj0 = (jtboneless.getValueAt(filaseleccionada, 0));///OBTIENES EL PRIMER FILA
+            Object obj1 = (jtboneless.getValueAt(filaseleccionada, 1));///OBTIENES EL PRIMER FILA
+            Object obj2 = (jtboneless.getValueAt(filaseleccionada, 2));//OBTIENES LA SEGUNDA FILA
+            combinar = "";
+          
+          String detalle = txt_notaboneless.getText().trim().toUpperCase();
+
+            model.addRow(new Object[]{obj0, obj1, obj2, 1, combinar, detalle});
+        }
+        sumar();
+    }
     public void agregarfinalbebidas() {
         DefaultTableModel model = (DefaultTableModel) jtfinal.getModel();
 
@@ -810,6 +826,76 @@ public class Principal extends javax.swing.JFrame {
         }
     }
 
+     public void Boneless() {
+       String data[][] = {};
+        String cabeza[] = {"Codigo", "Descripcion", "Precio", "Imagen"};///definimos nombre cada columna en encabezado
+        jtboneless.getTableHeader().setReorderingAllowed(false);//evitamos que no se pueda reordenar jtplatos 
+
+        md = new DefaultTableModel(data, cabeza) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                //   if (column != 4) {
+                if (column != 4) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        };
+        jtboneless.setModel(md); //igualamos en modelo en jplatos
+        JTableHeader th;
+        th = jtboneless.getTableHeader();
+        th.setFont(new java.awt.Font("tahoma", 0, 14));//seteamos fuente en el header
+        //<Centrar el encabezado de la tabla>
+        TableCellRenderer rendererFromHeader = jtboneless.getTableHeader().getDefaultRenderer();//
+        JLabel headerLabel = (JLabel) rendererFromHeader;
+        headerLabel.setHorizontalAlignment(JLabel.LEFT);
+        /////////////////////////////////////////////////////////>
+        jtboneless.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        jtboneless.getColumnModel().getColumn(0).setPreferredWidth(60); //Matrícula
+        jtboneless.getColumnModel().getColumn(0).setMaxWidth(300);
+        jtboneless.getColumnModel().getColumn(0).setMinWidth(60);
+
+        jtboneless.getColumnModel().getColumn(1).setPreferredWidth(180); //Matrícula
+        jtboneless.getColumnModel().getColumn(1).setMaxWidth(300);
+        jtboneless.getColumnModel().getColumn(1).setMinWidth(180);
+
+        jtboneless.getColumnModel().getColumn(2).setPreferredWidth(70); //Nombre
+        jtboneless.getColumnModel().getColumn(2).setMaxWidth(120);
+        jtboneless.getColumnModel().getColumn(2).setMinWidth(70);
+
+        jtboneless.getColumnModel().getColumn(3).setPreferredWidth(120); //Nombre
+        jtboneless.getColumnModel().getColumn(3).setMaxWidth(120);
+        jtboneless.getColumnModel().getColumn(3).setMinWidth(120);
+        jtboneless.setDefaultRenderer(Object.class, new Imgtabla());
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+            st = conexion.createStatement();
+            st.executeUpdate("use prueba");
+
+            //Seleccionar datos
+            rs = st.executeQuery("select `codigo`, `descripcion`, `precio`, `cantidad`, `categoria`, `imagen` from productos where categoria='boneless'");
+            md = (DefaultTableModel) jtboneless.getModel();
+            md.setRowCount(0);
+            try {
+                jtboneless.setRowHeight(40);
+                while (rs.next()) {
+                    String RUTA = "/img/" + rs.getString(6);
+                    Object[] fila = (new Object[]{rs.getString(1), rs.getString(2), "$" + rs.getString(3), new JLabel(new ImageIcon(getClass().getResource("" + RUTA + "")))});
+                    md.addRow(fila);
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+            }
+        } catch (HeadlessException | NumberFormatException | SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -848,6 +934,11 @@ public class Principal extends javax.swing.JFrame {
                 Ordenes2 = new javax.swing.JPanel();
                 jScrollPane6 = new javax.swing.JScrollPane();
                 jtboneless = new javax.swing.JTable();
+                editbuscar4 = new javax.swing.JLabel();
+                txt_boneless = new javax.swing.JTextField();
+                btnagregarajtfinal3 = new javax.swing.JButton();
+                txt_notaboneless = new javax.swing.JTextField();
+                jLabel12 = new javax.swing.JLabel();
                 Ordenes1 = new javax.swing.JPanel();
                 editbuscar3 = new javax.swing.JLabel();
                 txt_antojos = new javax.swing.JTextField();
@@ -1066,17 +1157,17 @@ public class Principal extends javax.swing.JFrame {
                                         .addGroup(jpfondoLayout.createSequentialGroup()
                                             .addComponent(editbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(txt_hamburguesa, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(txt_hamburguesa, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addContainerGap(16, Short.MAX_VALUE))
                             );
                             jpfondoLayout.setVerticalGroup(
                                 jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(jpfondoLayout.createSequentialGroup()
                                     .addGap(9, 9, 9)
-                                    .addGroup(jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(txt_hamburguesa, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
-                                        .addComponent(editbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addGroup(jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(txt_hamburguesa, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                                        .addComponent(editbuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addGroup(jpfondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1091,7 +1182,7 @@ public class Principal extends javax.swing.JFrame {
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                             .addComponent(jLabel6)
                                             .addGap(23, 23, 23)
-                                            .addComponent(txt_nota, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)))
+                                            .addComponent(txt_nota, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)))
                                     .addContainerGap())
                             );
 
@@ -1155,7 +1246,7 @@ public class Principal extends javax.swing.JFrame {
                                                 .addGroup(OrdenesLayout.createSequentialGroup()
                                                     .addComponent(editbuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                    .addComponent(txt_bebidas, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addComponent(txt_bebidas, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                         .addGroup(OrdenesLayout.createSequentialGroup()
                                             .addGap(339, 339, 339)
@@ -1166,13 +1257,13 @@ public class Principal extends javax.swing.JFrame {
                                 OrdenesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(OrdenesLayout.createSequentialGroup()
                                     .addGap(9, 9, 9)
-                                    .addGroup(OrdenesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(editbuscar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(txt_bebidas))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addGroup(OrdenesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(txt_bebidas, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                                        .addComponent(editbuscar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(btnagregarajtfinal1, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
+                                    .addComponent(btnagregarajtfinal1, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
                                     .addContainerGap())
                             );
 
@@ -1180,27 +1271,78 @@ public class Principal extends javax.swing.JFrame {
 
                             jtboneless.setModel(new javax.swing.table.DefaultTableModel(
                                 new Object [][] {
-                                    {null, null, null}
+
                                 },
                                 new String [] {
                                     "Title 1", "Title 2", "Title 3"
                                 }
                             ));
                             jtboneless.setRowHeight(32);
+                            jtboneless.addMouseListener(new java.awt.event.MouseAdapter() {
+                                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                    jtbonelessMouseClicked(evt);
+                                }
+                            });
                             jScrollPane6.setViewportView(jtboneless);
+
+                            editbuscar4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+                            editbuscar4.setText("Buscar:");
+
+                            txt_boneless.addKeyListener(new java.awt.event.KeyAdapter() {
+                                public void keyReleased(java.awt.event.KeyEvent evt) {
+                                    txt_bonelessKeyReleased(evt);
+                                }
+                            });
+
+                            btnagregarajtfinal3.setText("Agregar");
+                            btnagregarajtfinal3.addActionListener(new java.awt.event.ActionListener() {
+                                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                    btnagregarajtfinal3ActionPerformed(evt);
+                                }
+                            });
+
+                            jLabel12.setText("Anotaciones, Detalles,Nombre cliente:");
 
                             javax.swing.GroupLayout Ordenes2Layout = new javax.swing.GroupLayout(Ordenes2);
                             Ordenes2.setLayout(Ordenes2Layout);
                             Ordenes2Layout.setHorizontalGroup(
                                 Ordenes2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+                                .addGroup(Ordenes2Layout.createSequentialGroup()
+                                    .addContainerGap()
+                                    .addGroup(Ordenes2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                        .addGroup(Ordenes2Layout.createSequentialGroup()
+                                            .addComponent(editbuscar4, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(12, 12, 12)
+                                            .addComponent(txt_boneless, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(0, 0, Short.MAX_VALUE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Ordenes2Layout.createSequentialGroup()
+                                            .addGroup(Ordenes2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addGroup(Ordenes2Layout.createSequentialGroup()
+                                                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addGap(100, 100, 100))
+                                                .addComponent(txt_notaboneless, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                                            .addComponent(btnagregarajtfinal3)))
+                                    .addContainerGap())
                             );
                             Ordenes2Layout.setVerticalGroup(
                                 Ordenes2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(Ordenes2Layout.createSequentialGroup()
                                     .addContainerGap()
-                                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addContainerGap(402, Short.MAX_VALUE))
+                                    .addGroup(Ordenes2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(txt_boneless, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                                        .addComponent(editbuscar4, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)
+                                    .addGap(18, 18, 18)
+                                    .addGroup(Ordenes2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(btnagregarajtfinal3, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(Ordenes2Layout.createSequentialGroup()
+                                            .addComponent(jLabel12)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(txt_notaboneless, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGap(20, 20, 20))
                             );
 
                             panelmenu.addTab("Boneless & Alitas", Ordenes2);
@@ -1326,17 +1468,17 @@ public class Principal extends javax.swing.JFrame {
                                         .addGroup(Ordenes1Layout.createSequentialGroup()
                                             .addComponent(editbuscar3, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addGap(12, 12, 12)
-                                            .addComponent(txt_antojos, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(txt_antojos, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addContainerGap(16, Short.MAX_VALUE))
                             );
                             Ordenes1Layout.setVerticalGroup(
                                 Ordenes1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(Ordenes1Layout.createSequentialGroup()
                                     .addGap(9, 9, 9)
-                                    .addGroup(Ordenes1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(txt_antojos, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
-                                        .addComponent(editbuscar3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addGroup(Ordenes1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(txt_antojos, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                                        .addComponent(editbuscar3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addGroup(Ordenes1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1351,7 +1493,7 @@ public class Principal extends javax.swing.JFrame {
                                             .addComponent(jLabel10)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                             .addComponent(txt_notaantojo, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(btnagregarajtfinalantojos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addComponent(btnagregarajtfinalantojos, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE))
                                     .addContainerGap())
                             );
 
@@ -1503,8 +1645,8 @@ public class Principal extends javax.swing.JFrame {
                                         .addGroup(MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(txt_codigo1, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
                                             .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addGap(4, 4, 4)
-                                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(btnagregarhotdog, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
@@ -1646,20 +1788,18 @@ public class Principal extends javax.swing.JFrame {
                                                 .addGroup(Menu1Layout.createSequentialGroup()
                                                     .addComponent(editbuscar2, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addGap(12, 12, 12)
-                                                    .addComponent(txt_tortas, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addComponent(txt_tortas, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                     .addGap(16, 16, 16))
                             );
                             Menu1Layout.setVerticalGroup(
                                 Menu1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(Menu1Layout.createSequentialGroup()
-                                    .addGap(13, 13, 13)
-                                    .addGroup(Menu1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(Menu1Layout.createSequentialGroup()
-                                            .addGap(1, 1, 1)
-                                            .addComponent(editbuscar2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(txt_tortas, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGap(13, 13, 13)
+                                    .addGap(10, 10, 10)
+                                    .addGroup(Menu1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(editbuscar2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txt_tortas, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(7, 7, 7)
                                     .addGroup(Menu1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2059,6 +2199,20 @@ public class Principal extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnmonitorActionPerformed
 
+    private void txt_bonelessKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_bonelessKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_bonelessKeyReleased
+
+    private void btnagregarajtfinal3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarajtfinal3ActionPerformed
+        bonelessagregarfinal();
+    }//GEN-LAST:event_btnagregarajtfinal3ActionPerformed
+
+    private void jtbonelessMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbonelessMouseClicked
+        if (evt.getClickCount() == 2) {
+              bonelessagregarfinal();
+          }  
+    }//GEN-LAST:event_jtbonelessMouseClicked
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -2105,6 +2259,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btnagregarajtfinal;
     private javax.swing.JButton btnagregarajtfinal1;
     private javax.swing.JButton btnagregarajtfinal2;
+    private javax.swing.JButton btnagregarajtfinal3;
     private javax.swing.JButton btnagregarajtfinalantojos;
     private javax.swing.JToggleButton btnagregarhotdog;
     private javax.swing.JButton btncambiar;
@@ -2146,11 +2301,13 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel editbuscar1;
     private javax.swing.JLabel editbuscar2;
     private javax.swing.JLabel editbuscar3;
+    private javax.swing.JLabel editbuscar4;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -2182,11 +2339,13 @@ public class Principal extends javax.swing.JFrame {
     private java.awt.PopupMenu popupMenu1;
     private javax.swing.JTextField txt_antojos;
     private javax.swing.JTextField txt_bebidas;
+    private javax.swing.JTextField txt_boneless;
     private javax.swing.JTextField txt_codigo1;
     private javax.swing.JTextField txt_hamburguesa;
     public static javax.swing.JTextField txt_nota;
     public static javax.swing.JTextField txt_notaTortasytacos;
     public static javax.swing.JTextField txt_notaantojo;
+    public static javax.swing.JTextField txt_notaboneless;
     private javax.swing.JTextField txt_tortas;
     private javax.swing.JLabel txtcajero;
     private javax.swing.JLabel txtdolar;
