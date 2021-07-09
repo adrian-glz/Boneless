@@ -20,7 +20,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class Agregar extends javax.swing.JFrame {
+public class AgregarProducto extends javax.swing.JFrame {
 
     Statement st;
     PreparedStatement ps = null;
@@ -32,7 +32,7 @@ public class Agregar extends javax.swing.JFrame {
     double precio;
     String urlimagen;
 
-    public Agregar() {
+    public AgregarProducto() {
         initComponents();
         llenarcategorias();
         imagendebarra();
@@ -64,7 +64,7 @@ public class Agregar extends javax.swing.JFrame {
                 //Mostramos mensaje de confirmación de la copia realizada y la r ta.
                 JOptionPane.showMessageDialog(null, "El archivo fué copiado con 'xito a la carpeta: " + Dest);
             } catch (IOException ex) {
-                Logger.getLogger(Agregar.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(AgregarProducto.class.getName()).log(Level.SEVERE, null, ex);
 
             }
         
@@ -90,7 +90,7 @@ public class Agregar extends javax.swing.JFrame {
         } catch (HeadlessException | SQLException ex) {
             JOptionPane.showMessageDialog(rootPane, "Error en la base de datos 111");
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Agregar.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AgregarProducto.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -125,7 +125,7 @@ public class Agregar extends javax.swing.JFrame {
         } catch (HeadlessException | NumberFormatException | SQLException e) {
             JOptionPane.showMessageDialog(rootPane, e.getMessage()+"102");
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Agregar.class.getName()).log(Level.SEVERE, null, ex+"103");
+            Logger.getLogger(AgregarProducto.class.getName()).log(Level.SEVERE, null, ex+"103");
         }      
         }
     }
@@ -271,7 +271,7 @@ public class Agregar extends javax.swing.JFrame {
         getContentPane().add(btnbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 230, 100, 30));
 
         txt_ruta.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        txt_ruta.setText("Ruta....");
+        txt_ruta.setText(" ");
         getContentPane().add(txt_ruta, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 230, 160, 30));
 
         pack();
@@ -294,23 +294,25 @@ public class Agregar extends javax.swing.JFrame {
     }//GEN-LAST:event_btncancelarActionPerformed
 
     private void btnbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuscarActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-
-        FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("JPG & GIF Images", "jpg", "gif");
-        fileChooser.setFileFilter(imgFilter);
-
-        int result = fileChooser.showOpenDialog(this);
-        if (result != JFileChooser.CANCEL_OPTION) {
-
-            File fileName = fileChooser.getSelectedFile();
-            if ((fileName == null) || (fileName.getName().equals(""))) {
-                txt_ruta.setText("...");
-            } else {
-                urlimagen = fileName.getName().trim();
-                
-            System.out.println("" + urlimagen);
-                txt_ruta.setText(urlimagen);
+      JFileChooser file = new JFileChooser();
+        file.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        file.showOpenDialog(this);
+        File archivo = file.getSelectedFile();
+        //Verificamos la selección de un archivo
+        if (archivo != null) {
+            try {
+                String user = System.getProperty("user.name");
+                String Dest = "C:\\Users\\" + user + "\\Pictures\\img/" + archivo.getName();//destnull123.png
+                urlimagen = archivo.getName();
+                Path Destino = Paths.get(Dest);
+                String Orig = archivo.getPath();
+                Path Origen = Paths.get(Orig);
+                Files.copy(Origen, Destino, REPLACE_EXISTING);
+                txt_ruta.setText(urlimagen.toString());
+                System.out.println("completo"+Dest);
+            } catch (IOException ex) {
+                System.out.println("error");
+                Logger.getLogger(AgregarProducto.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_btnbuscarActionPerformed
@@ -329,20 +331,21 @@ public class Agregar extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Agregar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AgregarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Agregar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AgregarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Agregar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AgregarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Agregar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AgregarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Agregar().setVisible(true);
+                new AgregarProducto().setVisible(true);
             }
         });
     }

@@ -29,6 +29,7 @@ public class Configuracion extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         btnFondo1 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        usuarios = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Configuracion y ajustes Adicionales");
@@ -102,7 +103,16 @@ public class Configuracion extends javax.swing.JFrame {
         getContentPane().add(btnFondo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 80, 200, 60));
 
         jLabel2.setText("          ");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 200, 40, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 220, 40, -1));
+
+        usuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/users.png"))); // NOI18N
+        usuarios.setText("Usuarios");
+        usuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                usuariosActionPerformed(evt);
+            }
+        });
+        getContentPane().add(usuarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 150, 200, 60));
 
         pack();
         setLocationRelativeTo(null);
@@ -121,7 +131,7 @@ public class Configuracion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCambiarCosteoActionPerformed
 
     private void btnagregarproductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarproductoActionPerformed
-        Agregar a = new Agregar();
+        AgregarProducto a = new AgregarProducto();
         this.dispose();
         a.setVisible(true);
     }//GEN-LAST:event_btnagregarproductoActionPerformed
@@ -147,6 +157,10 @@ public class Configuracion extends javax.swing.JFrame {
     private void btnFondo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFondo1ActionPerformed
   
     }//GEN-LAST:event_btnFondo1ActionPerformed
+
+    private void usuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuariosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_usuariosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -194,5 +208,6 @@ public class Configuracion extends javax.swing.JFrame {
     private javax.swing.JButton btnagregarproducto;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton usuarios;
     // End of variables declaration//GEN-END:variables
 }

@@ -114,7 +114,7 @@ public class Login extends javax.swing.JFrame {
                 st.executeUpdate("use prueba;");
 
                 //Seleccionar datos
-                ResultSet rs = st.executeQuery("select * from usuarios  where usuario='" + txtusuario.getText().trim() + "' or id='" + txtusuario.getText().trim() + "'");
+                ResultSet rs = st.executeQuery("select * from usuarios  where usuario='" + txtusuario.getText().trim() +"'");
                 if (rs.next()) {   //Si existe el usuario
                     if (pass.equals(rs.getString("password"))) {    //Si la contraseña es correcta
                         nombrecompleto = rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4);

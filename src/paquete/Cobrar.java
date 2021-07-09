@@ -511,9 +511,10 @@ public class Cobrar extends javax.swing.JFrame {
             } 
         }///fin del cliclo for perro
         if (n > 0) {
-            
-     //  imprimeticketventa();
             imprimirpedido();
+            
+             imprimeticketventa();
+            
             Principal pr = new Principal();
             pr.aumentarfolio();
             //imprimirfolio

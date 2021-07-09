@@ -36,6 +36,8 @@ public class Principal extends javax.swing.JFrame {
     public static String rfecha;
     public static String rtxtnota;
     String combinar;
+     String user = System.getProperty("user.name");
+              
 
     public Principal() {
 
@@ -45,10 +47,10 @@ public class Principal extends javax.swing.JFrame {
         recuperafolio();
         recuperacostodolar();       
         Bebidas();//llamamos el metodo de bebidas para llenar tablas
-        Hamburguesas();//llamamos el metodo de Comidas para llenar Comidas
-      Boneless();
-        Tortasytacos();
-        Antojos();
+     //   Hamburguesas();//llamamos el metodo de Comidas para llenar Comidas
+   //   Boneless();
+    //    Tortasytacos();
+      //  Antojos();
         tablafinal();
         jtfinal.getTableHeader().setReorderingAllowed(false);///INHABILITA EL MOVER CABECERAS los titulos de la tabla jtfinal
     }
@@ -340,30 +342,7 @@ public class Principal extends javax.swing.JFrame {
             Object obj1 = (jtantojos.getValueAt(filaseleccionada, 1));///OBTIENES EL PRIMER FILA
             Object obj2 = (jtantojos.getValueAt(filaseleccionada, 2));//OBTIENES LA SEGUNDA FILA
             combinar = "";
-            if (ch13.isSelected()) {
-                combinar += "SIN CEBOLLA,";
-            }
-            if (ch15.isSelected()) {
-                combinar += "SIN CHILE,";
-            }
-            if (ch18.isSelected()) {
-                combinar += "SIN PEPINILLOS,";
-            }
-            if (ch14.isSelected()) {
-                combinar += "SIN TOMATE,";
-            }
-            if (ch16.isSelected()) {
-                combinar += "SIN MOSTAZA,";
-            }
-            if (ch17.isSelected()) {
-                combinar += "SIN KETCHUP.";
-            }
-            if (ch13.isSelected() && ch14.isSelected() && ch15.isSelected() && ch16.isSelected() && ch17.isSelected() && ch18.isSelected()) {
-                combinar = "SIN NADA";
-            }
-            if (ch19.isSelected() == false && ch14.isSelected() == false && ch15.isSelected() == false && ch16.isSelected() == false && ch17.isSelected() == false && ch18.isSelected() == false) {
-                combinar = "CON TODO";
-            }
+         
             String detalle = txt_notaantojo.getText().trim().toUpperCase();
 
             model.addRow(new Object[]{obj0, obj1, obj2, 1, combinar, detalle});
@@ -512,7 +491,11 @@ public class Principal extends javax.swing.JFrame {
             try {
                 jthamburguesas.setRowHeight(40);
                 while (rs.next()) {
-                    String RUTA = "/img/" + rs.getString(6);
+                      //  String Dest = "C:\\Users\\" + user + "\\Pictures/" + archivo.getName();//destnull123.png
+              String user = System.getProperty("user.name");
+              
+                    String RUTA =" C:\\Users\\" + user + "\\Pictures\\img/" + rs.getString(6);
+               //      String RUTA =" C:\\Users\\" + user + "\\Pictures\\img/" + rs.getString(6);
                     Object[] fila = (new Object[]{rs.getString(1), rs.getString(2), "$" + rs.getString(3), new JLabel(new ImageIcon(getClass().getResource("" + RUTA + "")))});
                     md.addRow(fila);
                 }
@@ -582,7 +565,7 @@ public class Principal extends javax.swing.JFrame {
             try {
                 jthotdogs.setRowHeight(40);
                 while (rs.next()) {
-                    String RUTA = "/img/" + rs.getString(6);
+                     String RUTA =" C:\\Users\\" + user + "\\Pictures\\img/" + rs.getString(6);
                     Object[] fila = (new Object[]{rs.getString(1), rs.getString(2), "$" + rs.getString(3), new JLabel(new ImageIcon(getClass().getResource("" + RUTA + "")))});
                     md.addRow(fila);
                 }
@@ -652,7 +635,7 @@ public class Principal extends javax.swing.JFrame {
             try {
                 jttortasytacos.setRowHeight(40);
                 while (rs.next()) {
-                    String RUTA = "/img/" + rs.getString(6);
+                     String RUTA =" C:\\Users\\" + user + "\\Pictures\\img/" + rs.getString(6);
                     Object[] fila = (new Object[]{rs.getString(1), rs.getString(2), "$" + rs.getString(3), new JLabel(new ImageIcon(getClass().getResource("" + RUTA + "")))});
                     md.addRow(fila);
                 }
@@ -722,7 +705,8 @@ public class Principal extends javax.swing.JFrame {
 
                 jtbebidas.setRowHeight(40);
                 while (rs.next()) {
-                    String RUTA = "/img/" + rs.getString(6);
+                     String RUTA ="C:\\Users\\" + user + "\\Pictures\\img/" + rs.getString(6).trim();
+                     System.out.println("><ruta"+RUTA);
                     Object[] fila = (new Object[]{rs.getString(1), rs.getString(2), "$" + rs.getString(3), new JLabel(new ImageIcon(getClass().getResource("" + RUTA + "")))});
                     md.addRow(fila);
                 }
@@ -811,7 +795,7 @@ public class Principal extends javax.swing.JFrame {
             try {
                 jtantojos.setRowHeight(40);
                 while (rs.next()) {
-                    String RUTA = "/img/" + rs.getString(6);
+                     String RUTA =" C:\\Users\\" + user + "\\Pictures\\img/" + rs.getString(6);
                     Object[] fila = (new Object[]{rs.getString(1), rs.getString(2), "$" + rs.getString(3), new JLabel(new ImageIcon(getClass().getResource("" + RUTA + "")))});
                     md.addRow(fila);
                 }
@@ -881,7 +865,7 @@ public class Principal extends javax.swing.JFrame {
             try {
                 jtboneless.setRowHeight(40);
                 while (rs.next()) {
-                    String RUTA = "/img/" + rs.getString(6);
+                     String RUTA =" C:\\Users\\" + user + "\\Pictures\\img/" + rs.getString(6);
                     Object[] fila = (new Object[]{rs.getString(1), rs.getString(2), "$" + rs.getString(3), new JLabel(new ImageIcon(getClass().getResource("" + RUTA + "")))});
                     md.addRow(fila);
                 }
@@ -949,13 +933,6 @@ public class Principal extends javax.swing.JFrame {
                     }};
                     btnsinnada1 = new javax.swing.JButton();
                     btncontodo1 = new javax.swing.JButton();
-                    jpingredentes1 = new javax.swing.JPanel();
-                    ch13 = new javax.swing.JCheckBox();
-                    ch14 = new javax.swing.JCheckBox();
-                    ch15 = new javax.swing.JCheckBox();
-                    ch16 = new javax.swing.JCheckBox();
-                    ch17 = new javax.swing.JCheckBox();
-                    ch18 = new javax.swing.JCheckBox();
                     jLabel10 = new javax.swing.JLabel();
                     txt_notaantojo = new javax.swing.JTextField();
                     btnagregarajtfinalantojos = new javax.swing.JButton();
@@ -1400,38 +1377,6 @@ public class Principal extends javax.swing.JFrame {
                                 }
                             });
 
-                            jpingredentes1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-                            jpingredentes1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-                            ch13.setText("SIN CEBOLLA");
-                            ch13.setPreferredSize(new java.awt.Dimension(90, 22));
-                            jpingredentes1.add(ch13, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 110, -1));
-
-                            ch14.setText("SIN TOMATE");
-                            ch14.setPreferredSize(new java.awt.Dimension(90, 22));
-                            jpingredentes1.add(ch14, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 60, 130, 20));
-
-                            ch15.setText("SIN CHILE");
-                            ch15.setPreferredSize(new java.awt.Dimension(90, 22));
-                            jpingredentes1.add(ch15, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 20, 102, -1));
-
-                            ch16.setText("SIN MOSTAZA");
-                            ch16.setPreferredSize(new java.awt.Dimension(90, 22));
-                            jpingredentes1.add(ch16, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 3, 120, 20));
-
-                            ch17.setText("SIN KETCHUP");
-                            ch17.setPreferredSize(new java.awt.Dimension(90, 22));
-                            ch17.addActionListener(new java.awt.event.ActionListener() {
-                                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                    ch17ActionPerformed(evt);
-                                }
-                            });
-                            jpingredentes1.add(ch17, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 20, 120, -1));
-
-                            ch18.setText("SIN PEPINILLOS");
-                            ch18.setPreferredSize(new java.awt.Dimension(90, 22));
-                            jpingredentes1.add(ch18, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 40, 140, -1));
-
                             jLabel10.setText("Anotaciones, Detalles,Nombre cliente:");
 
                             btnagregarajtfinalantojos.setText("Agregar");
@@ -1451,13 +1396,8 @@ public class Principal extends javax.swing.JFrame {
                                         .addGroup(Ordenes1Layout.createSequentialGroup()
                                             .addGroup(Ordenes1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                 .addGroup(Ordenes1Layout.createSequentialGroup()
-                                                    .addGroup(Ordenes1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                        .addGroup(Ordenes1Layout.createSequentialGroup()
-                                                            .addComponent(jpingredentes1, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
-                                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                                                        .addGroup(Ordenes1Layout.createSequentialGroup()
-                                                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                            .addGap(14, 14, 14)))
+                                                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addGap(14, 14, 14)
                                                     .addGroup(Ordenes1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                         .addComponent(btncontodo1, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
                                                         .addComponent(btnsinnada1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -1483,13 +1423,10 @@ public class Principal extends javax.swing.JFrame {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addGroup(Ordenes1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(Ordenes1Layout.createSequentialGroup()
-                                            .addGroup(Ordenes1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jpingredentes1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGroup(Ordenes1Layout.createSequentialGroup()
-                                                    .addComponent(btnsinnada1)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                    .addComponent(btncontodo1)))
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(btnsinnada1)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(btncontodo1)
+                                            .addGap(64, 64, 64)
                                             .addComponent(jLabel10)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                             .addComponent(txt_notaantojo, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -2185,10 +2122,6 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btncontodo1ActionPerformed
 
-    private void ch17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ch17ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ch17ActionPerformed
-
     private void btnagregarajtfinalantojosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarajtfinalantojosActionPerformed
         antojosagregarfinal();
     }//GEN-LAST:event_btnagregarajtfinalantojosActionPerformed
@@ -2227,13 +2160,13 @@ public class Principal extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Agregar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AgregarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Agregar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AgregarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Agregar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AgregarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Agregar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AgregarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -2276,12 +2209,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JCheckBox ch10;
     private javax.swing.JCheckBox ch11;
     private javax.swing.JCheckBox ch12;
-    private javax.swing.JCheckBox ch13;
-    private javax.swing.JCheckBox ch14;
-    private javax.swing.JCheckBox ch15;
-    private javax.swing.JCheckBox ch16;
-    private javax.swing.JCheckBox ch17;
-    private javax.swing.JCheckBox ch18;
     private javax.swing.JCheckBox ch19;
     private javax.swing.JCheckBox ch2;
     private javax.swing.JCheckBox ch20;
@@ -2326,7 +2253,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JPanel jpfondo;
     private javax.swing.JPanel jpingredentes;
-    private javax.swing.JPanel jpingredentes1;
     private javax.swing.JPanel jpingredentestortasytacos;
     private javax.swing.JTable jtantojos;
     private javax.swing.JTable jtbebidas;
