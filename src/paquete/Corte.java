@@ -64,11 +64,11 @@ public class Corte extends javax.swing.JFrame {
             java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
             st = conexion.createStatement();
             st.executeUpdate("use prueba");
-            rs = st.executeQuery("select sum(cantidad*precioventa) from ventas where caja='1'and fecha= '" + fecha + "'  ");
+            rs = st.executeQuery("select sum(cantidad * precioventa) from ventas where caja='1' and fecha= '" + fecha + "'  ");
             try {
                 while (rs.next()) {
                     Corte = rs.getString(1);
-                }               
+                }
                 if (Corte == (null)) {
                     Corte = "0";
                     System.out.println("Llego nulo");
@@ -76,7 +76,6 @@ public class Corte extends javax.swing.JFrame {
                 } else {
                     imprimeticketcorte();
                 }
- 
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
             }
@@ -89,24 +88,24 @@ public class Corte extends javax.swing.JFrame {
     }
 
     public void confirmar() {
-        
-        int result = JOptionPane.showConfirmDialog(null, "¿Se va a realizar el corte estas seguro, se reiniciara el contador de folio y no podras ingresar mas ventas a este dia?", "ATENCION",
+        corte();
+    /*    int result = JOptionPane.showConfirmDialog(null, "¿Quieres reiniciar el contador (Numero de folio)?", "ATENCION",
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (result == JOptionPane.YES_OPTION) {
-            corte();
+            reiniciafolio();
+            System.out.println("REINICIANDO");
         } else if (result == JOptionPane.NO_OPTION) {
-        }
+            System.out.println("SIN REINICIAR");
+        }*/
     }
 
     public void imprimeticketcorte() {
                 
         String user = System.getProperty("user.name");
         double total = Double.parseDouble(Corte);
-        // File archivo = new File("C:\\Users\\" + user + "\\Desktop\\LEEME.txt");
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String fecha = sdf.format(jtfecha.getDate());
-
             String cajero = nombrecompleto;
             ConexionMySQL con = new ConexionMySQL();
             Connection conn = con.Conectar();
@@ -114,25 +113,14 @@ public class Corte extends javax.swing.JFrame {
             JasperReport reporte = null;
             Map parametro = new HashMap(); // MAPEO DE MAPA TIPO HASH
             parametro.put("txt_fecha", "'" + fecha + "'");
-            //   System.out.println("fecha"+fecha);
             parametro.put("txt_total", total);
             parametro.put("txtcajero", cajero.trim());
             String path = "C:\\Program Files\\PV\\src\\Plantillas\\Corte.jasper";
-            //   String path = "C:\\Users\\"+user+"\\Documents\\NetBeansProjects\\Inventario\\src\\reportes\\Dia.jasper";
             reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
             JasperPrint jprint = JasperFillManager.fillReport(reporte, parametro, conn);
             JasperPrintManager.printReport(jprint, true);
-            /*            JasperViewer view = new JasperViewer(jprint, false);
-             view.setTitle("Corte"+fecha);
-             view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-             view.setVisible(true);
-             */
-            reiniciafolio();
-            // this.dispose();
         } catch (JRException ex) {
             Logger.getLogger(Corte.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, ">>" + ex);
-
         }
     }
 
@@ -265,14 +253,11 @@ public class Corte extends javax.swing.JFrame {
         if (jtfecha.getDate() == null) {
             JOptionPane.showMessageDialog(rootPane, "Ingrese una fecha");
         } else {
-            if (JOptionPane.showConfirmDialog(null, " Estas seguro de procesar con la fecha seleccionada ", " ATENCION!!! ",
+            if (JOptionPane.showConfirmDialog(null, " Seguro que deseas realizar el corte? ", " ATENCION!!! ",
                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 confirmar();
-
             }
-
         }
-
     }//GEN-LAST:event_btngenerarcorteActionPerformed
 
     private void btnvolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnvolverActionPerformed
@@ -336,11 +321,7 @@ public class Corte extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Corte.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
+    
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

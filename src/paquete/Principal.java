@@ -1,8 +1,6 @@
 package paquete;
 
 import java.awt.HeadlessException;
-import java.awt.Image;
-import java.awt.event.KeyEvent;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -45,12 +43,13 @@ public class Principal extends javax.swing.JFrame {
         obtenerfolio();
         imagendebarra();
         recuperafolio();
-        recuperacostodolar();       
-        Bebidas();//llamamos el metodo de bebidas para llenar tablas
-     //   Hamburguesas();//llamamos el metodo de Comidas para llenar Comidas
-   //   Boneless();
-    //    Tortasytacos();
-      //  Antojos();
+        recuperacostodolar();
+        Bebidas();
+        //llamamos el metodo de bebidas para llenar tablas
+        Hamburguesas();//llamamos el metodo de Comidas para llenar Comidas
+        Boneless();
+        Tortasytacos();
+        Antojos();
         tablafinal();
         jtfinal.getTableHeader().setReorderingAllowed(false);///INHABILITA EL MOVER CABECERAS los titulos de la tabla jtfinal
     }
@@ -59,6 +58,7 @@ public class Principal extends javax.swing.JFrame {
         try {
             setIconImage(new ImageIcon(getClass().getResource("/img/logo.png")).getImage());
         } catch (Exception e) {
+            
         }
     }
 
@@ -76,7 +76,6 @@ public class Principal extends javax.swing.JFrame {
                 while (rs.next()) {
                     rfecha = rs.getString(1);
                 }
-
                 //   JOptionPane.showMessageDialog(this, "Son las "+rhora);
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
@@ -186,34 +185,7 @@ public class Principal extends javax.swing.JFrame {
 
     }
 
-    public void insertaventapagos() {
-
-        Statement e;
-        PreparedStatement pse = null;
-        double numarticulo = 1;
-        int n = 0;
-        double total = Double.parseDouble(txttotal.getText().replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", ""));
-        //System.out.println("double perro>>>" + total);
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
-            Statement ste = conexion.createStatement();
-            ste.executeUpdate("use prueba;");
-            pse = conexion.prepareStatement("insert into `ventaspagos`(`fecha`,`Sucursal`,  `Caja`, `Folio`, `Importe`, `Clavepago`, `NumeroTarjeta`, `NombreCliente`, `DireccionCliente`, `TelefonoCliente`, `CorreoCliente`) \n"
-                    + "VALUES ('" + rfecha + "','1','1','" + folio + "','" + total + "','01','0000','NULL','NULL','NULL','NULL')");
-            numarticulo = numarticulo + 1;
-            n = pse.executeUpdate();
-        } catch (HeadlessException | SQLException ex) {
-            JOptionPane.showMessageDialog(rootPane, "Error en la base de datos903" + ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if (n > 0) {
-            //   JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
-            insertapedido();
-        }
-    }
-
+ 
    
     public void insertapedido() {
 
@@ -350,7 +322,7 @@ public class Principal extends javax.swing.JFrame {
         sumar();
     }
 
-     public void bonelessagregarfinal() {
+    public void bonelessagregarfinal() {
         DefaultTableModel model = (DefaultTableModel) jtfinal.getModel();
 
         int filaseleccionada = jtboneless.getSelectedRow();//OBTIENES EL ELEMENTO DE LA TABLA
@@ -359,13 +331,14 @@ public class Principal extends javax.swing.JFrame {
             Object obj1 = (jtboneless.getValueAt(filaseleccionada, 1));///OBTIENES EL PRIMER FILA
             Object obj2 = (jtboneless.getValueAt(filaseleccionada, 2));//OBTIENES LA SEGUNDA FILA
             combinar = "";
-          
-          String detalle = txt_notaboneless.getText().trim().toUpperCase();
+
+            String detalle = txt_notaboneless.getText().trim().toUpperCase();
 
             model.addRow(new Object[]{obj0, obj1, obj2, 1, combinar, detalle});
         }
         sumar();
     }
+
     public void agregarfinalbebidas() {
         DefaultTableModel model = (DefaultTableModel) jtfinal.getModel();
 
@@ -491,11 +464,12 @@ public class Principal extends javax.swing.JFrame {
             try {
                 jthamburguesas.setRowHeight(40);
                 while (rs.next()) {
-                      //  String Dest = "C:\\Users\\" + user + "\\Pictures/" + archivo.getName();//destnull123.png
-              String user = System.getProperty("user.name");
-              
-                    String RUTA =" C:\\Users\\" + user + "\\Pictures\\img/" + rs.getString(6);
-               //      String RUTA =" C:\\Users\\" + user + "\\Pictures\\img/" + rs.getString(6);
+                    //  String Dest = "C:\\Users\\" + user + "\\Pictures/" + archivo.getName();//destnull123.png
+                    String user = System.getProperty("user.name");
+
+                    String RUTA = "/imgcatalogo/" + rs.getString(6).trim();
+
+//      String RUTA ="/imgcatalogo/" + rs.getString(6).trim();
                     Object[] fila = (new Object[]{rs.getString(1), rs.getString(2), "$" + rs.getString(3), new JLabel(new ImageIcon(getClass().getResource("" + RUTA + "")))});
                     md.addRow(fila);
                 }
@@ -511,7 +485,7 @@ public class Principal extends javax.swing.JFrame {
     }
 
     public void Hotdogs() {
-       String data[][] = {};
+        String data[][] = {};
         String cabeza[] = {"Codigo", "Descripcion", "Precio", "Imagen"};///definimos nombre cada columna en encabezado
         jthotdogs.getTableHeader().setReorderingAllowed(false);//evitamos que no se pueda reordenar jtplatos 
 
@@ -565,7 +539,7 @@ public class Principal extends javax.swing.JFrame {
             try {
                 jthotdogs.setRowHeight(40);
                 while (rs.next()) {
-                     String RUTA =" C:\\Users\\" + user + "\\Pictures\\img/" + rs.getString(6);
+                    String RUTA = "/imgcatalogo/" + rs.getString(6).trim();
                     Object[] fila = (new Object[]{rs.getString(1), rs.getString(2), "$" + rs.getString(3), new JLabel(new ImageIcon(getClass().getResource("" + RUTA + "")))});
                     md.addRow(fila);
                 }
@@ -579,9 +553,9 @@ public class Principal extends javax.swing.JFrame {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void Tortasytacos() {
-       String data[][] = {};
+        String data[][] = {};
         String cabeza[] = {"Codigo", "Descripcion", "Precio", "Imagen"};///definimos nombre cada columna en encabezado
         jttortasytacos.getTableHeader().setReorderingAllowed(false);//evitamos que no se pueda reordenar jtplatos 
 
@@ -635,7 +609,7 @@ public class Principal extends javax.swing.JFrame {
             try {
                 jttortasytacos.setRowHeight(40);
                 while (rs.next()) {
-                     String RUTA =" C:\\Users\\" + user + "\\Pictures\\img/" + rs.getString(6);
+                    String RUTA = "/imgcatalogo/" + rs.getString(6).trim();
                     Object[] fila = (new Object[]{rs.getString(1), rs.getString(2), "$" + rs.getString(3), new JLabel(new ImageIcon(getClass().getResource("" + RUTA + "")))});
                     md.addRow(fila);
                 }
@@ -693,6 +667,8 @@ public class Principal extends javax.swing.JFrame {
         jtbebidas.getColumnModel().getColumn(3).setMinWidth(120);
         jtbebidas.setDefaultRenderer(Object.class, new Imgtabla());
         try {
+            //MEMO HERDEZ PACITO
+
             Class.forName("com.mysql.jdbc.Driver");
             java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
             st = conexion.createStatement();
@@ -705,8 +681,8 @@ public class Principal extends javax.swing.JFrame {
 
                 jtbebidas.setRowHeight(40);
                 while (rs.next()) {
-                     String RUTA ="C:\\Users\\" + user + "\\Pictures\\img/" + rs.getString(6).trim();
-                     System.out.println("><ruta"+RUTA);
+                    String RUTA = "/imgcatalogo/" + rs.getString(6).trim();
+                    //       System.out.println("><ruta"+RUTA);
                     Object[] fila = (new Object[]{rs.getString(1), rs.getString(2), "$" + rs.getString(3), new JLabel(new ImageIcon(getClass().getResource("" + RUTA + "")))});
                     md.addRow(fila);
                 }
@@ -741,7 +717,7 @@ public class Principal extends javax.swing.JFrame {
     }
 
     public void Antojos() {
-       String data[][] = {};
+        String data[][] = {};
         String cabeza[] = {"Codigo", "Descripcion", "Precio", "Imagen"};///definimos nombre cada columna en encabezado
         jtantojos.getTableHeader().setReorderingAllowed(false);//evitamos que no se pueda reordenar jtplatos 
 
@@ -795,7 +771,7 @@ public class Principal extends javax.swing.JFrame {
             try {
                 jtantojos.setRowHeight(40);
                 while (rs.next()) {
-                     String RUTA =" C:\\Users\\" + user + "\\Pictures\\img/" + rs.getString(6);
+                    String RUTA = "/imgcatalogo/" + rs.getString(6).trim();
                     Object[] fila = (new Object[]{rs.getString(1), rs.getString(2), "$" + rs.getString(3), new JLabel(new ImageIcon(getClass().getResource("" + RUTA + "")))});
                     md.addRow(fila);
                 }
@@ -810,8 +786,8 @@ public class Principal extends javax.swing.JFrame {
         }
     }
 
-     public void Boneless() {
-       String data[][] = {};
+    public void Boneless() {
+        String data[][] = {};
         String cabeza[] = {"Codigo", "Descripcion", "Precio", "Imagen"};///definimos nombre cada columna en encabezado
         jtboneless.getTableHeader().setReorderingAllowed(false);//evitamos que no se pueda reordenar jtplatos 
 
@@ -865,7 +841,7 @@ public class Principal extends javax.swing.JFrame {
             try {
                 jtboneless.setRowHeight(40);
                 while (rs.next()) {
-                     String RUTA =" C:\\Users\\" + user + "\\Pictures\\img/" + rs.getString(6);
+                    String RUTA = "/imgcatalogo/" + rs.getString(6).trim();
                     Object[] fila = (new Object[]{rs.getString(1), rs.getString(2), "$" + rs.getString(3), new JLabel(new ImageIcon(getClass().getResource("" + RUTA + "")))});
                     md.addRow(fila);
                 }

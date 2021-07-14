@@ -28,6 +28,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import static paquete.Login.nombrecompleto;
 import static paquete.Principal.jtfinal;
+import static paquete.Principal.numerocajero;
 import static paquete.Principal.rcambio;
 import static paquete.Principal.rfecha;
 import static paquete.Principal.rhora;
@@ -233,6 +234,9 @@ public class Cobrar extends javax.swing.JFrame {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jtxttarjetaKeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtxttarjetaKeyTyped(evt);
+            }
         });
         getContentPane().add(jtxttarjeta, new org.netbeans.lib.awtextra.AbsoluteConstraints(214, 154, 165, 40));
         jtxttarjeta.getAccessibleContext().setAccessibleName("");
@@ -313,7 +317,7 @@ public class Cobrar extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel5.setText("FALTAN");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 280, 60, 30));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 290, 60, 30));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel6.setText("MXN");
@@ -336,7 +340,7 @@ public class Cobrar extends javax.swing.JFrame {
         txtcr.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         txtcr.setForeground(new java.awt.Color(245, 2, 2));
         txtcr.setText("$ 0.00");
-        getContentPane().add(txtcr, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 280, 185, 30));
+        getContentPane().add(txtcr, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 290, 185, 30));
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel9.setText("CAMBIO");
@@ -397,17 +401,18 @@ public class Cobrar extends javax.swing.JFrame {
         SimpleDateFormat dd = new SimpleDateFormat("YYYY/MM/dd");
         SimpleDateFormat ddd = new SimpleDateFormat("HH:mm");
 
-        
+            String cajero = nombrecompleto;
         Statement e;
         PreparedStatement pse = null;
         double numarticulo = 1;
        
         
         int n = 0;
-        System.out.println("xxx1xxx");
+    //    System.out.println("xxx1xxx");
         for (int x = 0; x < jtfinal.getRowCount(); x++) {
 
             try {
+                
                 Class.forName("com.mysql.jdbc.Driver");
                 java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
                 Statement ste = conexion.createStatement();
@@ -418,8 +423,8 @@ public class Cobrar extends javax.swing.JFrame {
                 int vcantidad = ((int) jtfinal.getValueAt(x, 3));///obtienes el valor de la cantidad
                 String vprecioformateado = vprecio.replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", "");//dejameos solo los elementos"[^0-1-2-3-4-5-6-7-8-9-.00]"
                 double vprecioparseado = Double.parseDouble(vprecioformateado);
-                pse = conexion.prepareStatement("INSERT INTO ventas ( `fecha`,`Sucursal`, `Folio`, `Caja`, `Articulo`, `Codigo`, `Grupo`, `Cantidad`, `Precioventa`, `Vendedor`, `Cajero`, `Claveventa`, `Hora`) "
-                        + "VALUES ( '" + rfecha + "','1','" + folio + "','1','" + numarticulo + "','" + vcodigo + "','00','" + vcantidad + "','" + vprecioformateado + "','1111','00','777','" + rhora + "')");
+                pse = conexion.prepareStatement("INSERT INTO ventas ( `fecha`,`Sucursal`, `Folio`, `Caja`, `Articulo`, `Codigo`, `Grupo`, `Cantidad`, `Precioventa`, `Vendedor`, `Cajero`, `Claveventa`, `Hora`) "//13
+                        + "VALUES ( '" + rfecha + "','1','" + folio + "','1','" + numarticulo + "','" + vcodigo + "','00','" + vcantidad + "','" + vprecioformateado + "','"+ cajero+"','"+ cajero+"','1','" + rhora + "')");
              /*   System.out.println("INSERT INTO ventas ( `fecha`,`Sucursal`, `Folio`, `Caja`, `Articulo`, `Codigo`, `Grupo`, `Cantidad`, `Precioventa`, `Vendedor`, `Cajero`, `Claveventa`, `Hora`) "
                         + "VALUES ( '" + rfecha + "','1','" + folio + "','1','" + numarticulo + "','" + vcodigo + "','00','" + vcantidad + "','" + vprecioformateado + "','1111','00','777','" + rhora + "')");
                 */
@@ -456,7 +461,8 @@ public class Cobrar extends javax.swing.JFrame {
             Statement ste = conexion.createStatement();
             ste.executeUpdate("use prueba;");
             pse = conexion.prepareStatement("insert into `ventaspagos`(`fecha`,`Sucursal`,  `Caja`, `Folio`, `Importe`, `Clavepago`, `NumeroTarjeta`, `NombreCliente`, `DireccionCliente`, `TelefonoCliente`, `CorreoCliente`,`fpp`,`fpd`,`fpt`,`Cambio`) \n"
-                    + "VALUES ('" + rfecha + "','1','1','" + folio + "','" + total + "','01','0000','NULL','NULL','NULL','NULL','" + jtxtpesos.getText().trim() + "','" + jtxtdolares.getText().trim() + "','" + jtxttarjeta.getText().trim() + "','" + txtc.getText().trim() + "')");
+                    + "VALUES ('" + rfecha + "','1','1','" + folio + "','" + total + "','1','0000','NULL','NULL','NULL','NULL','" + jtxtpesos.getText().trim() + "','" + jtxtdolares.getText().trim() + "','" + jtxttarjeta.getText().trim() + "','" + txtc.getText().trim() + "')");
+            System.out.println("*****"+numerocajero);
             numarticulo = numarticulo + 1;
             n = pse.executeUpdate();
         } catch (HeadlessException | SQLException ex) {
@@ -481,7 +487,7 @@ public class Cobrar extends javax.swing.JFrame {
 
         PreparedStatement p = null;
         double numarticulo = 1;
-       // obtenerfolio();
+        // obtenerfolio();
         int n = 0;
         for (int x = 0; x < jtfinal.getRowCount(); x++) {
 
@@ -508,30 +514,31 @@ public class Cobrar extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(rootPane, "Error en la base de datos 902" + ex);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-            } 
+            }
         }///fin del cliclo for perro
         if (n > 0) {
             imprimirpedido();
-            
-             imprimeticketventa();
-            
+
+            imprimeticketventa();
+
             Principal pr = new Principal();
             pr.aumentarfolio();
             //imprimirfolio
         }
     }
-    public void totalventafoliotemp(){
-    
+
+    public void totalventafoliotemp() {
+
         try {
             Class.forName("com.mysql.jdbc.Driver");
             java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
             st = conexion.createStatement();
             st.executeUpdate("use prueba");
-            rs = st.executeQuery("SELECT sum(cantidad*precioventa) from ventas where folio ='"+folio+"' and fecha='"+rfecha+"'    ");
+            rs = st.executeQuery("SELECT sum(cantidad*precioventa) from ventas where folio ='" + folio + "' and fecha='" + rfecha + "'    ");
             try {
                 while (rs.next()) {
                     try {
-                       ventafoliotemp = rs.getInt(1);
+                        ventafoliotemp = rs.getInt(1);
                     } catch (Exception e) {
                         this.dispose();
                     }
@@ -547,59 +554,56 @@ public class Cobrar extends javax.swing.JFrame {
         }
         System.out.println("-----");
     }
-    
-     public void imprimeticketventa () {
-         //necesito fecha y folio padre
-         totalventafoliotemp();
-         obtenerfechaservidor();
-         String user = System.getProperty("user.name");
-      //  double total = Double.parseDouble(Corte);
-         // File archivo = new File("C:\\Users\\" + user + "\\Desktop\\LEEME.txt");
-         try {
-             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-             String cajero = nombrecompleto;
-             ConexionMySQL con = new ConexionMySQL();
-             Connection conn = con.Conectar();
-             System.out.println("cajero:" + cajero);
-             JasperReport reporte = null;
-             Map parametro = new HashMap(); // MAPEO DE MAPA TIPO HASH
-             parametro.put("txt_fecha", "'" + rfecha + "'");
-             parametro.put("txt_total", ventafoliotemp);
-             parametro.put("txt_folio", folio);
-             System.out.println(" imprime variables folio:  " + folio + "FECHA:" + rfecha+"totsl de venta "+ventafoliotemp);
-             parametro.put("txt_cajero", cajero.trim());
-             String path = "C:\\Users\\agonzalez\\Documents\\GitHub\\Boneless\\src\\Plantillas/Ticket.jasper";
-             //   String path = "C:\\Users\\"+user+"\\Documents\\NetBeansProjects\\Inventario\\src\\reportes\\Dia.jasper";
-             reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
-             JasperPrint jprint = JasperFillManager.fillReport(reporte, parametro, conn);
-             JasperPrintManager.printReport(jprint, true);
-           
+    public void imprimeticketventa() {
+        //necesito fecha y folio padre
+        totalventafoliotemp();
+        obtenerfechaservidor();
+        String user = System.getProperty("user.name");
+      //  double total = Double.parseDouble(Corte);
+        // File archivo = new File("C:\\Users\\" + user + "\\Desktop\\LEEME.txt");
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+            String cajero = nombrecompleto;
+            ConexionMySQL con = new ConexionMySQL();
+            Connection conn = con.Conectar();
+            System.out.println("cajero:" + cajero);
+            JasperReport reporte = null;
+            Map parametro = new HashMap(); // MAPEO DE MAPA TIPO HASH
+            parametro.put("txt_fecha", "'" + rfecha + "'");
+            parametro.put("txt_total", ventafoliotemp);
+            parametro.put("txt_folio", folio);
+            System.out.println(" imprime variables folio:  " + folio + "FECHA:" + rfecha + "totsl de venta " + ventafoliotemp);
+            parametro.put("txt_cajero", cajero.trim());
+            String path = "C:\\Users\\agonzalez\\Documents\\GitHub\\Boneless\\src\\Plantillas/Ticket.jasper";
+            //   String path = "C:\\Users\\"+user+"\\Documents\\NetBeansProjects\\Inventario\\src\\reportes\\Dia.jasper";
+            reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametro, conn);
+            JasperPrintManager.printReport(jprint, true);
         } catch (JRException ex) {
             Logger.getLogger(Corte.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, ">>" + ex);
-
         }
     }
-     public void imprimirpedido () {
-       try {
-              ConexionMySQL con = new ConexionMySQL();
-             Connection conn = con.Conectar();
-             JasperReport reporte = null;
-             Map parametro = new HashMap(); // MAPEO DE MAPA TIPO HASH
-             parametro.put("txt_fecha", "'" + rfecha + "'");
-             parametro.put("txt_folio", folio);
-             System.out.println(" imprime variables folio:  " + folio + "FECHA:" + rfecha+"totsl de venta "+ventafoliotemp);
-              String path = "C:\\Users\\agonzalez\\Documents\\GitHub\\Boneless\\src\\Plantillas/Ticketpedido.jasper";
-             //   String path = "C:\\Users\\"+user+"\\Documents\\NetBeansProjects\\Inventario\\src\\reportes\\Dia.jasper";
-             reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
-             JasperPrint jprint = JasperFillManager.fillReport(reporte, parametro, conn);
-             JasperPrintManager.printReport(jprint, true);
-           
+
+    public void imprimirpedido() {
+        try {
+            ConexionMySQL con = new ConexionMySQL();
+            Connection conn = con.Conectar();
+            JasperReport reporte = null;
+            Map parametro = new HashMap(); // MAPEO DE MAPA TIPO HASH
+            parametro.put("txt_fecha", "'" + rfecha + "'");
+            parametro.put("txt_folio", folio);
+            System.out.println(" imprime variables folio:  " + folio + "FECHA:" + rfecha + "totsl de venta " + ventafoliotemp);
+            String path = "C:\\Users\\agonzalez\\Documents\\GitHub\\Boneless\\src\\Plantillas/Ticketpedido.jasper";
+            //   String path = "C:\\Users\\"+user+"\\Documents\\NetBeansProjects\\Inventario\\src\\reportes\\Dia.jasper";
+            reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametro, conn);
+            JasperPrintManager.printReport(jprint, true);
         } catch (JRException ex) {
             Logger.getLogger(Corte.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, ">>" + ex);
-
         }
     }
     private void jtxtpesosFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtpesosFocusLost
@@ -642,6 +646,10 @@ public class Cobrar extends javax.swing.JFrame {
             calcularcambio();
         }
     }//GEN-LAST:event_jtxttarjetaFocusLost
+
+    private void jtxttarjetaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtxttarjetaKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtxttarjetaKeyTyped
 
     public static void main(String args[]) {
         try {

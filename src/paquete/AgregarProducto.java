@@ -47,11 +47,7 @@ public class AgregarProducto extends javax.swing.JFrame {
     }
 
     public void copiaimagen() {
-        //Seleccionamos el archivo
-       
-        //Verificamos la selección de un archivo 
-      
-            try {
+                 try {
                 //Definimos el destino del archivo, que será la carpeta Imágenes"
                 String Dest = System.getProperty("user.dir") + "/img/" + urlimagen;
                 System.out.println("Dest"+Dest);
@@ -65,9 +61,7 @@ public class AgregarProducto extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "El archivo fué copiado con 'xito a la carpeta: " + Dest);
             } catch (IOException ex) {
                 Logger.getLogger(AgregarProducto.class.getName()).log(Level.SEVERE, null, ex);
-
             }
-        
     }
     public void insertarcodigo() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SS");
@@ -94,35 +88,34 @@ public class AgregarProducto extends javax.swing.JFrame {
         }
     }
 
-    public void comprobarcodigo(){
-       String x=txtcodigo.getText();
-        if(x.length()<1){ 
+    public void comprobarcodigo() {
+        String x = txtcodigo.getText();
+        if (x.length() < 1) {
             System.out.println(txtcodigo.getText());
-           JOptionPane.showMessageDialog(null, "Teclea el codigo", "Alerta", JOptionPane.WARNING_MESSAGE);                
-                 
-        }else{
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
-            st = conexion.createStatement(); 
-            st.executeUpdate("use prueba");
-            rs = st.executeQuery("select codigo  from productos where codigo='" + txtcodigo.getText()  + "'");
-           
-            boolean friv = rs.next();
-            String s1 = Boolean.toString(friv);
+            JOptionPane.showMessageDialog(null, "Teclea el codigo", "Alerta", JOptionPane.WARNING_MESSAGE);
+        } else {
             try {
-                System.out.println("><><>"+s1);
-                if (s1.equals("true")) {
-                    JOptionPane.showMessageDialog(null, "UPPS!!  el codigo ----> " + txtcodigo.getText() + "  Ya existe ", "Alerta", JOptionPane.WARNING_MESSAGE);                
-                    while (rs.next()) {
+                Class.forName("com.mysql.jdbc.Driver");
+                java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+                st = conexion.createStatement();
+                st.executeUpdate("use prueba");
+                rs = st.executeQuery("select codigo  from productos where codigo='" + txtcodigo.getText() + "'");
+
+                boolean friv = rs.next();
+                String s1 = Boolean.toString(friv);
+                try {
+                    System.out.println("><><>" + s1);
+                    if (s1.equals("true")) {
+                        JOptionPane.showMessageDialog(null, "UPPS!!  el codigo ----> " + txtcodigo.getText() + "  Ya existe ", "Alerta", JOptionPane.WARNING_MESSAGE);
+                        while (rs.next()) {
+                        }
+                    } else {
+                        compruebacampos();
                     }
-                } else {
-                     compruebacampos();                  
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(rootPane, "101" + ex.getMessage());
                 }
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(rootPane,"101"+ ex.getMessage());
-            }
-        } catch (HeadlessException | NumberFormatException | SQLException e) {
+            } catch (HeadlessException | NumberFormatException | SQLException e) {
             JOptionPane.showMessageDialog(rootPane, e.getMessage()+"102");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(AgregarProducto.class.getName()).log(Level.SEVERE, null, ex+"103");

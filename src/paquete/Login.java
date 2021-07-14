@@ -2,6 +2,7 @@ package paquete;
 
 import java.awt.HeadlessException;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -9,6 +10,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import static paquete.Principal.rfecha;
+import static paquete.Principal.rhora;
 
 /**
  *
@@ -17,10 +20,15 @@ import javax.swing.JOptionPane;
 public class Login extends javax.swing.JFrame {
 
     public static String nombrecompleto = "";
-
+    Statement st;
+    ResultSet rs;
+    String fechaUltimaVenta="";
+    String fechaActual="";
     public Login() {
+        
         initComponents();
         imagendebarra();
+        IniciaDia();
     }
 
     @SuppressWarnings("unchecked")
@@ -96,6 +104,104 @@ public class Login extends javax.swing.JFrame {
         try {
             setIconImage(new ImageIcon(getClass().getResource("/img/logo.png")).getImage());
         } catch (Exception e) {
+        
+        
+        }
+    }
+    
+    public void reiniciafolio() {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+            Statement st = conexion.createStatement();
+            st.executeUpdate("use prueba;");
+
+            PreparedStatement ps = conexion.prepareStatement("update  folios  set FOLIO = '1' where `caja`=1");
+
+            int n = ps.executeUpdate();
+            if (n > 0) {
+                //   JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
+                st.close();
+
+                //  limpiarcampos();
+            }
+        } catch (HeadlessException | SQLException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Error en la base de datos, no se pudo guardar el folio" + ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void ObtenerFechaActual() {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+            st = conexion.createStatement();
+            st.executeUpdate("use prueba");
+
+            //Seleccionar datos
+            rs = st.executeQuery("select CURDATE()");
+            try {
+                while (rs.next()) {
+                    fechaActual = rs.getString(1);
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+            }
+        } catch (HeadlessException | NumberFormatException | SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            //alertasql();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            //alertasql();
+        }
+    }
+
+    public void ObtenerFechaUltimaVenta() {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
+            st = conexion.createStatement();
+            st.executeUpdate("use prueba");
+
+            //Seleccionar datos
+            
+            rs = st.executeQuery("SELECT max(fecha) from ventas");
+            try {
+                while (rs.next()) {
+               //     fechaUltimaVenta = rs.getString(1);                   
+                    //System.out.println(">>>>>>>>>>>>>>"+rs.getString(1));   
+                   
+                    fechaUltimaVenta =rs.getString(1);
+                  
+                }
+
+                //   JOptionPane.showMessageDialog(this, "Son las "+rhora);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+                //      alertasql();
+            }
+        } catch (HeadlessException | NumberFormatException | SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            //alertasql();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            //alertasql();
+        }
+    }
+
+    public void IniciaDia() {
+        ObtenerFechaActual();
+        ObtenerFechaUltimaVenta();
+        System.out.println("ULTIMAVENTA " + fechaUltimaVenta);
+        System.out.println("<COMPARA>");
+        System.out.println("FECHAACTUAL " + fechaActual);
+        if (fechaUltimaVenta.trim().equals(fechaActual.trim())) {
+            System.out.println("no haces nada aqui");
+        } else {
+            System.out.println("que perx");
+            reiniciafolio();
         }
     }
 
@@ -119,6 +225,9 @@ public class Login extends javax.swing.JFrame {
                     if (pass.equals(rs.getString("password"))) {    //Si la contraseña es correcta
                         nombrecompleto = rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4);
                         JOptionPane.showMessageDialog(this, "Bienvenido: " + nombrecompleto);
+                        
+                      //  IniciaDia();
+                        
                         Principal p = new Principal();
                         this.dispose();
                         p.setVisible(true);
