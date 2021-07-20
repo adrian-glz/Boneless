@@ -235,7 +235,8 @@ public class Monitor extends javax.swing.JFrame {
         });
         getContentPane().add(cbestado, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 10, 150, 50));
 
-        jButton1.setText("Regresar");
+        jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButton1.setText("REGRESAR");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);

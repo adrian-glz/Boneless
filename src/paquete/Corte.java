@@ -16,15 +16,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
-import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.view.JasperViewer;
 import static paquete.Login.nombrecompleto;
 
 /**
@@ -59,6 +56,7 @@ public class Corte extends javax.swing.JFrame {
     public void corte() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String fecha = sdf.format(jtfecha.getDate());
+        System.out.println("fecha sw coerte"+fecha);
         try {
             Class.forName("com.mysql.jdbc.Driver");
             java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
@@ -71,7 +69,7 @@ public class Corte extends javax.swing.JFrame {
                 }
                 if (Corte == (null)) {
                     Corte = "0";
-                    System.out.println("Llego nulo");
+                  //  System.out.println("Llego nulo");
                     JOptionPane.showMessageDialog(null, "Este dia no registra ventas");
                 } else {
                     imprimeticketcorte();
@@ -89,33 +87,32 @@ public class Corte extends javax.swing.JFrame {
 
     public void confirmar() {
         corte();
-    /*    int result = JOptionPane.showConfirmDialog(null, "¿Quieres reiniciar el contador (Numero de folio)?", "ATENCION",
-                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if (result == JOptionPane.YES_OPTION) {
-            reiniciafolio();
-            System.out.println("REINICIANDO");
-        } else if (result == JOptionPane.NO_OPTION) {
-            System.out.println("SIN REINICIAR");
-        }*/
+    
     }
 
     public void imprimeticketcorte() {
-                
-        String user = System.getProperty("user.name");
-        double total = Double.parseDouble(Corte);
+        System.out.println("entrando al metodo imprimirticketcorte");
+        // String user = System.getProperty("user.name");
+        double t = Double.parseDouble(Corte);
+               String totali=String.valueOf(t).trim();  
+
+        String cajero = nombrecompleto.trim();
         try {
+            
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String fecha = sdf.format(jtfecha.getDate());
-            String cajero = nombrecompleto;
+        //    System.out.println("6969 "+rfecha);
+          //  System.out.println("6969>_? "+fecha);
             ConexionMySQL con = new ConexionMySQL();
             Connection conn = con.Conectar();
-            System.out.println("cajero:" + cajero);
+            System.out.println("cajero en corte:" + cajero);
+            System.out.println("Total:" + totali);
             JasperReport reporte = null;
             Map parametro = new HashMap(); // MAPEO DE MAPA TIPO HASH
-            parametro.put("txt_fecha", "'" + fecha + "'");
-            parametro.put("txt_total", total);
-            parametro.put("txtcajero", cajero.trim());
-            String path = "C:\\Program Files\\PV\\src\\Plantillas\\Corte.jasper";
+            parametro.put("txt_fecha", "'"+ fecha +"'");
+            parametro.put("txt_total", totali);
+            parametro.put("txt_c", cajero);
+            String path = "C:\\Users\\agonzalez\\Documents\\GitHub\\Boneless\\src\\Plantillas/CorteFinal.jasper";
             reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
             JasperPrint jprint = JasperFillManager.fillReport(reporte, parametro, conn);
             JasperPrintManager.printReport(jprint, true);

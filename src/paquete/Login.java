@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import static paquete.Principal.rfecha;
 import static paquete.Principal.rhora;
 
+
 /**
  *
  * @author AGONZALEZ
@@ -112,6 +113,7 @@ public class Login extends javax.swing.JFrame {
     public void reiniciafolio() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
+            
             java.sql.Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "");
             Statement st = conexion.createStatement();
             st.executeUpdate("use prueba;");
@@ -223,7 +225,7 @@ public class Login extends javax.swing.JFrame {
                 ResultSet rs = st.executeQuery("select * from usuarios  where usuario='" + txtusuario.getText().trim() +"'");
                 if (rs.next()) {   //Si existe el usuario
                     if (pass.equals(rs.getString("password"))) {    //Si la contraseña es correcta
-                        nombrecompleto = rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4);
+                        nombrecompleto = rs.getString(2).trim() + " " + rs.getString(3).trim() + " " + rs.getString(4).trim();
                         JOptionPane.showMessageDialog(this, "Bienvenido: " + nombrecompleto);
                         
                       //  IniciaDia();

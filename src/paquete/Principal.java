@@ -348,7 +348,7 @@ public class Principal extends javax.swing.JFrame {
             Object obj1 = (jtbebidas.getValueAt(filaseleccionada, 1));///OBTIENES EL PRIMER FILA
             Object obj2 = (jtbebidas.getValueAt(filaseleccionada, 2));//OBTIENES LA SEGUNDA FILA
 
-            model.addRow(new Object[]{obj0, obj1, obj2, 1});
+            model.addRow(new Object[]{obj0, obj1, obj2,1 ,"",""});
         }
         sumar();
     }

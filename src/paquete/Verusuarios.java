@@ -46,7 +46,7 @@ public class Verusuarios extends javax.swing.JFrame {
     public void llenartabla() {
 
         String data[][] = {};
-        String cabeza[] = {"Id", "Nombre"};///definimos nombre cada columna en encabezado
+        String cabeza[] = {"Id" };///definimos nombre cada columna en encabezado
         jtverusuarios.getTableHeader().setReorderingAllowed(false);//evitamos que no se pueda reordenar jtplatos 
 
         md = new DefaultTableModel(data, cabeza) {

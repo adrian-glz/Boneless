@@ -3,8 +3,6 @@ package paquete;
  
 import java.awt.Color;
 import java.awt.HeadlessException;
-import java.awt.event.ItemEvent;
-import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -28,7 +26,6 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import static paquete.Login.nombrecompleto;
 import static paquete.Principal.jtfinal;
-import static paquete.Principal.numerocajero;
 import static paquete.Principal.rcambio;
 import static paquete.Principal.rfecha;
 import static paquete.Principal.rhora;
@@ -129,7 +126,7 @@ public class Cobrar extends javax.swing.JFrame {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex + "xd");
         }
-        System.out.println("-----");
+   //     System.out.println("-----");
     }
 
     public void Enviartotal() {
@@ -169,7 +166,7 @@ public class Cobrar extends javax.swing.JFrame {
         double vfpdolares = Double.parseDouble(fpdolares);
         String fptarjeta = jtxttarjeta.getText().replaceAll("[^0-1-2-3-4-5-6-7-8-9-.00]", "");
         double vfptarjeta = Double.parseDouble(fptarjeta);
-        System.out.println("costo cambio" + rcambio);
+   //     System.out.println("costo cambio" + rcambio);
         double totalformadepago = vfppesos + (vfpdolares * rcambio) + vfptarjeta;
 
         double cantidadrestante = (vtotal - totalformadepago);
@@ -361,7 +358,7 @@ public class Cobrar extends javax.swing.JFrame {
 
         lblcambio.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblcambio.setForeground(new java.awt.Color(0, 153, 51));
-        getContentPane().add(lblcambio, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 10, 150, 30));
+        getContentPane().add(lblcambio, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 10, 140, 30));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel11.setText("Dolar costo");
@@ -425,9 +422,7 @@ public class Cobrar extends javax.swing.JFrame {
                 double vprecioparseado = Double.parseDouble(vprecioformateado);
                 pse = conexion.prepareStatement("INSERT INTO ventas ( `fecha`,`Sucursal`, `Folio`, `Caja`, `Articulo`, `Codigo`, `Grupo`, `Cantidad`, `Precioventa`, `Vendedor`, `Cajero`, `Claveventa`, `Hora`) "//13
                         + "VALUES ( '" + rfecha + "','1','" + folio + "','1','" + numarticulo + "','" + vcodigo + "','00','" + vcantidad + "','" + vprecioformateado + "','"+ cajero+"','"+ cajero+"','1','" + rhora + "')");
-             /*   System.out.println("INSERT INTO ventas ( `fecha`,`Sucursal`, `Folio`, `Caja`, `Articulo`, `Codigo`, `Grupo`, `Cantidad`, `Precioventa`, `Vendedor`, `Cajero`, `Claveventa`, `Hora`) "
-                        + "VALUES ( '" + rfecha + "','1','" + folio + "','1','" + numarticulo + "','" + vcodigo + "','00','" + vcantidad + "','" + vprecioformateado + "','1111','00','777','" + rhora + "')");
-                */
+         
                 numarticulo = numarticulo + 1;
                 n = pse.executeUpdate();
 
@@ -436,7 +431,7 @@ public class Cobrar extends javax.swing.JFrame {
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }///fin del cliclo for perro
+        }///fin del cliclo for  
         if (n > 0) {
             // JOptionPane.showMessageDialog(null, "¡Los datos han sido guardados exitósamente!");
             insertaventapagos();
@@ -462,7 +457,7 @@ public class Cobrar extends javax.swing.JFrame {
             ste.executeUpdate("use prueba;");
             pse = conexion.prepareStatement("insert into `ventaspagos`(`fecha`,`Sucursal`,  `Caja`, `Folio`, `Importe`, `Clavepago`, `NumeroTarjeta`, `NombreCliente`, `DireccionCliente`, `TelefonoCliente`, `CorreoCliente`,`fpp`,`fpd`,`fpt`,`Cambio`) \n"
                     + "VALUES ('" + rfecha + "','1','1','" + folio + "','" + total + "','1','0000','NULL','NULL','NULL','NULL','" + jtxtpesos.getText().trim() + "','" + jtxtdolares.getText().trim() + "','" + jtxttarjeta.getText().trim() + "','" + txtc.getText().trim() + "')");
-            System.out.println("*****"+numerocajero);
+       //     System.out.println("*****"+numerocajero);
             numarticulo = numarticulo + 1;
             n = pse.executeUpdate();
         } catch (HeadlessException | SQLException ex) {
@@ -574,7 +569,7 @@ public class Cobrar extends javax.swing.JFrame {
             parametro.put("txt_fecha", "'" + rfecha + "'");
             parametro.put("txt_total", ventafoliotemp);
             parametro.put("txt_folio", folio);
-            System.out.println(" imprime variables folio:  " + folio + "FECHA:" + rfecha + "totsl de venta " + ventafoliotemp);
+            System.out.println(" imprime variables VENTA folio:  " + folio + "FECHA:" + rfecha + "totsl de venta " + ventafoliotemp);
             parametro.put("txt_cajero", cajero.trim());
             String path = "C:\\Users\\agonzalez\\Documents\\GitHub\\Boneless\\src\\Plantillas/Ticket.jasper";
             //   String path = "C:\\Users\\"+user+"\\Documents\\NetBeansProjects\\Inventario\\src\\reportes\\Dia.jasper";
@@ -583,7 +578,7 @@ public class Cobrar extends javax.swing.JFrame {
             JasperPrintManager.printReport(jprint, true);
         } catch (JRException ex) {
             Logger.getLogger(Corte.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, ">>" + ex);
+        //    JOptionPane.showMessageDialog(null, ">>" + ex);
         }
     }
 
@@ -593,11 +588,10 @@ public class Cobrar extends javax.swing.JFrame {
             Connection conn = con.Conectar();
             JasperReport reporte = null;
             Map parametro = new HashMap(); // MAPEO DE MAPA TIPO HASH
-            parametro.put("txt_fecha", "'" + rfecha + "'");
+            parametro.put("txt_fecha", "'"+rfecha+"'");
             parametro.put("txt_folio", folio);
-            System.out.println(" imprime variables folio:  " + folio + "FECHA:" + rfecha + "totsl de venta " + ventafoliotemp);
+            System.out.println(" imprime variables PEDIDOS folio:  "+folio+"FECHA:"+rfecha+"totsl de venta"+ventafoliotemp);
             String path = "C:\\Users\\agonzalez\\Documents\\GitHub\\Boneless\\src\\Plantillas/Ticketpedido.jasper";
-            //   String path = "C:\\Users\\"+user+"\\Documents\\NetBeansProjects\\Inventario\\src\\reportes\\Dia.jasper";
             reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
             JasperPrint jprint = JasperFillManager.fillReport(reporte, parametro, conn);
             JasperPrintManager.printReport(jprint, true);
